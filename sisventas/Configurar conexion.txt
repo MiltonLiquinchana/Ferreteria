@@ -1,0 +1,11 @@
+Utilizar mysql
+Base de datos:dbventaspiura
+Sevidor: localhost
+Usuario: sistema
+Password: 123
+
+
+
+Para acceder a la aplicación
+usuario: admin
+clave: 123
