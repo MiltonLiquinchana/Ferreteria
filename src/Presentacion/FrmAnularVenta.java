@@ -62,7 +62,7 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
 //--------------------------------------METODOS--------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
-    void CrearTabla() {
+    public void CrearTabla() {
         //--------------------PRESENTACION DE JTABLE----------------------
 
         TableCellRenderer render = new DefaultTableCellRenderer() {
@@ -111,7 +111,7 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
 
     }
 
-    void BuscarVenta() {
+    public void BuscarVenta() {
         String titulos[] = {"ID", "Cliente", "Fecha", "Empleado", "Documento", "Serie", "Número", "Estado", "Total"};
         dtm.setColumnIdentifiers(titulos);
 
@@ -275,14 +275,13 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
         tblDetalleVenta.setModel(dtm1);
     }
 
-    void CantidadTotal() {
+     void CantidadTotal() {
         Total = String.valueOf(tblVenta.getRowCount());
         lblEstado.setText("Se cargaron " + Total + " registros");
     }
 
     void restablecerCantidades() {
         String strId;
-        String idventa = lblIdVenta.getText();
         ClsProducto productos = new ClsProducto();
         ClsEntidadProducto producto = new ClsEntidadProducto();
         int fila = 0;
@@ -558,9 +557,7 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnAnularVentaActionPerformed
 
     private void btneditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneditarActionPerformed
-        capturecodproducto();
-
-        mostrarventanaventa();
+        actualizarventa();
     }//GEN-LAST:event_btneditarActionPerformed
     /*este metod sirve para mostrar la ventana venta*/
     void mostrarventanaventa() {
@@ -572,7 +569,9 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
         venta.NombreEmpleado = lblvendedor.getText();
         venta.CalcularValor_Venta();
         venta.CalcularSubTotal();
-
+        /*el valor del label venta sera anular*/
+        venta.vandera.setText("anular");
+        venta.idventaanular.setText(lblIdVenta.getText());
         /*instancia de objeto para poder acceder a la tabla de ventas*/
         venta.show();
     }
@@ -598,12 +597,13 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
                 Datos[7] = (String) rs.getString(8);
                 Datos[8] = (String) rs.getString(9);
                 venta.agregardatos(Integer.parseInt(Datos[0]), Datos[1], Datos[2], Datos[3], Double.parseDouble(Datos[4]),
-                    Datos[5], Datos[6], Datos[7], Datos[8]);
+                        Datos[5], Datos[6], Datos[7], Datos[8]);
                 encuentra = true;
             }
-            
+
             if (encuentra = false) {
                 JOptionPane.showMessageDialog(null, "¡No se encuentra!");
+
             }
 
         } catch (Exception ex) {
@@ -611,6 +611,47 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
         }
 
     }
+
+    /*Este metodo nos sirve para actualizar regresar la cantidad de productos vendidos antes de una compra*/
+    void actualizarventa() {
+        /*mensaje que avisa si desea actualizar la venta y en la cual se dice que se anulara la venta para luego proceder a la venta nuevamente*/
+        int indice = JOptionPane.showConfirmDialog(this, "Para actualizar la venta primero se la anulara \n ¿esta seguro?");/*al poner this se muestra en el centro del formulario y al poner null en medio de la pantalla*/
+ /*para obtener la respuesta de que boton se preciono se lo hace al obtener el indice empesando desde cero este indice se guardara en una
+    variable entera*/
+        //el indice 0 equivale a SI
+        if (indice == 0) {
+            //si preciono si primero se ejecuta el metodo que anula la venta
+
+            int fila_s;
+            String est_venta;
+            fila_s = tblVenta.getSelectedRow();
+            est_venta = String.valueOf(tblVenta.getModel().getValueAt(fila_s, 7));
+            if (!est_venta.equals("ANULADO")) {
+                if (tblVenta.getSelectedRows().length > 0) {
+                    ClsVenta ventas = new ClsVenta();
+                    ClsEntidadVenta venta = new ClsEntidadVenta();
+                    venta.setStrEstadoVenta("ANULADO");
+                    ventas.actualizarVentaEstado(lblIdVenta.getText(), venta);
+                    BuscarVenta();
+                    CrearTabla();
+                    restablecerCantidades();
+                    /*ejecutamos los metodos*/
+                    capturecodproducto();
+                    mostrarventanaventa();
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "¡Se debe seleccionar un registro de venta!");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "¡Esta venta ya ha sido ANULADA!");
+            }
+
+        } else{
+            JOptionPane.showMessageDialog(this, "entendido");
+        
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnularVenta;
     private javax.swing.JButton btnVerDetalle;
