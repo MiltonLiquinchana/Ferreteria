@@ -131,16 +131,32 @@ private Connection connection=new ClsConexion().getConection();
         }catch(SQLException SQLex){
             throw SQLex;            
         }        
+    }
+    
+    /*este metodo nos sirve para listar los productos utilizando el id de la venta*/
+    public ResultSet listarProductosporId(String ID) throws Exception{
+        ResultSet rs = null;
+        try{
+            CallableStatement statement = connection.prepareCall("{call SP_S_DetalleProductoPorParametro(?)}");
+            statement.setString ("pbusqueda", ID);
+            rs = statement.executeQuery();
+            return rs;
+        }catch(SQLException SQLex){
+            throw SQLex;            
+        }        
     } 
+    
     /*este metodo me sirve para listar las ventas realizadas por el nombre del cliente*/
-    public ResultSet listarVentaPorCliente(String criterio, String NomCliente)throws Exception{/*recivimos parametros desde del formulario FrmVentasRealizadas(
+    public ResultSet listarVentaPorCliente(String criterio, String NomCliente,Date fechaini, Date fechafin)throws Exception{/*recivimos parametros desde del formulario FrmVentasRealizadas(
         criterio, nombre cliente)*/
         //objeto que almacenara los resultados que devuelve la base de datos
         ResultSet rs=null;
          try{
-            CallableStatement statement = connection.prepareCall("{call SP_S_VentaPorCliente(?,?)}");
+            CallableStatement statement = connection.prepareCall("{call SP_S_VentaPorClienteFecha(?,?,?,?)}");
             statement.setString ("pcriterio", criterio);
             statement.setString ("Incliente", NomCliente);
+            statement.setDate ("fechaini", new java.sql.Date(fechaini.getTime()));
+            statement.setDate ("fechafin", new java.sql.Date(fechafin.getTime()));
             rs = statement.executeQuery();
             return rs;
         }catch(SQLException SQLex){
@@ -149,6 +165,7 @@ private Connection connection=new ClsConexion().getConection();
          
     }
     
+    /**/
     public void actualizarVentaEstado(String codigo,ClsEntidadVenta Venta){
         try{
             CallableStatement statement=connection.prepareCall("{call SP_U_ActualizarVentaEstado(?,?)}");
@@ -159,7 +176,7 @@ private Connection connection=new ClsConexion().getConection();
         }catch(SQLException ex){
             ex.printStackTrace();
         }
-        JOptionPane.showMessageDialog(null,"¡Venta Anulada!","Mensaje del Sistema",1);
+        JOptionPane.showMessageDialog(null,"¡Venta Actualizada!","Mensaje del Sistema",1);
     }
     public ResultSet listarVentaPorDetalle(String criterio,Date fechaini, Date fechafin) throws Exception{
         ResultSet rs = null;

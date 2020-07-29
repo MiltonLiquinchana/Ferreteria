@@ -45,9 +45,6 @@ public class FrmVentasRealizadas extends javax.swing.JInternalFrame {
     String documento, criterio, busqueda, Total;
     boolean valor = true;
     int n = 0;
-    /*para saber que radio buton se selecciono al momento de hacer la consulta*/
-    String radiovalue = "";
-
     public FrmVentasRealizadas() {
         initComponents();
         lblIdVenta.setVisible(false);
@@ -65,8 +62,6 @@ public class FrmVentasRealizadas extends javax.swing.JInternalFrame {
         BuscarVenta();
         CrearTabla();
         CantidadTotal();
-        /*Los controles de filtro estan bloqueados al principio*/
-        eneablebtnradio();
     }
 
 //-----------------------------------------------------------------------------------------------
@@ -168,8 +163,8 @@ public class FrmVentasRealizadas extends javax.swing.JInternalFrame {
         tblVenta.setModel(dtm);
     }
 
-    /*metodo para filtrar registros por cliente*/
-    void BuscarVentaCliente() {
+    /*metodo para filtrar registros por cliente y fecha*/
+    void BuscarVentaClienteFecha() {
         String titulos[] = {"ID", "Cliente", "Fecha", "Empleado", "Documento", "Serie", "Número", "Estado", "Valor Venta", "Descuento", "Total"};
         dtm.setColumnIdentifiers(titulos);
 
@@ -179,7 +174,7 @@ public class FrmVentasRealizadas extends javax.swing.JInternalFrame {
         fecha_fin = dcFechafin.getDate();
 
         try {
-            rs = venta.listarVentaPorCliente("consultar", txtNombreCliente.getText());
+            rs = venta.listarVentaPorCliente("consultar", txtNombreCliente.getText(),fecha_ini, fecha_fin);
             boolean encuentra = false;
             String Datos[] = new String[11];
             int f, i;
@@ -216,13 +211,7 @@ public class FrmVentasRealizadas extends javax.swing.JInternalFrame {
         tblVenta.setModel(dtm);
     }
 
-    /*metodo que desablilita controles al inicciar la ventana*/
-    public void eneablebtnradio() {
-        dcFechaini.setEnabled(false);
-        dcFechafin.setEnabled(false);
-        txtNombreCliente.setEnabled(false);
-
-    }
+  
 
     void CrearTablaDetalle() {
         //--------------------PRESENTACION DE JTABLE DETALLE VENTA----------------------
@@ -363,7 +352,6 @@ public class FrmVentasRealizadas extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
         jScrollPane5 = new javax.swing.JScrollPane();
         tblVenta = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
@@ -374,8 +362,6 @@ public class FrmVentasRealizadas extends javax.swing.JInternalFrame {
         jButton1 = new javax.swing.JButton();
         lblIdVenta = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        rbtnfecha = new javax.swing.JRadioButton();
-        rbtnNombre = new javax.swing.JRadioButton();
         txtNombreCliente = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         btnVerDetalle = new javax.swing.JButton();
@@ -418,21 +404,21 @@ public class FrmVentasRealizadas extends javax.swing.JInternalFrame {
 
         dcFechaini.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jPanel1.add(dcFechaini);
-        dcFechaini.setBounds(210, 20, 100, 25);
+        dcFechaini.setBounds(90, 20, 100, 25);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Nombre:");
         jPanel1.add(jLabel1);
-        jLabel1.setBounds(160, 60, 70, 20);
+        jLabel1.setBounds(40, 60, 70, 20);
 
         dcFechafin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jPanel1.add(dcFechafin);
-        dcFechafin.setBounds(370, 20, 100, 25);
+        dcFechafin.setBounds(250, 20, 100, 25);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("HASTA:");
         jPanel1.add(jLabel3);
-        jLabel3.setBounds(320, 20, 70, 20);
+        jLabel3.setBounds(200, 20, 70, 20);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Buscar_32.png"))); // NOI18N
         jButton1.setText("Buscar");
@@ -442,7 +428,7 @@ public class FrmVentasRealizadas extends javax.swing.JInternalFrame {
             }
         });
         jPanel1.add(jButton1);
-        jButton1.setBounds(480, 20, 110, 50);
+        jButton1.setBounds(400, 20, 110, 50);
         jPanel1.add(lblIdVenta);
         lblIdVenta.setBounds(320, 20, 40, 20);
 
@@ -454,34 +440,14 @@ public class FrmVentasRealizadas extends javax.swing.JInternalFrame {
             }
         });
         jPanel1.add(jButton2);
-        jButton2.setBounds(610, 20, 110, 50);
-
-        buttonGroup1.add(rbtnfecha);
-        rbtnfecha.setText("Filtrar por Fecha");
-        rbtnfecha.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbtnfechaActionPerformed(evt);
-            }
-        });
-        jPanel1.add(rbtnfecha);
-        rbtnfecha.setBounds(10, 20, 110, 23);
-
-        buttonGroup1.add(rbtnNombre);
-        rbtnNombre.setText("Filtrar por Nombre");
-        rbtnNombre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbtnNombreActionPerformed(evt);
-            }
-        });
-        jPanel1.add(rbtnNombre);
-        rbtnNombre.setBounds(10, 60, 113, 23);
+        jButton2.setBounds(530, 20, 110, 50);
         jPanel1.add(txtNombreCliente);
-        txtNombreCliente.setBounds(220, 60, 230, 20);
+        txtNombreCliente.setBounds(100, 60, 230, 20);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("DESDE:");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(160, 20, 70, 20);
+        jLabel2.setBounds(40, 20, 70, 20);
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(10, 10, 730, 90);
@@ -541,16 +507,8 @@ public class FrmVentasRealizadas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tblVentaMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        /*condicional que sirve para verificar que radio buton esta seleccionado*/
-        if (rbtnfecha.isSelected() == true) {
-            BuscarVenta();
-            radiovalue="fecha";
-        } else if (rbtnNombre.isSelected() == true) {
-            BuscarVentaCliente();
-            radiovalue="cliente";
-        } else {
-            JOptionPane.showMessageDialog(null, "Seleccione un metodo de busqueda");
-        }
+        /*ejecutamos el metodo buscarVentaCliente*/    
+        BuscarVentaClienteFecha();
         CrearTabla();
         CantidadTotal();
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -591,13 +549,12 @@ public class FrmVentasRealizadas extends javax.swing.JInternalFrame {
         JasperReport report = null;
         JasperPrint print;
         try {
-            if(radiovalue.equals("fecha")){
-            report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/Reportes/RptVentasRealizadas.jrxml");
+            if(txtNombreCliente.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Ingrese un Nombre");
+            }else{
+                report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/Reportes/RptVentasRealizadas.jrxml"); /*solo*/
             }
-            else if(radiovalue.equals("cliente")){
-            report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/Reportes/RptVentasRClientes.jrxml");
-            }
-            
+
             print = JasperFillManager.fillReport(report, p, connection);
             JasperViewer view = new JasperViewer(print, false);
             view.setTitle("Reporte General de Ventas Realizadas");
@@ -607,21 +564,8 @@ public class FrmVentasRealizadas extends javax.swing.JInternalFrame {
         }        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void rbtnfechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnfechaActionPerformed
-        dcFechaini.setEnabled(true);
-        dcFechafin.setEnabled(true);
-        txtNombreCliente.setEnabled(false);
-    }//GEN-LAST:event_rbtnfechaActionPerformed
-
-    private void rbtnNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnNombreActionPerformed
-        txtNombreCliente.setEnabled(true);
-        dcFechaini.setEnabled(false);
-        dcFechafin.setEnabled(false);
-    }//GEN-LAST:event_rbtnNombreActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVerDetalle;
-    private javax.swing.ButtonGroup buttonGroup1;
     private com.toedter.calendar.JDateChooser dcFechafin;
     private com.toedter.calendar.JDateChooser dcFechaini;
     private javax.swing.JButton jButton1;
@@ -634,8 +578,6 @@ public class FrmVentasRealizadas extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JLabel lblEstado;
     private javax.swing.JLabel lblIdVenta;
-    private javax.swing.JRadioButton rbtnNombre;
-    private javax.swing.JRadioButton rbtnfecha;
     private javax.swing.JTable tblDetalleVenta;
     private javax.swing.JTable tblVenta;
     private javax.swing.JTextField txtNombreCliente;

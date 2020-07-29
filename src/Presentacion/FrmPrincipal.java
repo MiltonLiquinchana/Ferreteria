@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package Presentacion;
+
 import Backup.*;
 import Consultas.FrmConsultaStock;
 import Consultas.FrmKardexValorizado;
@@ -21,28 +22,32 @@ import java.util.Date;
 import java.text.*;
 import javax.swing.JFrame;
 
-
 public class FrmPrincipal extends javax.swing.JFrame {
-   public int intEstado; 
-   public String strUsuario; 
-   public String strIdEmpleado;
-   public String strNombreEmpleado;
-   public String strTipo; 
-   public String idAcceso;
-   static ResultSet rs=null;
-      private boolean mFullScreen = false;
-   //---------------------Privilegios--------------------
-    String p_venta,p_compra,p_producto,p_proveedor,p_empleado;
-    String p_cliente,p_categoria,p_tipodoc,p_tipouser,p_anularv,p_anularc;
-    String p_estadoprod,p_ventare,p_ventade,p_estadistica,p_comprare,p_comprade,p_pass,p_respaldar,p_restaurar,p_caja;
+
+    public int intEstado;
+    public String strUsuario;
+    public String strIdEmpleado;
+    public String strNombreEmpleado;
+    public String strTipo;
+    public String idAcceso;
+    /*variables para obtener el id y nombre del usuario*/
+    public String idusuario;
+    public String nombreusuario;
+    static ResultSet rs = null;
+    private boolean mFullScreen = false;
+    //---------------------Privilegios--------------------
+    String p_venta, p_compra, p_producto, p_proveedor, p_empleado;
+    String p_cliente, p_categoria, p_tipodoc, p_tipouser, p_anularv, p_anularc;
+    String p_estadoprod, p_ventare, p_ventade, p_estadistica, p_comprare, p_comprade, p_pass, p_respaldar, p_restaurar, p_caja;
+
     //----------------------------------------------------
-   public FrmPrincipal() {
+    public FrmPrincipal() {
         initComponents();
         JMIniciarSesion.setEnabled(false);
-        
-        Date date=new Date();
-        String format=new String("dd/MM/yyyy");
-        SimpleDateFormat formato=new SimpleDateFormat(format);
+
+        Date date = new Date();
+        String format = new String("dd/MM/yyyy");
+        SimpleDateFormat formato = new SimpleDateFormat(format);
         lblFecha.setText(formato.format(date));
         //---------------------ANCHO Y ALTO DEL FORM----------------------
         //this.setSize(1024, 566);
@@ -54,71 +59,72 @@ public class FrmPrincipal extends javax.swing.JFrame {
 //
 //        setUndecorated(true);
 //      setResizable(true);
-      //Make it happen!
-     // gDev.setFullScreenWindow(this);
+        //Make it happen!
+        // gDev.setFullScreenWindow(this);
 
-            
         lblIdEmpleado.setVisible(false);
         lblUsuarioEmpleado.setVisible(false);
         lblEstado.setVisible(false);
-   }
-
-void BuscarPermisos(){
-        String usuario=null;
-        String tipo=null;
-        int sen=1;int tu=1;
-        usuario=strUsuario;
-        tipo=strTipo;
-        boolean encuentra=false;
-    
-            try{
-                ClsTipoUsuario oTipoUsuario=new ClsTipoUsuario();
-                
-                rs= oTipoUsuario.consultarLoginPermisos(usuario,tipo);
-                while (rs.next()&& sen==1) {
-                    if(rs.getString(2).equals(strUsuario)&&rs.getString(3).equals(strTipo)) {
-        
-                            p_venta=rs.getString(4);
-                            p_compra=rs.getString(5);
-                            p_producto=rs.getString(6);
-                            p_proveedor=rs.getString(7);
-                            p_empleado=rs.getString(8);
-                            p_cliente=rs.getString(9);
-                            p_categoria=rs.getString(10);
-                            p_tipodoc=rs.getString(11);
-                            p_tipouser=rs.getString(12);
-                            p_anularv=rs.getString(13);
-                            p_anularc=rs.getString(14);
-                            p_estadoprod=rs.getString(15);
-                            p_ventare=rs.getString(16);
-                            p_ventade=rs.getString(17);
-                            p_estadistica=rs.getString(18);
-                            p_comprare=rs.getString(19);
-                            p_comprade=rs.getString(20);
-                            p_pass=rs.getString(21);
-                            p_respaldar=rs.getString(22);
-                            p_restaurar=rs.getString(23);
-                            p_caja=rs.getString(24);
-    
-                            sen=2;
-         
-                    }
-                   encuentra=true;
-                   break;
-                }
-                if(sen==1) {
-                    JOptionPane.showMessageDialog(this, "¡Código de Asistente no Registrado!");
-
-                } else {
-                              
-                }
-
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this,ex.getMessage());
-                System.out.println(ex.getMessage());
-            }        
-    
     }
+
+    void BuscarPermisos() {
+        String usuario = null;
+        String tipo = null;
+        int sen = 1;
+        int tu = 1;
+        usuario = strUsuario;
+        tipo = strTipo;
+        boolean encuentra = false;
+
+        try {
+            ClsTipoUsuario oTipoUsuario = new ClsTipoUsuario();
+
+            rs = oTipoUsuario.consultarLoginPermisos(usuario, tipo);
+            while (rs.next() && sen == 1) {
+                if (rs.getString(2).equals(strUsuario) && rs.getString(3).equals(strTipo)) {
+
+                    p_venta = rs.getString(4);
+                    p_compra = rs.getString(5);
+                    p_producto = rs.getString(6);
+                    p_proveedor = rs.getString(7);
+                    p_empleado = rs.getString(8);
+                    p_cliente = rs.getString(9);
+                    p_categoria = rs.getString(10);
+                    p_tipodoc = rs.getString(11);
+                    p_tipouser = rs.getString(12);
+                    p_anularv = rs.getString(13);
+                    p_anularc = rs.getString(14);
+                    p_estadoprod = rs.getString(15);
+                    p_ventare = rs.getString(16);
+                    p_ventade = rs.getString(17);
+                    p_estadistica = rs.getString(18);
+                    p_comprare = rs.getString(19);
+                    p_comprade = rs.getString(20);
+                    p_pass = rs.getString(21);
+                    p_respaldar = rs.getString(22);
+                    p_restaurar = rs.getString(23);
+                    p_caja = rs.getString(24);
+
+                    sen = 2;
+
+                }
+                encuentra = true;
+                break;
+            }
+            if (sen == 1) {
+                JOptionPane.showMessageDialog(this, "¡Código de Asistente no Registrado!");
+
+            } else {
+
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+            System.out.println(ex.getMessage());
+        }
+
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -633,29 +639,31 @@ void BuscarPermisos(){
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Escritorio)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(lblIdEmpleado)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblNombreEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(lblUsuarioEmpleado)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(150, 150, 150)
-                .addComponent(lblEstado)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addComponent(TBPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 1024, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblIdEmpleado)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblNombreEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblUsuarioEmpleado)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(150, 150, 150)
+                        .addComponent(lblEstado)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Escritorio))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -684,212 +692,206 @@ void BuscarPermisos(){
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         BuscarPermisos();
         lblEstado.setText("Desconectado");
-        if(intEstado==1){
+        if (intEstado == 1) {
             lblIdEmpleado.setText(strIdEmpleado);
-            lblNombreEmpleado.setText(strNombreEmpleado);            
+            lblNombreEmpleado.setText(strNombreEmpleado);
             lblUsuarioEmpleado.setText(strUsuario);
             lblTipo.setText(strTipo);
             lblEstado.setText("Conectado");
         }
-        if(lblEstado.getText().equals("Desconectado")){
+        if (lblEstado.getText().equals("Desconectado")) {
             mnuArchivo.setVisible(false);
             mnuMantenimiento.setVisible(false);
-            TBPrincipal.setVisible(false);    
+            TBPrincipal.setVisible(false);
         }
-         if(lblUsuarioEmpleado.getText().equals("Coordinador")){
+        if (lblUsuarioEmpleado.getText().equals("Coordinador")) {
             mnuRegistro.setVisible(false);
             mnuMantenimiento.setVisible(false);
-            
-          
+
         }
-         
-  //-------------------BLOQUEAR SERVICIOS DEL SISTEMA----------------
-    if (p_venta.equals("1")){
-        mVenta.setEnabled(true);
-        mbtnVenta.setEnabled(true);
-    }else{
-        mVenta.setEnabled(false);
-        mbtnVenta.setEnabled(false);
-    }
-    if (p_compra.equals("1")){
-        mCompra.setEnabled(true);
-        mbtnCompra.setEnabled(true);
-    }else{
-        mCompra.setEnabled(false);
-        mbtnCompra.setEnabled(false);
-    }
-    if (p_producto.equals("1")){
-        mProducto.setEnabled(true);
-        mbtnProducto.setEnabled(true);
-    }else{
-        mProducto.setEnabled(false);
-        mbtnProducto.setEnabled(false);
-    }
-    if (p_proveedor.equals("1")){
-        mProveedor.setEnabled(true);
-    }else{
-        mProveedor.setEnabled(false);
-    }
-    if (p_empleado.equals("1")){
-        mEmpleado.setEnabled(true);
-        mbtnEmpleado.setEnabled(true);
-    }else{
-        mEmpleado.setEnabled(false);
-        mbtnEmpleado.setEnabled(false);
-    }
-    if (p_cliente.equals("1")){
-        mCliente.setEnabled(true);
-        mbtnCliente.setEnabled(true);
-    }else{
-        mCliente.setEnabled(false);
-        mbtnCliente.setEnabled(false);
-    }
-    if (p_categoria.equals("1")){
-        mCategoria.setEnabled(true);
-    }else{
-        mCategoria.setEnabled(false);
-    }
-    if (p_tipodoc.equals("1")){
-        mTipodoc.setEnabled(true);
-    }else{
-        mTipodoc.setEnabled(false);
-    }
-    if (p_tipouser.equals("1")){
-        mTipouser.setEnabled(true);
-    }else{
-        mTipouser.setEnabled(false);
-    }    
-    if (p_anularv.equals("1")){
-        mAnularv.setEnabled(true);
-    }else{
-        mAnularv.setEnabled(false);
-    }  
-    if (p_anularc.equals("1")){
-        mAnularc.setEnabled(true);
-    }else{
-        mAnularc.setEnabled(false);
-    }  
-    if (p_estadoprod.equals("1")){
-        mEstado.setEnabled(true);
-        mbtnEstado.setEnabled(true);
-    }else{
-        mEstado.setEnabled(false);
-        mbtnEstado.setEnabled(false);
-    }  
-    if (p_ventare.equals("1")){
-        mVentare.setEnabled(true);
-    }else{
-        mVentare.setEnabled(false);
-    }  
-    if (p_ventade.equals("1")){
-        mVentade.setEnabled(true);
-    }else{
-        mVentade.setEnabled(false);
-    }  
-    if (p_estadistica.equals("1")){
-        mEstadistica.setEnabled(true);
-    }else{
-        mEstadistica.setEnabled(false);
-    }  
-    if (p_comprare.equals("1")){
-        mComprare.setEnabled(true);
-    }else{
-        mComprare.setEnabled(false);
-    }  
-    if (p_comprade.equals("1")){
-        mComprade.setEnabled(true);
-    }else{
-        mComprade.setEnabled(false);
-    }  
-    if (p_pass.equals("1")){
-        mCambiarpass.setEnabled(true);
-    }else{
-        mCambiarpass.setEnabled(false);
-    }  
-    if (p_respaldar.equals("1")){
-        mRespaldar.setEnabled(true);
-    }else{
-        mRespaldar.setEnabled(false);
-    } 
-    if (p_restaurar.equals("1")){
-        mRestaurar.setEnabled(true);
-    }else{
-        mRestaurar.setEnabled(false);
-    } 
-    if (p_caja.equals("1")){
-        mbtnCaja.setEnabled(true);
-    }else{
-        mbtnCaja.setEnabled(false);
-    }     
+
+        //-------------------BLOQUEAR SERVICIOS DEL SISTEMA----------------
+        if (p_venta.equals("1")) {
+            mVenta.setEnabled(true);
+            mbtnVenta.setEnabled(true);
+        } else {
+            mVenta.setEnabled(false);
+            mbtnVenta.setEnabled(false);
+        }
+        if (p_compra.equals("1")) {
+            mCompra.setEnabled(true);
+            mbtnCompra.setEnabled(true);
+        } else {
+            mCompra.setEnabled(false);
+            mbtnCompra.setEnabled(false);
+        }
+        if (p_producto.equals("1")) {
+            mProducto.setEnabled(true);
+            mbtnProducto.setEnabled(true);
+        } else {
+            mProducto.setEnabled(false);
+            mbtnProducto.setEnabled(false);
+        }
+        if (p_proveedor.equals("1")) {
+            mProveedor.setEnabled(true);
+        } else {
+            mProveedor.setEnabled(false);
+        }
+        if (p_empleado.equals("1")) {
+            mEmpleado.setEnabled(true);
+            mbtnEmpleado.setEnabled(true);
+        } else {
+            mEmpleado.setEnabled(false);
+            mbtnEmpleado.setEnabled(false);
+        }
+        if (p_cliente.equals("1")) {
+            mCliente.setEnabled(true);
+            mbtnCliente.setEnabled(true);
+        } else {
+            mCliente.setEnabled(false);
+            mbtnCliente.setEnabled(false);
+        }
+        if (p_categoria.equals("1")) {
+            mCategoria.setEnabled(true);
+        } else {
+            mCategoria.setEnabled(false);
+        }
+        if (p_tipodoc.equals("1")) {
+            mTipodoc.setEnabled(true);
+        } else {
+            mTipodoc.setEnabled(false);
+        }
+        if (p_tipouser.equals("1")) {
+            mTipouser.setEnabled(true);
+        } else {
+            mTipouser.setEnabled(false);
+        }
+        if (p_anularv.equals("1")) {
+            mAnularv.setEnabled(true);
+        } else {
+            mAnularv.setEnabled(false);
+        }
+        if (p_anularc.equals("1")) {
+            mAnularc.setEnabled(true);
+        } else {
+            mAnularc.setEnabled(false);
+        }
+        if (p_estadoprod.equals("1")) {
+            mEstado.setEnabled(true);
+            mbtnEstado.setEnabled(true);
+        } else {
+            mEstado.setEnabled(false);
+            mbtnEstado.setEnabled(false);
+        }
+        if (p_ventare.equals("1")) {
+            mVentare.setEnabled(true);
+        } else {
+            mVentare.setEnabled(false);
+        }
+        if (p_ventade.equals("1")) {
+            mVentade.setEnabled(true);
+        } else {
+            mVentade.setEnabled(false);
+        }
+        if (p_estadistica.equals("1")) {
+            mEstadistica.setEnabled(true);
+        } else {
+            mEstadistica.setEnabled(false);
+        }
+        if (p_comprare.equals("1")) {
+            mComprare.setEnabled(true);
+        } else {
+            mComprare.setEnabled(false);
+        }
+        if (p_comprade.equals("1")) {
+            mComprade.setEnabled(true);
+        } else {
+            mComprade.setEnabled(false);
+        }
+        if (p_pass.equals("1")) {
+            mCambiarpass.setEnabled(true);
+        } else {
+            mCambiarpass.setEnabled(false);
+        }
+        if (p_respaldar.equals("1")) {
+            mRespaldar.setEnabled(true);
+        } else {
+            mRespaldar.setEnabled(false);
+        }
+        if (p_restaurar.equals("1")) {
+            mRestaurar.setEnabled(true);
+        } else {
+            mRestaurar.setEnabled(false);
+        }
+        if (p_caja.equals("1")) {
+            mbtnCaja.setEnabled(true);
+        } else {
+            mbtnCaja.setEnabled(false);
+        }
     }//GEN-LAST:event_formComponentShown
 
     private void mCambiarpassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCambiarpassActionPerformed
-        Presentacion.FrmCambiarContraseña Cambiar=new Presentacion.FrmCambiarContraseña();
+        Presentacion.FrmCambiarContraseña Cambiar = new Presentacion.FrmCambiarContraseña();
         Escritorio.add(Cambiar);
         Cambiar.show();
-        Cambiar.IdEmpleado=lblIdEmpleado.getText();
-       
+        Cambiar.IdEmpleado = lblIdEmpleado.getText();
+
     }//GEN-LAST:event_mCambiarpassActionPerformed
 
     private void JMSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMSalirActionPerformed
         //ClsAcceso acceso = new ClsAcceso();
         //acceso.modificarAcceso(idAcceso);
-        int salir = JOptionPane.showConfirmDialog(this, "¿Desea realmente cerrar la aplicación?","Mensaje del Sistema WorldEvent",0,3);
-        if(salir==JOptionPane.OK_OPTION)
-        {
+        int salir = JOptionPane.showConfirmDialog(this, "¿Desea realmente cerrar la aplicación?", "Mensaje del Sistema WorldEvent", 0, 3);
+        if (salir == JOptionPane.OK_OPTION) {
             System.exit(0);
         }
-        
+
     }//GEN-LAST:event_JMSalirActionPerformed
 
     private void mVentadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mVentadeActionPerformed
-       Consultas.FrmVentasRealizadas_Detallado ventasdetalladas=new Consultas.FrmVentasRealizadas_Detallado();
-       Escritorio.add(ventasdetalladas);
-       ventasdetalladas.show(); 
+        Consultas.FrmVentasRealizadas_Detallado ventasdetalladas = new Consultas.FrmVentasRealizadas_Detallado();
+        Escritorio.add(ventasdetalladas);
+        ventasdetalladas.show();
     }//GEN-LAST:event_mVentadeActionPerformed
 
     private void mVentareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mVentareActionPerformed
-       Consultas.FrmVentasRealizadas VentasRealizadas=new Consultas.FrmVentasRealizadas();
-       Escritorio.add(VentasRealizadas);
-       VentasRealizadas.show();
+        Consultas.FrmVentasRealizadas VentasRealizadas = new Consultas.FrmVentasRealizadas();
+        Escritorio.add(VentasRealizadas);
+        VentasRealizadas.show();
     }//GEN-LAST:event_mVentareActionPerformed
 
     private void mComprareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mComprareActionPerformed
-       Consultas.FrmComprasRelizadas ComprasRelizadas=new Consultas.FrmComprasRelizadas();
-       Escritorio.add(ComprasRelizadas);
-       ComprasRelizadas.show();
+        Consultas.FrmComprasRelizadas ComprasRelizadas = new Consultas.FrmComprasRelizadas();
+        Escritorio.add(ComprasRelizadas);
+        ComprasRelizadas.show();
     }//GEN-LAST:event_mComprareActionPerformed
 
     private void mRespaldarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mRespaldarActionPerformed
-        Backup.FrmRespaldarDB Respaldar=new Backup.FrmRespaldarDB();
+        Backup.FrmRespaldarDB Respaldar = new Backup.FrmRespaldarDB();
         Escritorio.add(Respaldar);
         Respaldar.show();
     }//GEN-LAST:event_mRespaldarActionPerformed
 
     private void mRestaurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mRestaurarActionPerformed
-        Backup.FrmRestaurarDB Restaurar=new Backup.FrmRestaurarDB();
+        Backup.FrmRestaurarDB Restaurar = new Backup.FrmRestaurarDB();
         Escritorio.add(Restaurar);
         Restaurar.show();
     }//GEN-LAST:event_mRestaurarActionPerformed
 
     private void mCalculadoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCalculadoraActionPerformed
-        try
-        {
+        try {
             Runtime obj = Runtime.getRuntime();
             obj.exec("C:\\WINDOWS\\system32\\CALC.EXE");
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_mCalculadoraActionPerformed
 
     private void JMIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMIniciarSesionActionPerformed
         this.dispose();
-        Presentacion.FrmLogin Login=new Presentacion.FrmLogin();
+        Presentacion.FrmLogin Login = new Presentacion.FrmLogin();
 
         Login.show();
-
 
 
     }//GEN-LAST:event_JMIniciarSesionActionPerformed
@@ -911,155 +913,157 @@ void BuscarPermisos(){
         mbtnCaja.setEnabled(false);
         mbtnEstado.setEnabled(false);
         JMIniciarSesion.setEnabled(true);
-        
+
     }//GEN-LAST:event_JMCerrarSesionActionPerformed
 
     private void mCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCategoriaActionPerformed
-        Presentacion.FrmCategoria Categoria=new Presentacion.FrmCategoria();
+        Presentacion.FrmCategoria Categoria = new Presentacion.FrmCategoria();
         Escritorio.add(Categoria);
         Categoria.show();
     }//GEN-LAST:event_mCategoriaActionPerformed
 
     private void mClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mClienteActionPerformed
-        Presentacion.FrmCliente Cliente=new Presentacion.FrmCliente();
+        Presentacion.FrmCliente Cliente = new Presentacion.FrmCliente();
         Escritorio.add(Cliente);
         Cliente.show();
     }//GEN-LAST:event_mClienteActionPerformed
 
     private void mProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mProveedorActionPerformed
-        Presentacion.FrmProveedor Proveedor=new Presentacion.FrmProveedor();
+        Presentacion.FrmProveedor Proveedor = new Presentacion.FrmProveedor();
         Escritorio.add(Proveedor);
         Proveedor.show();
     }//GEN-LAST:event_mProveedorActionPerformed
 
     private void mTipodocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mTipodocActionPerformed
-        Presentacion.FrmTipoDocumento Documento=new Presentacion.FrmTipoDocumento();
+        Presentacion.FrmTipoDocumento Documento = new Presentacion.FrmTipoDocumento();
         Escritorio.add(Documento);
         Documento.show();
     }//GEN-LAST:event_mTipodocActionPerformed
 
     private void mTipouserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mTipouserActionPerformed
-        Presentacion.FrmTipoUsuario Usuario=new Presentacion.FrmTipoUsuario();
+        Presentacion.FrmTipoUsuario Usuario = new Presentacion.FrmTipoUsuario();
         Escritorio.add(Usuario);
         Usuario.show();
     }//GEN-LAST:event_mTipouserActionPerformed
 
     private void mProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mProductoActionPerformed
-        Presentacion.FrmProducto Producto=new Presentacion.FrmProducto();
+        Presentacion.FrmProducto Producto = new Presentacion.FrmProducto();
         Escritorio.add(Producto);
         Producto.show();
     }//GEN-LAST:event_mProductoActionPerformed
 
     private void mVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mVentaActionPerformed
-      
-        Presentacion.FrmVenta venta=new Presentacion.FrmVenta();
+
+        Presentacion.FrmVenta venta = new Presentacion.FrmVenta();
         Escritorio.add(venta);
         venta.show();
-        venta.IdEmpleado=lblIdEmpleado.getText();
-        venta.NombreEmpleado=lblNombreEmpleado.getText();
+        venta.IdEmpleado = lblIdEmpleado.getText();
+        venta.NombreEmpleado = lblNombreEmpleado.getText();
 
     }//GEN-LAST:event_mVentaActionPerformed
 
     private void mCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCompraActionPerformed
-        Presentacion.FrmCompra compra=new Presentacion.FrmCompra();
+        Presentacion.FrmCompra compra = new Presentacion.FrmCompra();
         Escritorio.add(compra);
         compra.show();
-        compra.IdEmpleado=lblIdEmpleado.getText();
-        compra.NombreEmpleado=lblNombreEmpleado.getText();
+        compra.IdEmpleado = lblIdEmpleado.getText();
+        compra.NombreEmpleado = lblNombreEmpleado.getText();
     }//GEN-LAST:event_mCompraActionPerformed
 
     private void mEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mEmpleadoActionPerformed
-        Presentacion.FrmEmpleado Empleado=new Presentacion.FrmEmpleado();
+        Presentacion.FrmEmpleado Empleado = new Presentacion.FrmEmpleado();
         Escritorio.add(Empleado);
         Empleado.show();
     }//GEN-LAST:event_mEmpleadoActionPerformed
 
     private void mEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mEstadoActionPerformed
-        Presentacion.FrmProductoEstado ProductoEstado=new Presentacion.FrmProductoEstado();
+        Presentacion.FrmProductoEstado ProductoEstado = new Presentacion.FrmProductoEstado();
         Escritorio.add(ProductoEstado);
         ProductoEstado.show();
     }//GEN-LAST:event_mEstadoActionPerformed
 
     private void mAnularvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mAnularvActionPerformed
-        Presentacion.FrmAnularVenta AnularVenta=new Presentacion.FrmAnularVenta();
+        Presentacion.FrmAnularVenta AnularVenta = new Presentacion.FrmAnularVenta();
+        AnularVenta.lblidvendedor.setText(lblIdEmpleado.getText());
+        AnularVenta.lblvendedor.setText(lblNombreEmpleado.getText());
         Escritorio.add(AnularVenta);
         AnularVenta.show();
     }//GEN-LAST:event_mAnularvActionPerformed
 
     private void mAnularcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mAnularcActionPerformed
-        Presentacion.FrmAnularCompra AnularCompra=new Presentacion.FrmAnularCompra();
+        Presentacion.FrmAnularCompra AnularCompra = new Presentacion.FrmAnularCompra();
         Escritorio.add(AnularCompra);
         AnularCompra.show();
     }//GEN-LAST:event_mAnularcActionPerformed
 
     private void mbtnProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mbtnProductoActionPerformed
-        Presentacion.FrmProducto Producto=new Presentacion.FrmProducto();
+        Presentacion.FrmProducto Producto = new Presentacion.FrmProducto();
         Escritorio.add(Producto);
         Producto.show();
     }//GEN-LAST:event_mbtnProductoActionPerformed
 
     private void mbtnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mbtnClienteActionPerformed
-        Presentacion.FrmCliente Cliente=new Presentacion.FrmCliente();
+        Presentacion.FrmCliente Cliente = new Presentacion.FrmCliente();
         Escritorio.add(Cliente);
         Cliente.show();
     }//GEN-LAST:event_mbtnClienteActionPerformed
 
     private void mbtnEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mbtnEmpleadoActionPerformed
-        Presentacion.FrmEmpleado Empleado=new Presentacion.FrmEmpleado();
+        Presentacion.FrmEmpleado Empleado = new Presentacion.FrmEmpleado();
         Escritorio.add(Empleado);
         Empleado.show();
     }//GEN-LAST:event_mbtnEmpleadoActionPerformed
 
     private void mbtnVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mbtnVentaActionPerformed
-        Presentacion.FrmVenta venta=new Presentacion.FrmVenta();
+        Presentacion.FrmVenta venta = new Presentacion.FrmVenta();
         Escritorio.add(venta);
         venta.show();
-        venta.IdEmpleado=lblIdEmpleado.getText();
-        venta.NombreEmpleado=lblNombreEmpleado.getText();
+        venta.IdEmpleado = lblIdEmpleado.getText();
+        venta.NombreEmpleado = lblNombreEmpleado.getText();
     }//GEN-LAST:event_mbtnVentaActionPerformed
 
     private void mbtnCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mbtnCompraActionPerformed
-        Presentacion.FrmCompra compra=new Presentacion.FrmCompra();
+        Presentacion.FrmCompra compra = new Presentacion.FrmCompra();
         Escritorio.add(compra);
         compra.show();
-        compra.IdEmpleado=lblIdEmpleado.getText();
-        compra.NombreEmpleado=lblNombreEmpleado.getText();
+        compra.IdEmpleado = lblIdEmpleado.getText();
+        compra.NombreEmpleado = lblNombreEmpleado.getText();
     }//GEN-LAST:event_mbtnCompraActionPerformed
 
     private void mbtnEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mbtnEstadoActionPerformed
-        Presentacion.FrmProductoEstado ProductoEstado=new Presentacion.FrmProductoEstado();
+        Presentacion.FrmProductoEstado ProductoEstado = new Presentacion.FrmProductoEstado();
         Escritorio.add(ProductoEstado);
         ProductoEstado.show();
     }//GEN-LAST:event_mbtnEstadoActionPerformed
 
     private void mbtnCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mbtnCajaActionPerformed
-        Presentacion.FrmCaja Caja=new Presentacion.FrmCaja();
+        Presentacion.FrmCaja Caja = new Presentacion.FrmCaja();
         Escritorio.add(Caja);
         Caja.show();
     }//GEN-LAST:event_mbtnCajaActionPerformed
 
     private void mEstadisticaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mEstadisticaActionPerformed
-        Consultas.FrmVentasMensuales Ventas=new Consultas.FrmVentasMensuales();
+        Consultas.FrmVentasMensuales Ventas = new Consultas.FrmVentasMensuales();
         Escritorio.add(Ventas);
         Ventas.show();
     }//GEN-LAST:event_mEstadisticaActionPerformed
 
     private void mCompradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mCompradeActionPerformed
-       Consultas.FrmComprasRealizadas_Detallado Compras=new Consultas.FrmComprasRealizadas_Detallado();
+        Consultas.FrmComprasRealizadas_Detallado Compras = new Consultas.FrmComprasRealizadas_Detallado();
         Escritorio.add(Compras);
         Compras.show();
     }//GEN-LAST:event_mCompradeActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // TODO add your handling code here:
-        FrmAcercaDe form =new FrmAcercaDe();
+        FrmAcercaDe form = new FrmAcercaDe();
         Escritorio.add(form);
         form.show();
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-         try {
+        try {
             File path = new File("Manual.pdf");
             Desktop.getDesktop().open(path);
         } catch (IOException ex) {
@@ -1069,13 +1073,13 @@ void BuscarPermisos(){
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
-        FrmConsultaStock form =new FrmConsultaStock();
+        FrmConsultaStock form = new FrmConsultaStock();
         Escritorio.add(form);
         form.show();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        FrmKardexValorizado form =new FrmKardexValorizado();
+        FrmKardexValorizado form = new FrmKardexValorizado();
         Escritorio.add(form);
         form.show();
     }//GEN-LAST:event_jMenuItem3ActionPerformed

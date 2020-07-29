@@ -161,6 +161,7 @@ private Connection connection=new ClsConexion().getConection();
             throw SQLex;            
         }        
     }
+
     
     public ResultSet consultaStock() throws Exception{
         ResultSet rs = null;
