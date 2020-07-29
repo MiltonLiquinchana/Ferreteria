@@ -939,7 +939,7 @@ public class FrmVenta extends javax.swing.JInternalFrame {
         double n_cant, n_total;
         if (p > -1) {
 
-            n_cant = (Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 4)))*0) + cant;
+            n_cant = (Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 4))) * 0) + cant;
             tblDetalleProducto.setValueAt(n_cant, p, 4);
 
             n_total = Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 4))) * Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 5)));
@@ -1171,6 +1171,8 @@ public class FrmVenta extends javax.swing.JInternalFrame {
         se volvera a ejecutar el metodo actualizar caso contrario solo se vende*/
         vander = vandera.getText();
         if (vander.equals("vandera")) {
+            mirar();
+            limpiarTabla();
             this.dispose();
         }
         if (vander.equals("anular")) {
@@ -1180,6 +1182,8 @@ public class FrmVenta extends javax.swing.JInternalFrame {
             venta.setStrEstadoVenta("EMITIDO");
             ventas.actualizarVentaEstado(idventaanular.getText(), venta);
             restablecerCantidades();
+            mirar();
+            limpiarTabla();
             this.dispose();
         }
     }//GEN-LAST:event_btnSalirActionPerformed
@@ -1200,6 +1204,8 @@ public class FrmVenta extends javax.swing.JInternalFrame {
             venta.setStrEstadoVenta("EMITIDO");
             ventas.actualizarVentaEstado(idventaanular.getText(), venta);
             restablecerCantidades();
+            mirar();
+            limpiarTabla();
             this.dispose();
         }
 
