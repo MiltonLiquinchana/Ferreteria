@@ -176,7 +176,7 @@ private Connection connection=new ClsConexion().getConection();
         }catch(SQLException ex){
             ex.printStackTrace();
         }
-        JOptionPane.showMessageDialog(null,"¡Venta Actualizada!","Mensaje del Sistema",1);
+        
     }
     public ResultSet listarVentaPorDetalle(String criterio,Date fechaini, Date fechafin) throws Exception{
         ResultSet rs = null;

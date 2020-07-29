@@ -37,8 +37,13 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
     String documento, criterio, busqueda, Total;
     boolean valor = true;
     int n = 0;
+
+    /*enviar cantidad de esta consulta a la otra ventana*/
+    double cant = 0, ncant, stock;
     /*instancia de form frmventa*/
     Presentacion.FrmVenta venta = new Presentacion.FrmVenta();
+    /*Array list tipo string publica*/
+    ArrayList cantidades = new ArrayList();
 
     public FrmAnularVenta() {
         initComponents();
@@ -53,7 +58,8 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
         SimpleDateFormat formato = new SimpleDateFormat(format);
         dcFechaini.setDate(date);
         dcFechafin.setDate(date);
-
+        lblidvendedor.setVisible(false);
+        lblvendedor.setVisible(false);
         BuscarVenta();
         CrearTabla();
         CantidadTotal();
@@ -275,7 +281,7 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
         tblDetalleVenta.setModel(dtm1);
     }
 
-     void CantidadTotal() {
+    void CantidadTotal() {
         Total = String.valueOf(tblVenta.getRowCount());
         lblEstado.setText("Se cargaron " + Total + " registros");
     }
@@ -285,7 +291,7 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
         ClsProducto productos = new ClsProducto();
         ClsEntidadProducto producto = new ClsEntidadProducto();
         int fila = 0;
-        double cant = 0, ncant, stock;
+
         fila = tblDetalleVenta.getRowCount();
         for (int f = 0; f < fila; f++) {
             try {
@@ -557,7 +563,13 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnAnularVentaActionPerformed
 
     private void btneditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneditarActionPerformed
-        actualizarventa();
+        if (tblVenta.getSelectedRows().length > 0) {
+            actualizarventa();
+        } else {
+            JOptionPane.showMessageDialog(null, "¡Se debe seleccionar un registro de venta!");
+        }
+
+
     }//GEN-LAST:event_btneditarActionPerformed
     /*este metod sirve para mostrar la ventana venta*/
     void mostrarventanaventa() {
@@ -572,6 +584,15 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
         /*el valor del label venta sera anular*/
         venta.vandera.setText("anular");
         venta.idventaanular.setText(lblIdVenta.getText());
+        /*agregar datos a el array cantidades*/
+        int f, i = 0;
+        f = tblDetalleVenta.getRowCount();
+        while (i < f) {
+            cantidades.add(String.valueOf(tblDetalleVenta.getValueAt(i, 5)));
+            i++;
+        }
+        venta.agregardatosarraylist(cantidades);
+        cantidades.clear();
         /*instancia de objeto para poder acceder a la tabla de ventas*/
         venta.show();
     }
@@ -615,7 +636,7 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
     /*Este metodo nos sirve para actualizar regresar la cantidad de productos vendidos antes de una compra*/
     void actualizarventa() {
         /*mensaje que avisa si desea actualizar la venta y en la cual se dice que se anulara la venta para luego proceder a la venta nuevamente*/
-        int indice = JOptionPane.showConfirmDialog(this, "Para actualizar la venta primero se la anulara \n ¿esta seguro?");/*al poner this se muestra en el centro del formulario y al poner null en medio de la pantalla*/
+        int indice = JOptionPane.showConfirmDialog(this, "Para esta accion primero se anulara la venta \n ¿esta seguro?");/*al poner this se muestra en el centro del formulario y al poner null en medio de la pantalla*/
  /*para obtener la respuesta de que boton se preciono se lo hace al obtener el indice empesando desde cero este indice se guardara en una
     variable entera*/
         //el indice 0 equivale a SI
@@ -646,10 +667,7 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "¡Esta venta ya ha sido ANULADA!");
             }
 
-        } else{
-            JOptionPane.showMessageDialog(this, "entendido");
-        
-        }
+        } 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
