@@ -404,21 +404,21 @@ public class FrmVentasRealizadas extends javax.swing.JInternalFrame {
 
         dcFechaini.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jPanel1.add(dcFechaini);
-        dcFechaini.setBounds(90, 20, 100, 25);
+        dcFechaini.setBounds(70, 20, 100, 25);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel1.setText("Nombre:");
+        jLabel1.setText("NOMBRE/CEDULA");
         jPanel1.add(jLabel1);
-        jLabel1.setBounds(40, 60, 70, 20);
+        jLabel1.setBounds(20, 60, 110, 20);
 
         dcFechafin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jPanel1.add(dcFechafin);
-        dcFechafin.setBounds(250, 20, 100, 25);
+        dcFechafin.setBounds(230, 20, 100, 25);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("HASTA:");
         jPanel1.add(jLabel3);
-        jLabel3.setBounds(200, 20, 70, 20);
+        jLabel3.setBounds(180, 20, 70, 20);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Buscar_32.png"))); // NOI18N
         jButton1.setText("Buscar");
@@ -442,12 +442,12 @@ public class FrmVentasRealizadas extends javax.swing.JInternalFrame {
         jPanel1.add(jButton2);
         jButton2.setBounds(530, 20, 110, 50);
         jPanel1.add(txtNombreCliente);
-        txtNombreCliente.setBounds(100, 60, 230, 20);
+        txtNombreCliente.setBounds(130, 60, 230, 20);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("DESDE:");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(40, 20, 70, 20);
+        jLabel2.setBounds(20, 20, 70, 20);
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(10, 10, 730, 90);

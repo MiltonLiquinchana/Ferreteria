@@ -62,6 +62,7 @@ public class FrmVenta extends javax.swing.JInternalFrame {
 
     String criterio, busqueda;
     String vander;
+    ArrayList cantidadesrecive = new ArrayList();
 
     public FrmVenta() {
         initComponents();
@@ -81,6 +82,9 @@ public class FrmVenta extends javax.swing.JInternalFrame {
         lblIdCliente.setVisible(false);
         txtDescripcionProducto.setVisible(false);
         txtCostoProducto.setVisible(false);
+//        vandera.setVisible(false);
+//        lblcantidadproductorecivido.setVisible(false);
+//        idventaanular.setVisible(false);
         mirar();
         //--------------------JTABLE - DETALLEPRODUCTO--------------------
 
@@ -89,6 +93,8 @@ public class FrmVenta extends javax.swing.JInternalFrame {
         tblDetalleProducto.setModel(dtmDetalle);
         //CrearTablaDetalleProducto();
         vander = vandera.getText();
+        vandera.setVisible(false);
+        idventaanular.setVisible(false);
     }
 
 //-----------------------------------------------------------------------------------------------
@@ -611,7 +617,7 @@ public class FrmVenta extends javax.swing.JInternalFrame {
         jPanel3.add(btnLimpiarTabla, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 5, 50, 40));
 
         vandera.setText("vandera");
-        jPanel3.add(vandera, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 10, -1, -1));
+        jPanel3.add(vandera, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 0, -1, -1));
 
         idventaanular.setText("idventa");
         jPanel3.add(idventaanular, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 30, -1, -1));
@@ -939,7 +945,7 @@ public class FrmVenta extends javax.swing.JInternalFrame {
         double n_cant, n_total;
         if (p > -1) {
 
-            n_cant = (Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 4))) * 0) + cant;
+            n_cant = Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 4))) + cant;
             tblDetalleProducto.setValueAt(n_cant, p, 4);
 
             n_total = Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 4))) * Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 5)));
@@ -956,6 +962,11 @@ public class FrmVenta extends javax.swing.JInternalFrame {
 
         }
         tblDetalleProducto.setModel(dtmDetalle);
+    }
+
+    public void agregardatosarraylist(ArrayList cantidades) {
+        cantidadesrecive = cantidades;
+
     }
 
     public void CalcularValor_Venta() {
@@ -1189,7 +1200,6 @@ public class FrmVenta extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-
         /*verificaremos si se a anulado la venta si se a accedido desde anular venta y da en cancelar
         se volvera a ejecutar el metodo actualizar caso contrario solo se vende*/
         vander = vandera.getText();
@@ -1217,12 +1227,14 @@ public class FrmVenta extends javax.swing.JInternalFrame {
         ClsProducto productos = new ClsProducto();
         ClsEntidadProducto producto = new ClsEntidadProducto();
         int fila = 0;
-        double cant = 0, ncant, stock = 0;
+        double cant = 0, ncant = 0, stock = 0;
         //String cantidad[] = new String[1];
-        fila = tblDetalleProducto.getRowCount();
+        //fila = tblDetalleProducto.getRowCount();
+        fila=cantidadesrecive.size();
         ClsProducto productocsl = new ClsProducto();
         //String listadedatos[] = new String[1];
-        for (int f = 0; f < fila; f++) {
+        int f = 0;
+        while (f < fila) {
             String idproductolista;
             idproductolista = (String) tblDetalleProducto.getValueAt(f, 0);
             try {
@@ -1234,14 +1246,17 @@ public class FrmVenta extends javax.swing.JInternalFrame {
             }
 
             strId = ((String) tblDetalleProducto.getValueAt(f, 0));
-            ncant = Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 4)));
+            ncant = Double.parseDouble((String) cantidadesrecive.get(f));
+
             stock = cant - ncant;
             producto.setStrStockProducto(String.valueOf(stock));
             productos.actualizarProductoStock(strId, producto);
+            f++;
         }
         cant = 0;
         ncant = 0;
         stock = 0;
+        cantidadesrecive.clear();
     }
 
 
