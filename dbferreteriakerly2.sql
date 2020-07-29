@@ -1490,7 +1490,7 @@ IF pcriterio = "consultar" THEN
 			INNER JOIN tipodocumento AS td ON v.IdTipoDocumento=td.IdTipoDocumento
 			INNER JOIN cliente AS c ON v.IdCliente=c.IdCliente
 			INNER JOIN empleado AS e ON v.IdEmpleado=e.IdEmpleado
-			WHERE c.Nombre=Incliente AND (v.Fecha BETWEEN fechaini AND fechafin)  ORDER BY v.IdVenta;
+			WHERE c.Nombre LIKE CONCAT('%',Incliente,'%') AND (v.Fecha BETWEEN fechaini AND fechafin)  ORDER BY v.IdVenta;
 			END IF;
             
 END ;;
@@ -2051,4 +2051,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-28 20:06:12
+-- Dump completed on 2020-07-29 10:38:03
