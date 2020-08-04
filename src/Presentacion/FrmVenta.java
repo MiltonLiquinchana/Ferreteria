@@ -31,6 +31,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Scanner;
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -90,6 +92,17 @@ public class FrmVenta extends javax.swing.JInternalFrame {
 
         String titulos[] = {"ID", "CÓDIGO", "PRODUCTO", "DESCRIPCIÓN", "CANT.", "COSTO", "PRECIO", "TOTAL", "IVA"};
         dtmDetalle.setColumnIdentifiers(titulos);
+        dtmDetalle.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent tme) {
+                if (tme.getType() == TableModelEvent.UPDATE) {
+                   int fila_s, columna;
+                    fila_s = tblDetalleProducto.getSelectedRow();
+                    columna=tblDetalleProducto.getSelectedColumn();
+                    JOptionPane.showMessageDialog(null, dtmDetalle.getValueAt(fila_s, columna));
+                }
+            }
+        });
         tblDetalleProducto.setModel(dtmDetalle);
         //CrearTablaDetalleProducto();
         vander = vandera.getText();
@@ -961,6 +974,7 @@ public class FrmVenta extends javax.swing.JInternalFrame {
             dtmDetalle.addRow(Datos);
 
         }
+
         tblDetalleProducto.setModel(dtmDetalle);
     }
 
@@ -1230,7 +1244,7 @@ public class FrmVenta extends javax.swing.JInternalFrame {
         double cant = 0, ncant = 0, stock = 0;
         //String cantidad[] = new String[1];
         //fila = tblDetalleProducto.getRowCount();
-        fila=cantidadesrecive.size();
+        fila = cantidadesrecive.size();
         ClsProducto productocsl = new ClsProducto();
         //String listadedatos[] = new String[1];
         int f = 0;
@@ -1476,6 +1490,17 @@ public class FrmVenta extends javax.swing.JInternalFrame {
 
         }
     }
+
+    /*en este metodo agregamos el listener al modelo y se llama al metodo 
+    que calcula el total, al agregar el listener podremos escuchar el evento de la tabla*/
+    private void anadeListenerAlModelo(JTable tabla) {
+        tabla.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent evento) {
+                /*aqui ejecutamos el metodo que suma el total y subtotal*/
+            }
+        });
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarProducto;
     private javax.swing.JButton btnBuscarCliente;
@@ -1488,7 +1513,7 @@ public class FrmVenta extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnLimpiarTabla;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnSalir;
-    private javax.swing.JComboBox cboTipoDocumento;
+    public static javax.swing.JComboBox cboTipoDocumento;
     private javax.swing.JCheckBox chkCambiarNumero;
     public static javax.swing.JCheckBox chkiva;
     public static javax.swing.JLabel idventaanular;
