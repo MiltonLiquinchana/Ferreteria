@@ -26,11 +26,11 @@ import javax.swing.table.TableCellRenderer;
  */
 public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
 
-
-    static ResultSet rs=null;
-    DefaultTableModel dtm=new DefaultTableModel();
+    static ResultSet rs = null;
+    DefaultTableModel dtm = new DefaultTableModel();
     public String Total;
-    String criterio,busqueda;
+    String criterio, busqueda;
+
     public FrmBuscarProducto_Venta() {
 
         initComponents();
@@ -38,9 +38,7 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
         buttonGroup1.add(rbtnNombre);
         buttonGroup1.add(rbtnDescripcion);
 
-
         //--------------------PANEL - PRODUCTO----------------------------
-        
         actualizarTablaProducto();
         CrearTablaProducto();
         //---------------------ANCHO Y ALTO DEL FORM----------------------
@@ -52,51 +50,52 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
 //-----------------------------------------------------------------------------------------------
 //----------------------------------PANEL - PRODUCTO---------------------------------------------
 //-----------------------------------------------------------------------------------------------
-    void actualizarTablaProducto(){
-       String titulos[]={"ID","Cód. de Barras","Nombre","Descripción","Stock","P. Costo","P. Venta","Iva"};
-              
-       ClsProducto productos=new ClsProducto();
-       ArrayList<ClsEntidadProducto> producto=productos.listarProductoActivo();
-       Iterator iterator=producto.iterator();
-       DefaultTableModel defaultTableModel=new DefaultTableModel(null,titulos);
-       
-       String fila[]=new String[8];
-       while(iterator.hasNext()){
-           ClsEntidadProducto Producto=new ClsEntidadProducto();
-           Producto=(ClsEntidadProducto) iterator.next();
-           fila[0]=Producto.getStrIdProducto();
-           fila[1]=Producto.getStrCodigoProducto();       
-           fila[2]=Producto.getStrNombreProducto();
-           fila[3]=Producto.getStrDescripcionProducto();
-           fila[4]=Producto.getStrStockProducto();
-           fila[5]=Producto.getStrPrecioCostoProducto();
-           fila[6]=Producto.getStrPrecioVentaProducto();
-           fila[7]=Producto.getStrIva();
-           defaultTableModel.addRow(fila);               
-       }
-       tblProducto.setModel(defaultTableModel);
-   }
-    void CrearTablaProducto(){
-   //--------------------PRESENTACION DE JTABLE PRODUCTO----------------------
-      
-        TableCellRenderer render = new DefaultTableCellRenderer() { 
+    void actualizarTablaProducto() {
+        String titulos[] = {"ID", "Cód. de Barras", "Nombre", "Descripción", "Stock", "P. Costo", "P. Venta", "Iva"};
 
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) { 
+        ClsProducto productos = new ClsProducto();
+        ArrayList<ClsEntidadProducto> producto = productos.listarProductoActivo();
+        Iterator iterator = producto.iterator();
+        DefaultTableModel defaultTableModel = new DefaultTableModel(null, titulos);
+
+        String fila[] = new String[8];
+        while (iterator.hasNext()) {
+            ClsEntidadProducto Producto = new ClsEntidadProducto();
+            Producto = (ClsEntidadProducto) iterator.next();
+            fila[0] = Producto.getStrIdProducto();
+            fila[1] = Producto.getStrCodigoProducto();
+            fila[2] = Producto.getStrNombreProducto();
+            fila[3] = Producto.getStrDescripcionProducto();
+            fila[4] = Producto.getStrStockProducto();
+            fila[5] = Producto.getStrPrecioCostoProducto();
+            fila[6] = Producto.getStrPrecioVentaProducto();
+            fila[7] = Producto.getStrIva();
+            defaultTableModel.addRow(fila);
+        }
+        tblProducto.setModel(defaultTableModel);
+    }
+
+    void CrearTablaProducto() {
+        //--------------------PRESENTACION DE JTABLE PRODUCTO----------------------
+
+        TableCellRenderer render = new DefaultTableCellRenderer() {
+
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 //aqui obtengo el render de la calse superior 
-                JLabel l = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
+                JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 //Determinar Alineaciones   
-                    if(column==0 || column==1 || column==4 || column==5 || column==6 || column==13){
-                        l.setHorizontalAlignment(SwingConstants.CENTER); 
-                    }else{
-                        l.setHorizontalAlignment(SwingConstants.LEFT);
-                    }
+                if (column == 0 || column == 1 || column == 4 || column == 5 || column == 6 || column == 13) {
+                    l.setHorizontalAlignment(SwingConstants.CENTER);
+                } else {
+                    l.setHorizontalAlignment(SwingConstants.LEFT);
+                }
 
                 //Colores en Jtable        
                 if (isSelected) {
                     l.setBackground(new Color(203, 159, 41));
                     //l.setBackground(new Color(168, 198, 238));
-                    l.setForeground(Color.WHITE); 
-                }else{
+                    l.setForeground(Color.WHITE);
+                } else {
                     l.setForeground(Color.BLACK);
                     if (row % 2 == 0) {
                         l.setBackground(Color.WHITE);
@@ -104,74 +103,77 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
                         //l.setBackground(new Color(232, 232, 232));
                         l.setBackground(new Color(254, 227, 152));
                     }
-                }        
-                return l; 
-            } 
-        }; 
-        
+                }
+                return l;
+            }
+        };
+
         //Agregar Render
-        for (int i=0;i<tblProducto.getColumnCount();i++){
+        for (int i = 0; i < tblProducto.getColumnCount(); i++) {
             tblProducto.getColumnModel().getColumn(i).setCellRenderer(render);
         }
-      
+
         //Activar ScrollBar
         tblProducto.setAutoResizeMode(tblProducto.AUTO_RESIZE_OFF);
 
         //Anchos de cada columna
-        int[] anchos = {40,100,150,200,60,60,60,30};
-        for(int i = 0; i < tblProducto.getColumnCount(); i++) {
+        int[] anchos = {40, 100, 150, 200, 60, 60, 60, 30};
+        for (int i = 0; i < tblProducto.getColumnCount(); i++) {
             tblProducto.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
         }
-   }
-    void BuscarProductoPanel(){
-        String titulos[]={"ID","Cód. de Barras","Nombre","Descripción","Stock","P. Costo","P. Venta","Iva"};
+    }
+
+    void BuscarProductoPanel() {
+        String titulos[] = {"ID", "Cód. de Barras", "Nombre", "Descripción", "Stock", "P. Costo", "P. Venta", "Iva"};
         dtm.setColumnIdentifiers(titulos);
-        
-        ClsProducto categoria=new ClsProducto();
-        busqueda=txtBusqueda.getText();
-        if(rbtnCodigo.isSelected()){
-            criterio="codigo";
-        }else if(rbtnNombre.isSelected()){
-            criterio="nombre";
-        }else if(rbtnDescripcion.isSelected()){
-            criterio="descripcion";
+
+        ClsProducto categoria = new ClsProducto();
+        busqueda = txtBusqueda.getText();
+        if (rbtnCodigo.isSelected()) {
+            criterio = "codigo";
+        } else if (rbtnNombre.isSelected()) {
+            criterio = "nombre";
+        } else if (rbtnDescripcion.isSelected()) {
+            criterio = "descripcion";
         }
-        try{
-            rs=categoria.listarProductoActivoPorParametro(criterio,busqueda);
-            boolean encuentra=false;
-            String Datos[]=new String[8];
-            int f,i;
-            f=dtm.getRowCount();
-            if(f>0){
-                for(i=0;i<f;i++){
+        try {
+            rs = categoria.listarProductoActivoPorParametro(criterio, busqueda);
+            boolean encuentra = false;
+            String Datos[] = new String[8];
+            int f, i;
+            f = dtm.getRowCount();
+            if (f > 0) {
+                for (i = 0; i < f; i++) {
                     dtm.removeRow(0);
                 }
             }
-            while(rs.next()){
-                Datos[0]=(String) rs.getString(1);
-                Datos[1]=(String) rs.getString(2);
-                Datos[2]=(String) rs.getString(3);
-                Datos[3]=(String) rs.getString(4);
-                Datos[4]=(String) rs.getString(5);
-                Datos[5]=(String) rs.getString(7);
-                Datos[6]=(String) rs.getString(8);
-                Datos[7]=(String) rs.getString(13);
+            while (rs.next()) {
+                Datos[0] = (String) rs.getString(1);
+                Datos[1] = (String) rs.getString(2);
+                Datos[2] = (String) rs.getString(3);
+                Datos[3] = (String) rs.getString(4);
+                Datos[4] = (String) rs.getString(5);
+                Datos[5] = (String) rs.getString(7);
+                Datos[6] = (String) rs.getString(8);
+                Datos[7] = (String) rs.getString(13);
                 dtm.addRow(Datos);
-                encuentra=true;
+                encuentra = true;
             }
-            if(encuentra=false){
+            if (encuentra = false) {
                 JOptionPane.showMessageDialog(null, "¡No se encuentra!");
             }
 
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         tblProducto.setModel(dtm);
     }
-    void CantidadTotal(){
-        Total= String.valueOf(tblProducto.getRowCount());   
-        lblEstado.setText("Se cargaron " + Total + " registros");      
+
+    void CantidadTotal() {
+        Total = String.valueOf(tblProducto.getRowCount());
+        lblEstado.setText("Se cargaron " + Total + " registros");
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -291,32 +293,26 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_rbtnNombreStateChanged
 
     private void tblProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductoMouseClicked
-
         int fila;
-
-        DefaultTableModel defaultTableModel = new DefaultTableModel();
         fila = tblProducto.getSelectedRow();
-
-        if (fila == -1){
+        DefaultTableModel defaultTableModel = new DefaultTableModel();
+        if (fila >= 0) {
+            defaultTableModel = (DefaultTableModel) tblProducto.getModel();
+            Presentacion.FrmVenta.lblIdProducto.setText((String) defaultTableModel.getValueAt(fila, 0));
+            Presentacion.FrmVenta.txtCodigoProducto.setText((String) defaultTableModel.getValueAt(fila, 1));
+            Presentacion.FrmVenta.txtNombreProducto.setText((String) defaultTableModel.getValueAt(fila, 2));
+            Presentacion.FrmVenta.txtDescripcionProducto.setText((String) defaultTableModel.getValueAt(fila, 3));
+            Presentacion.FrmVenta.txtStockProducto.setText((String) defaultTableModel.getValueAt(fila, 4));
+            Presentacion.FrmVenta.txtCostoProducto.setText((String) defaultTableModel.getValueAt(fila, 5));
+            Presentacion.FrmVenta.txtPrecioProducto.setText((String) defaultTableModel.getValueAt(fila, 6));
+            if ("si".equals((String) defaultTableModel.getValueAt(fila, 7))) {
+                Presentacion.FrmVenta.chkiva.setSelected(true);
+            } else if ("no".equals((String) defaultTableModel.getValueAt(fila, 7))) {
+                Presentacion.FrmVenta.chkiva.setSelected(false);
+            }
+        }else {
             JOptionPane.showMessageDialog(null, "Se debe seleccionar un registro");
-        }else{
-            defaultTableModel = (DefaultTableModel)tblProducto.getModel();
-
-                Presentacion.FrmVenta.lblIdProducto.setText((String)defaultTableModel.getValueAt(fila,0));
-                Presentacion.FrmVenta.txtCodigoProducto.setText((String)defaultTableModel.getValueAt(fila,1));
-                Presentacion.FrmVenta.txtNombreProducto.setText((String)defaultTableModel.getValueAt(fila,2));
-                Presentacion.FrmVenta.txtDescripcionProducto.setText((String)defaultTableModel.getValueAt(fila,3));
-                Presentacion.FrmVenta.txtStockProducto.setText((String)defaultTableModel.getValueAt(fila,4));
-                Presentacion.FrmVenta.txtCostoProducto.setText((String)defaultTableModel.getValueAt(fila,5));          
-                Presentacion.FrmVenta.txtPrecioProducto.setText((String)defaultTableModel.getValueAt(fila,6));    
-                if ("si".equals((String) defaultTableModel.getValueAt(fila,7))){
-                    Presentacion.FrmVenta.chkiva.setSelected(true);
-                }else if ("no".equals((String) defaultTableModel.getValueAt(fila,7))){
-                    Presentacion.FrmVenta.chkiva.setSelected(false);
-                }
-        
-        }
-
+        }       
     }//GEN-LAST:event_tblProductoMouseClicked
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed

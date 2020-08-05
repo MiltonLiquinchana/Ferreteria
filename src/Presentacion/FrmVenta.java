@@ -12,19 +12,15 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.view.*;
 import java.util.HashMap;
 import java.util.Map;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,8 +32,9 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
 
-public class FrmVenta extends javax.swing.JInternalFrame {
+public final class FrmVenta extends javax.swing.JInternalFrame {
 
     private Connection connection = new ClsConexion().getConection();
     String Total;
@@ -80,34 +77,70 @@ public class FrmVenta extends javax.swing.JInternalFrame {
         this.setSize(955, 505);
         cargarComboTipoDocumento();
 
-        lblIdProducto.setVisible(false);
-        lblIdCliente.setVisible(false);
+        //lblIdProducto.setVisible(false);
+        //lblIdCliente.setVisible(false);
         txtDescripcionProducto.setVisible(false);
         txtCostoProducto.setVisible(false);
-//        vandera.setVisible(false);
-//        lblcantidadproductorecivido.setVisible(false);
-//        idventaanular.setVisible(false);
         mirar();
         //--------------------JTABLE - DETALLEPRODUCTO--------------------
 
         String titulos[] = {"ID", "CÓDIGO", "PRODUCTO", "DESCRIPCIÓN", "CANT.", "COSTO", "PRECIO", "TOTAL", "IVA"};
         dtmDetalle.setColumnIdentifiers(titulos);
+        /**
+         * *********************Evento datatable**************************
+         */
         dtmDetalle.addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent tme) {
-                if (tme.getType() == TableModelEvent.UPDATE) {
-                   int fila_s, columna;
-                    fila_s = tblDetalleProducto.getSelectedRow();
-                    columna=tblDetalleProducto.getSelectedColumn();
-                    JOptionPane.showMessageDialog(null, dtmDetalle.getValueAt(fila_s, columna));
-                }
+                eventotable(tme);
             }
         });
+
+        /**
+         * *************************Evento Datatable fin**********************
+         */
+        /*hacignamos el modelo de a la tabla*/
         tblDetalleProducto.setModel(dtmDetalle);
-        //CrearTablaDetalleProducto();
+        CrearTablaDetalleProducto();
         vander = vandera.getText();
-        vandera.setVisible(false);
-        idventaanular.setVisible(false);
+        //vandera.setVisible(false);
+        //idventaanular.setVisible(false);
+    }
+
+    public void eventotable(TableModelEvent evento) {
+
+        if (evento.getType() == TableModelEvent.UPDATE) {
+            /*obtenemos el modelo de la tabla y la fila/ columna que han cambiado*/
+            TableModel modelo = ((TableModel) (evento.getSource()));
+            int fila = evento.getFirstRow();
+            int columna = evento.getColumn();
+            /*obtenemos los valores que se modificarion*/
+            String cantidanueva, precio, totalnuevo;
+            cantidanueva = String.valueOf(modelo.getValueAt(fila, 4));
+            precio = String.valueOf(modelo.getValueAt(fila, 6));
+            // Los cambios en la columna numero 7 donde se ase el cambio de por el nuevo total se ignoran.
+            // Este return es necesario porque cuando nuestro codigo modifique
+            // los valores de las cantidades, precios en esta fila y columna, saltara nuevamente
+            // el evento, metiendonos en un bucle recursivo de llamadas a este
+            // metodo.
+            /*aqui le decimos que ignore cualquier cambio en la columna 7*/
+            if (columna == 7) {
+                return;
+            }
+            try {
+                /*hacemos el calculo con los valores que se obtenieron anteriorment*/
+                totalnuevo = String.valueOf(Double.parseDouble(cantidanueva) * Double.parseDouble(precio));
+                /*hacignamos el nuevo calculo*/
+                modelo.setValueAt(totalnuevo, fila, 7);
+                CalcularValor_Venta();
+                CalcularSubTotal();
+                CalcularIGV();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "ha ocurrido un problema");
+            }
+
+        }
+
     }
 
 //-----------------------------------------------------------------------------------------------
@@ -200,8 +233,9 @@ public class FrmVenta extends javax.swing.JInternalFrame {
         for (int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
             tblDetalleProducto.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
         }
+
         //Ocultar columa
-        setOcultarColumnasJTable(tblDetalleProducto, new int[]{0, 6});
+        setOcultarColumnasJTable(tblDetalleProducto, new int[]{0, 5});
 
     }
 
@@ -338,7 +372,7 @@ public class FrmVenta extends javax.swing.JInternalFrame {
 
     }
 
-    void BuscarClientePorDefecto() {
+    public void BuscarClientePorDefecto() {
         try {
             ClsCliente oCliente = new ClsCliente();
             rs = oCliente.listarClientePorParametro("id", "1");
@@ -477,6 +511,11 @@ public class FrmVenta extends javax.swing.JInternalFrame {
         tblDetalleProducto.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
                 tblDetalleProductoComponentAdded(evt);
+            }
+        });
+        tblDetalleProducto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDetalleProductoMouseClicked(evt);
             }
         });
         jScrollPane3.setViewportView(tblDetalleProducto);
@@ -900,7 +939,7 @@ public class FrmVenta extends javax.swing.JInternalFrame {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
 //        txtIdEmpleado.setText(IdEmpleado);
-        BuscarClientePorDefecto();
+        //BuscarClientePorDefecto();
         cargarComboTipoDocumento();
 
 
@@ -980,7 +1019,6 @@ public class FrmVenta extends javax.swing.JInternalFrame {
 
     public void agregardatosarraylist(ArrayList cantidades) {
         cantidadesrecive = cantidades;
-
     }
 
     public void CalcularValor_Venta() {
@@ -998,26 +1036,27 @@ public class FrmVenta extends javax.swing.JInternalFrame {
 
     public void CalcularSubTotal() {
         int contar = tblDetalleProducto.getRowCount();
-        double suma = 0;
+        double suma = 0, subtotal;
         for (int i = 0; i < contar; i++) {
-            suma = suma + Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(i, 6)));
+            suma = suma + Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(i, 7)));;
         }
         DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
         simbolos.setDecimalSeparator('.');
         DecimalFormat formateador = new DecimalFormat("####.####", simbolos);
-
-        txtSubTotal.setText(formateador.format(suma));
+        subtotal = suma / 1.12;
+        txtSubTotal.setText(formateador.format(subtotal));
     }
 
-    void CalcularIGV() {
+    public void CalcularIGV() {
         double totalpagar = 0;
-        double value = 0;
+        double subtotal = 0, iva;
         totalpagar = Double.parseDouble(txtTotalPagar.getText());
         DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
         simbolos.setDecimalSeparator('.');
-        DecimalFormat formateador = new DecimalFormat("####.##", simbolos);
-        value = totalpagar - (totalpagar * 0.12);
-        txtIGV.setText(formateador.format(value));
+        DecimalFormat formateador = new DecimalFormat("####.###", simbolos);
+        subtotal = totalpagar / 1.12;
+        iva = totalpagar - subtotal;
+        txtIGV.setText(formateador.format(iva));
     }
 
     /*
@@ -1151,7 +1190,6 @@ public class FrmVenta extends javax.swing.JInternalFrame {
 
     private void btnEliminarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProductoActionPerformed
         int fila = tblDetalleProducto.getSelectedRow();
-        JOptionPane.showMessageDialog(null, fila);
         dtmDetalle.removeRow(fila);
     }//GEN-LAST:event_btnEliminarProductoActionPerformed
 
@@ -1261,7 +1299,6 @@ public class FrmVenta extends javax.swing.JInternalFrame {
 
             strId = ((String) tblDetalleProducto.getValueAt(f, 0));
             ncant = Double.parseDouble((String) cantidadesrecive.get(f));
-
             stock = cant - ncant;
             producto.setStrStockProducto(String.valueOf(stock));
             productos.actualizarProductoStock(strId, producto);
@@ -1433,6 +1470,10 @@ public class FrmVenta extends javax.swing.JInternalFrame {
     private void tblDetalleProductoComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_tblDetalleProductoComponentAdded
 
     }//GEN-LAST:event_tblDetalleProductoComponentAdded
+
+    private void tblDetalleProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDetalleProductoMouseClicked
+
+    }//GEN-LAST:event_tblDetalleProductoMouseClicked
     void obtenerUltimoIdVenta() {
         try {
             ClsVenta oVenta = new ClsVenta();
