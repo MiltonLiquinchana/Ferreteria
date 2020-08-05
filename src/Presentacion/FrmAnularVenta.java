@@ -37,7 +37,7 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
     String documento, criterio, busqueda, Total;
     boolean valor = true;
     int n = 0;
-
+    String nomcliente;
     /*enviar cantidad de esta consulta a la otra ventana*/
     double cant = 0, ncant, stock;
     /*instancia de form frmventa*/
@@ -486,16 +486,14 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
 
     private void tblVentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVentaMouseClicked
         int fila;
-        DefaultTableModel defaultTableModel = new DefaultTableModel();
         fila = tblVenta.getSelectedRow();
-
-        if (fila == -1) {
+        DefaultTableModel defaultTableModel = new DefaultTableModel();
+        if (fila < 0) {
             JOptionPane.showMessageDialog(null, "Se debe seleccionar un registro");
         } else {
             defaultTableModel = (DefaultTableModel) tblVenta.getModel();
             //strCodigo =  ((String) defaultTableModel.getValueAt(fila, 0));
             lblIdVenta.setText((String) defaultTableModel.getValueAt(fila, 0));
-
         }
         BuscarVentaDetalle();
         CrearTablaDetalle();
@@ -592,7 +590,7 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
             i++;
         }
         venta.agregardatosarraylist(cantidades);
-        cantidades.clear();
+        //cantidades.clear();
         /*instancia de objeto para poder acceder a la tabla de ventas*/
         venta.show();
     }
@@ -607,20 +605,26 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
         try {
             rs = ventas.listarProductosporId(lblIdVenta.getText());
             boolean encuentra = false;
+            
             while (rs.next()) {
-                Datos[0] = (String) rs.getString(1);
-                Datos[1] = (String) rs.getString(2);
-                Datos[2] = (String) rs.getString(3);
-                Datos[3] = (String) rs.getString(4);
-                Datos[4] = (String) rs.getString(5);
-                Datos[5] = (String) rs.getString(6);
-                Datos[6] = (String) rs.getString(7);
-                Datos[7] = (String) rs.getString(8);
-                Datos[8] = (String) rs.getString(9);
+                nomcliente=(String) rs.getString(1);
+                Datos[0] = (String) rs.getString(2);
+                Datos[1] = (String) rs.getString(3);
+                Datos[2] = (String) rs.getString(4);
+                Datos[3] = (String) rs.getString(5);
+                Datos[4] = (String) rs.getString(6);
+                Datos[5] = (String) rs.getString(7);
+                Datos[6] = (String) rs.getString(8);
+                Datos[7] = (String) rs.getString(9);
+                Datos[8] = (String) rs.getString(10);
                 venta.agregardatos(Integer.parseInt(Datos[0]), Datos[1], Datos[2], Datos[3], Double.parseDouble(Datos[4]),
                         Datos[5], Datos[6], Datos[7], Datos[8]);
                 encuentra = true;
             }
+
+            
+            
+            
 
             if (encuentra = false) {
                 JOptionPane.showMessageDialog(null, "¡No se encuentra!");
@@ -667,7 +671,7 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "¡Esta venta ya ha sido ANULADA!");
             }
 
-        } 
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

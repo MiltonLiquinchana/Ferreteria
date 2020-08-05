@@ -1017,6 +1017,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void mbtnVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mbtnVentaActionPerformed
         Presentacion.FrmVenta venta = new Presentacion.FrmVenta();
         Escritorio.add(venta);
+        venta.BuscarClientePorDefecto();
         venta.show();
         venta.IdEmpleado = lblIdEmpleado.getText();
         venta.NombreEmpleado = lblNombreEmpleado.getText();
