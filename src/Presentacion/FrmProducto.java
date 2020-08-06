@@ -150,7 +150,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
        txtStock.setText("");
        txtStockMin.setText("");
        txtPrecioCosto.setText("");
-       txtPrecioVenta.setText("");
+       txtDescuento.setText("");
        lblImagen.setIcon(null);
        txtUtilidad.setText("");
        txtCodigoBar.requestFocus();
@@ -159,7 +159,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
 //       txtStock.setText("0");
 //       txtStockMin.setText("0");
        txtPrecioCosto.setText("0.0");
-       txtPrecioVenta.setText("0.0");
+       txtDescuento.setText("0.0");
        txtUtilidad.setText("0.0");
        jCheckiva.setSelected(false);
        
@@ -186,7 +186,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
        txtStock.setEnabled(false);
        txtStockMin.setEnabled(false);
        txtPrecioCosto.setEnabled(false);
-       txtPrecioVenta.setEnabled(false);
+       txtDescuento.setEnabled(false);
        cboCategoria.setEnabled(false);
        rbtnActivo.setEnabled(false);
        rbtnInactivo.setEnabled(false);
@@ -215,7 +215,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
        txtStock.setEnabled(true);
        txtStockMin.setEnabled(true);
        txtPrecioCosto.setEnabled(true);
-       txtPrecioVenta.setEnabled(true);
+       txtDescuento.setEnabled(true);
        cboCategoria.setEnabled(true);
        rbtnActivo.setEnabled(true);
        rbtnInactivo.setEnabled(true);
@@ -347,7 +347,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
             txtStock.setText((String)defaultTableModel.getValueAt(registros,4));
             txtStockMin.setText((String)defaultTableModel.getValueAt(registros,5));
             txtPrecioCosto.setText((String)defaultTableModel.getValueAt(registros,6));
-            txtPrecioVenta.setText((String)defaultTableModel.getValueAt(registros,7));
+            txtDescuento.setText((String)defaultTableModel.getValueAt(registros,7));
             txtUtilidad.setText((String)defaultTableModel.getValueAt(registros,8));
             if ("ACTIVO".equals((String) defaultTableModel.getValueAt(registros,9))){
                rbtnActivo.setSelected(true);
@@ -374,7 +374,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
     void CalcularUtilidad(){
         double pre_costo=0,pre_venta=0,utilidad=0,t_utilidad;
         pre_costo=Double.parseDouble(txtPrecioCosto.getText());
-        pre_venta=Double.parseDouble(txtPrecioVenta.getText());
+        pre_venta=Double.parseDouble(txtDescuento.getText());
         utilidad=pre_venta-pre_costo;
         t_utilidad=Math.rint(utilidad*100)/100;
         txtUtilidad.setText(String.valueOf(t_utilidad));
@@ -415,7 +415,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         txtStockMin = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        txtPrecioVenta = new javax.swing.JTextField();
+        txtDescuento = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         txtPrecioCosto = new javax.swing.JTextField();
@@ -448,6 +448,8 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         jLabel22 = new javax.swing.JLabel();
         btnSeleccionarImagen = new javax.swing.JButton();
         jCheckiva = new javax.swing.JCheckBox();
+        jLabel17 = new javax.swing.JLabel();
+        txtPrecioVenta = new javax.swing.JTextField();
         btnSalir1 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -591,16 +593,16 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         pNuevo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtCodigo.setEnabled(false);
-        pNuevo.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, 70, 20));
+        pNuevo.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, 70, 20));
 
         jLabel3.setText("ID Producto:");
-        pNuevo.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 70, 20));
+        pNuevo.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 70, 20));
 
         jLabel14.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Datos del Producto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
-        pNuevo.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 16, 430, 140));
+        pNuevo.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 430, 140));
 
         jLabel2.setText("Código de Barras:");
-        pNuevo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, 100, 20));
+        pNuevo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, 100, 20));
 
         txtCodigoBar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -610,10 +612,10 @@ public class FrmProducto extends javax.swing.JInternalFrame {
                 txtCodigoBarKeyTyped(evt);
             }
         });
-        pNuevo.add(txtCodigoBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 40, 130, -1));
+        pNuevo.add(txtCodigoBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, 130, -1));
 
         jLabel5.setText("Nombre:");
-        pNuevo.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 50, 20));
+        pNuevo.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 50, 20));
 
         txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -623,10 +625,10 @@ public class FrmProducto extends javax.swing.JInternalFrame {
                 txtNombreKeyTyped(evt);
             }
         });
-        pNuevo.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 70, 310, -1));
+        pNuevo.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 310, -1));
 
         jLabel6.setText("Stock:");
-        pNuevo.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 280, 40, 30));
+        pNuevo.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 40, 30));
 
         txtStockMin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtStockMin.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -634,28 +636,28 @@ public class FrmProducto extends javax.swing.JInternalFrame {
                 txtStockMinKeyReleased(evt);
             }
         });
-        pNuevo.add(txtStockMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 320, 80, 30));
+        pNuevo.add(txtStockMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 280, 80, 30));
 
         jLabel7.setText("Stock Mínimo:");
-        pNuevo.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, 80, 30));
+        pNuevo.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 80, 30));
 
-        txtPrecioVenta.setBackground(new java.awt.Color(254, 254, 241));
-        txtPrecioVenta.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtPrecioVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtDescuento.setBackground(new java.awt.Color(254, 254, 241));
+        txtDescuento.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtDescuento.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtPrecioVentaKeyReleased(evt);
+                txtDescuentoKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtPrecioVentaKeyTyped(evt);
+                txtDescuentoKeyTyped(evt);
             }
         });
-        pNuevo.add(txtPrecioVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 400, 80, 30));
+        pNuevo.add(txtDescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 400, 80, 30));
 
         jLabel8.setText("Descripción:");
-        pNuevo.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 70, 20));
+        pNuevo.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 70, 20));
 
         jLabel10.setText("Precio Costo:");
-        pNuevo.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 80, 30));
+        pNuevo.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 80, 30));
 
         txtPrecioCosto.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtPrecioCosto.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -663,23 +665,23 @@ public class FrmProducto extends javax.swing.JInternalFrame {
                 txtPrecioCostoKeyReleased(evt);
             }
         });
-        pNuevo.add(txtPrecioCosto, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 360, 80, 30));
+        pNuevo.add(txtPrecioCosto, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 320, 80, 30));
 
         jLabel12.setText("Precio Venta:");
-        pNuevo.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 80, 30));
+        pNuevo.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, 80, 30));
 
         rbtnActivo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         rbtnActivo.setText("ACTIVO");
         rbtnActivo.setOpaque(false);
-        pNuevo.add(rbtnActivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 80, -1));
+        pNuevo.add(rbtnActivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 80, -1));
 
         rbtnInactivo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         rbtnInactivo.setText("INACTIVO");
         rbtnInactivo.setOpaque(false);
-        pNuevo.add(rbtnInactivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 230, 90, -1));
+        pNuevo.add(rbtnInactivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 210, 90, -1));
 
         jLabel11.setBorder(javax.swing.BorderFactory.createTitledBorder("Estado"));
-        pNuevo.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 190, 50));
+        pNuevo.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 190, 190, 50));
 
         txtStock.setBackground(new java.awt.Color(242, 253, 253));
         txtStock.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -691,26 +693,26 @@ public class FrmProducto extends javax.swing.JInternalFrame {
                 txtStockKeyTyped(evt);
             }
         });
-        pNuevo.add(txtStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 280, 80, 30));
+        pNuevo.add(txtStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, 80, 30));
 
         jLabel15.setText("Utilidad:");
-        pNuevo.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 440, 50, 30));
+        pNuevo.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 440, 50, 30));
 
         txtUtilidad.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtUtilidad.setEnabled(false);
-        pNuevo.add(txtUtilidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 440, 80, 30));
+        pNuevo.add(txtUtilidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 440, 80, 30));
 
         txtDescripcion.setColumns(20);
         txtDescripcion.setRows(5);
         jScrollPane3.setViewportView(txtDescripcion);
 
-        pNuevo.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 100, 310, 50));
+        pNuevo.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 310, 50));
 
         jLabel4.setText("Categoría:");
-        pNuevo.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 60, 30));
+        pNuevo.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 60, 30));
 
         cboCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        pNuevo.add(cboCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 170, 120, 30));
+        pNuevo.add(cboCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 150, 120, 30));
 
         btnGenerar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Generar.png"))); // NOI18N
         btnGenerar.setText("Generar");
@@ -765,13 +767,13 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         jLabel20.setForeground(new java.awt.Color(0, 51, 153));
         jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel20.setText("*");
-        pNuevo.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 40, 20, 20));
+        pNuevo.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, 20, 20));
 
         jLabel21.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel21.setForeground(new java.awt.Color(0, 51, 153));
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel21.setText("*");
-        pNuevo.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 70, 20, 20));
+        pNuevo.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 50, 20, 20));
 
         btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/printer.png"))); // NOI18N
         btnImprimir.addActionListener(new java.awt.event.ActionListener() {
@@ -783,7 +785,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
 
         lblImagen.setBackground(new java.awt.Color(255, 255, 153));
         lblImagen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        pNuevo.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 170, 300, 300));
+        pNuevo.add(lblImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 150, 300, 310));
 
         jLabel22.setForeground(new java.awt.Color(0, 51, 153));
         jLabel22.setText("Los campos marcado con un");
@@ -795,7 +797,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
                 btnSeleccionarImagenActionPerformed(evt);
             }
         });
-        pNuevo.add(btnSeleccionarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 120, 50, 40));
+        pNuevo.add(btnSeleccionarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 100, 50, 40));
 
         jCheckiva.setText("IVA");
         jCheckiva.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -809,6 +811,21 @@ public class FrmProducto extends javax.swing.JInternalFrame {
             }
         });
         pNuevo.add(jCheckiva, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 380, -1, -1));
+
+        jLabel17.setText("Descuento:");
+        pNuevo.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, -1, 30));
+
+        txtPrecioVenta.setBackground(new java.awt.Color(254, 254, 241));
+        txtPrecioVenta.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPrecioVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPrecioVentaKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioVentaKeyTyped(evt);
+            }
+        });
+        pNuevo.add(txtPrecioVenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 360, 80, 30));
 
         tabProducto.addTab("Nuevo / Modificar", pNuevo);
 
@@ -902,7 +919,12 @@ public class FrmProducto extends javax.swing.JInternalFrame {
                 producto.setStrUtilidadProducto("0");
             }else{
                 producto.setStrUtilidadProducto(txtUtilidad.getText());
-            }           
+            }
+            if(txtDescuento.getText().equals("")){
+            producto.setValorDescuento(0);
+            }else{
+            producto.setValorDescuento(Integer.parseInt(txtDescuento.getText()));
+            }     
             if (rbtnActivo.isSelected()){
                 producto.setStrEstadoProducto("ACTIVO");
             }else if (rbtnInactivo.isSelected()){
@@ -1058,11 +1080,11 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         if (keyCode==KeyEvent.VK_ENTER) txtPrecioVenta.requestFocus();  
     }//GEN-LAST:event_txtPrecioCostoKeyReleased
 
-    private void txtPrecioVentaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioVentaKeyReleased
+    private void txtDescuentoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescuentoKeyReleased
         CalcularUtilidad();
         int keyCode = evt.getKeyCode();
         if (keyCode==KeyEvent.VK_ENTER) btnGuardar.requestFocus();  
-    }//GEN-LAST:event_txtPrecioVentaKeyReleased
+    }//GEN-LAST:event_txtDescuentoKeyReleased
        void verificarCodigoBar(){
         String busqueda=null;
         int sen = 2;
@@ -1233,9 +1255,9 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         txtStock.setBackground(Color.WHITE);        
     }//GEN-LAST:event_txtStockKeyTyped
 
-    private void txtPrecioVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioVentaKeyTyped
+    private void txtDescuentoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescuentoKeyTyped
         txtPrecioVenta.setBackground(Color.WHITE);
-    }//GEN-LAST:event_txtPrecioVentaKeyTyped
+    }//GEN-LAST:event_txtDescuentoKeyTyped
 
     private void txtCodigoBarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoBarKeyReleased
         int keyCode = evt.getKeyCode();
@@ -1361,6 +1383,14 @@ public class FrmProducto extends javax.swing.JInternalFrame {
     private void jCheckivaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckivaStateChanged
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckivaStateChanged
+
+    private void txtPrecioVentaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioVentaKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrecioVentaKeyReleased
+
+    private void txtPrecioVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioVentaKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrecioVentaKeyTyped
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
@@ -1386,6 +1416,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
@@ -1422,6 +1453,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtCodigoBar;
     private javax.swing.JTextArea txtDescripcion;
+    private javax.swing.JTextField txtDescuento;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtPrecioCosto;
     private javax.swing.JTextField txtPrecioVenta;
