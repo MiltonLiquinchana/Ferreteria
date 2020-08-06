@@ -1172,9 +1172,8 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
                     if (rdbtnsi.isSelected()) {
                         if (chkiva.isSelected()) {
 
-                            d7 = txtPrecioProducto.getText();
-                            d8 = String.valueOf(
-                                    formateador.format((Double.parseDouble(txtPrecioProducto.getText()) * Double.parseDouble(txtCantidadProducto.getText())) - ((Double.parseDouble(txtPrecioProducto.getText()) * Double.parseDouble(txtCantidadProducto.getText())) * (Double.parseDouble(lblDescuento.getText()) / 100))));
+                            d7 = String.valueOf(formateador.format(Double.parseDouble(txtPrecioProducto.getText())-(Double.parseDouble(txtPrecioProducto.getText())*(Double.parseDouble(lblDescuento.getText())/100))));
+                            d8 = String.valueOf(formateador.format(Double.parseDouble(txtCantidadProducto.getText())*(Double.parseDouble(txtPrecioProducto.getText())-(Double.parseDouble(txtPrecioProducto.getText())*(Double.parseDouble(lblDescuento.getText())/100)))));
                             d9 = "si";
                         } else {
                             d7 = txtPrecioProducto.getText();
