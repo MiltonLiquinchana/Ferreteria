@@ -57,7 +57,7 @@ String Total;
         String format=new String("dd/MM/yyyy");
         SimpleDateFormat formato=new SimpleDateFormat(format);
 
-        txtFecha.setDate(date);
+        txtFechaCaducidadLote.setDate(date);
         //---------------------GENERA NUMERO DE VENTA---------------------
         numCompra=generaNumCompra();
         txtNumero.setText(numCompra);
@@ -195,7 +195,7 @@ String Total;
        cboTipoDocumento.setEnabled(false);
        txtCodigoProducto.setEnabled(false);
        txtCantidadProducto.setEnabled(false);
-       txtFecha.setEnabled(false);
+       txtFechaCaducidadLote.setEnabled(false);
        txtNumero.setEnabled(false);
        
        btnBuscarProveedor.setEnabled(false);
@@ -234,7 +234,7 @@ String Total;
        cboTipoDocumento.setEnabled(true);
        txtCodigoProducto.setEnabled(true);
        txtCantidadProducto.setEnabled(true);
-       txtFecha.setEnabled(true);
+       txtFechaCaducidadLote.setEnabled(true);
        
        btnBuscarProveedor.setEnabled(true);
        btnBuscarProducto.setEnabled(true);
@@ -537,15 +537,21 @@ void CalcularTotal(){
         txtPrecioProducto = new javax.swing.JTextField();
         lblIdProducto = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        txtporcentajeDescuento = new javax.swing.JTextField();
+        jLabel25 = new javax.swing.JLabel();
+        txtporcentajeDescuento1 = new javax.swing.JTextField();
+        txtFechaCaducidadLote = new com.toedter.calendar.JDateChooser();
+        jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btnBuscarProveedor = new javax.swing.JButton();
         txtNombreProveedor = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         cboTipoDocumento = new javax.swing.JComboBox();
-        jLabel2 = new javax.swing.JLabel();
-        txtFecha = new com.toedter.calendar.JDateChooser();
         lblIdProveedor = new javax.swing.JLabel();
+        txtFecha1 = new com.toedter.calendar.JDateChooser();
+        jLabel3 = new javax.swing.JLabel();
         chkCambiarNumero = new javax.swing.JCheckBox();
         jLabel4 = new javax.swing.JLabel();
         jCheckiva = new javax.swing.JCheckBox();
@@ -720,16 +726,16 @@ void CalcularTotal(){
         });
         jPanel3.add(btnLimpiarTabla, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 5, 50, 40));
 
-        jPanel5.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 530, 50));
+        jPanel5.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 610, 50));
 
         txtNumero.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtNumero.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jPanel5.add(txtNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 200, 110, -1));
+        jPanel5.add(txtNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 190, 110, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Nº DE COMPRA");
-        jPanel5.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 180, 110, 20));
+        jPanel5.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 170, 110, 20));
 
         jPanel2.setBackground(new java.awt.Color(249, 205, 87));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del Producto"));
@@ -762,25 +768,41 @@ void CalcularTotal(){
         txtNombreProducto.setEnabled(false);
         jPanel2.add(txtNombreProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 75, 240, -1));
 
-        jLabel19.setText("STOCK:");
-        jPanel2.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 40, -1, -1));
+        jLabel19.setText("Descuento:");
+        jPanel2.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 20, -1, -1));
         jPanel2.add(txtDescripcionProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 30, 20));
 
         txtStockProducto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtStockProducto.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtStockProducto.setEnabled(false);
-        jPanel2.add(txtStockProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 60, 90, -1));
+        jPanel2.add(txtStockProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 30, 90, -1));
 
         txtPrecioProducto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtPrecioProducto.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtPrecioProducto.setEnabled(false);
-        jPanel2.add(txtPrecioProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 60, 90, -1));
+        jPanel2.add(txtPrecioProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 70, 90, -1));
         jPanel2.add(lblIdProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, 20, 20));
 
-        jLabel23.setText("COSTO:");
-        jPanel2.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 40, 50, -1));
+        jLabel23.setText("Lote:");
+        jPanel2.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 20, 30, -1));
 
-        jPanel5.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 85, 530, 100));
+        jLabel20.setText("STOCK:");
+        jPanel2.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, -1, -1));
+
+        txtporcentajeDescuento.setText("0");
+        jPanel2.add(txtporcentajeDescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 40, 50, -1));
+
+        jLabel25.setText("COSTO:");
+        jPanel2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 50, 50, -1));
+
+        txtporcentajeDescuento1.setText("0");
+        jPanel2.add(txtporcentajeDescuento1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 40, 50, -1));
+        jPanel2.add(txtFechaCaducidadLote, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 70, 100, 20));
+
+        jLabel2.setText("FECHA CADUCIDAD:");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 70, 110, 20));
+
+        jPanel5.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 85, 610, 100));
 
         jPanel1.setBackground(new java.awt.Color(249, 205, 87));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos de la Compra"));
@@ -806,13 +828,13 @@ void CalcularTotal(){
 
         cboTipoDocumento.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jPanel1.add(cboTipoDocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 35, 130, 20));
-
-        jLabel2.setText("FECHA:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 15, 80, 20));
-        jPanel1.add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 35, 100, -1));
         jPanel1.add(lblIdProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 20, 20));
+        jPanel1.add(txtFecha1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 35, 100, -1));
 
-        jPanel5.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 530, 70));
+        jLabel3.setText("FECHA:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 15, 80, 20));
+
+        jPanel5.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 610, 70));
 
         chkCambiarNumero.setText("Cambiar Número");
         chkCambiarNumero.setOpaque(false);
@@ -821,10 +843,10 @@ void CalcularTotal(){
                 chkCambiarNumeroStateChanged(evt);
             }
         });
-        jPanel5.add(chkCambiarNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 220, 110, -1));
+        jPanel5.add(chkCambiarNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 220, 110, -1));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Ferreteria2.png"))); // NOI18N
-        jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(601, 30, 150, 150));
+        jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 20, 150, 150));
 
         jCheckiva.setBackground(new java.awt.Color(255, 255, 204));
         jCheckiva.setText("IVA");
@@ -833,7 +855,7 @@ void CalcularTotal(){
                 jCheckivaStateChanged(evt);
             }
         });
-        jPanel5.add(jCheckiva, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 220, -1, -1));
+        jPanel5.add(jCheckiva, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 220, -1, -1));
 
         getContentPane().add(jPanel5);
         jPanel5.setBounds(10, 10, 790, 250);
@@ -1028,7 +1050,7 @@ void CalcularTotal(){
                 venta.setStrIdProveedor(lblIdProveedor.getText());
                 venta.setStrIdEmpleado(IdEmpleado);
                 venta.setStrNumeroCompra(txtNumero.getText());
-                venta.setStrFechaCompra(txtFecha.getDate());
+                venta.setStrFechaCompra(txtFechaCaducidadLote.getDate());
                 venta.setStrSubTotalCompra(txtSubTotal.getText());
                 venta.setStrIgvCompra(txtIGV.getText());
                 venta.setStrTotalCompra(txtTotalCompra.getText());
@@ -1090,10 +1112,13 @@ void CalcularTotal(){
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1111,7 +1136,8 @@ void CalcularTotal(){
     private javax.swing.JTextField txtCantidadProducto;
     public static javax.swing.JTextField txtCodigoProducto;
     public static javax.swing.JLabel txtDescripcionProducto;
-    private com.toedter.calendar.JDateChooser txtFecha;
+    private com.toedter.calendar.JDateChooser txtFecha1;
+    private com.toedter.calendar.JDateChooser txtFechaCaducidadLote;
     private javax.swing.JTextField txtIGV;
     public static javax.swing.JTextField txtNombreProducto;
     public static javax.swing.JTextField txtNombreProveedor;
@@ -1121,5 +1147,7 @@ void CalcularTotal(){
     private javax.swing.JTextField txtSubTotal;
     private javax.swing.JTextField txtTotalCompra;
     private javax.swing.JTextField txtTotalProducto;
+    private javax.swing.JTextField txtporcentajeDescuento;
+    private javax.swing.JTextField txtporcentajeDescuento1;
     // End of variables declaration//GEN-END:variables
 }
