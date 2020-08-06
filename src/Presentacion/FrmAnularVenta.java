@@ -582,6 +582,7 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
         /*el valor del label venta sera anular*/
         venta.vandera.setText("anular");
         venta.idventaanular.setText(lblIdVenta.getText());
+        venta.txtNombreCliente.setText(nomcliente);
         /*agregar datos a el array cantidades*/
         int f, i = 0;
         f = tblDetalleVenta.getRowCount();
@@ -621,11 +622,6 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
                         Datos[5], Datos[6], Datos[7], Datos[8]);
                 encuentra = true;
             }
-
-            
-            
-            
-
             if (encuentra = false) {
                 JOptionPane.showMessageDialog(null, "¡No se encuentra!");
 

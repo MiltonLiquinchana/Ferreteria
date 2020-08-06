@@ -18,6 +18,7 @@ public class ClsEntidadProducto {
     private String strPrecioCostoProducto;
     private String strPrecioVentaProducto;
     private String strUtilidadProducto;
+    private int valorDescuento;
     private String strEstadoProducto;
     private String strIdCategoria;
     private String strDescripcionCategoria;
@@ -112,6 +113,14 @@ public class ClsEntidadProducto {
         this.strUtilidadProducto = strUtilidadProducto;
     }
 
+    public int getValorDescuento() {
+        return valorDescuento;
+    }
+
+    public void setValorDescuento(int valorDescuento) {
+        this.valorDescuento = valorDescuento;
+    }
+    
     public String getStrEstadoProducto() {
         return strEstadoProducto;
     }

@@ -77,8 +77,8 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         this.setSize(955, 505);
         cargarComboTipoDocumento();
 
-        //lblIdProducto.setVisible(false);
-        //lblIdCliente.setVisible(false);
+        lblIdProducto.setVisible(false);
+        lblIdCliente.setVisible(false);
         txtDescripcionProducto.setVisible(false);
         txtCostoProducto.setVisible(false);
         mirar();
@@ -103,8 +103,8 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         tblDetalleProducto.setModel(dtmDetalle);
         CrearTablaDetalleProducto();
         vander = vandera.getText();
-        //vandera.setVisible(false);
-        //idventaanular.setVisible(false);
+        vandera.setVisible(false);
+        idventaanular.setVisible(false);
     }
 
     public void eventotable(TableModelEvent evento) {
@@ -293,6 +293,10 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         txtCantidadProducto.setText("");
         txtTotalProducto.setText("");
         txtCodigoProducto.requestFocus();
+        /*deseleccionamos los radiobutons*/
+        grupodescuento.clearSelection();
+        rdbtnno.setEnabled(false);
+        rdbtnsi.setEnabled(false);
 
     }
 
@@ -319,6 +323,9 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         chkiva.setEnabled(false);
 
         txtCodigoProducto.requestFocus();
+        /*activo los radio butons*/
+        rdbtnno.setEnabled(true);
+        rdbtnsi.setEnabled(true);
     }
 
     void cargarComboTipoDocumento() {
@@ -418,6 +425,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        grupodescuento = new javax.swing.ButtonGroup();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblDetalleProducto = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
@@ -453,8 +461,12 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         txtStockProducto = new javax.swing.JTextField();
         txtPrecioProducto = new javax.swing.JTextField();
         lblIdProducto = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
+        lblDescuento = new javax.swing.JLabel();
         txtCostoProducto = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        rdbtnsi = new javax.swing.JRadioButton();
+        rdbtnno = new javax.swing.JRadioButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btnBuscarCliente = new javax.swing.JButton();
@@ -741,24 +753,38 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         });
         jPanel2.add(txtNombreProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 75, 240, -1));
 
-        jLabel19.setText("STOCK:");
-        jPanel2.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 40, -1, -1));
+        jLabel19.setText("Descuento:");
+        jPanel2.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 10, -1, -1));
         jPanel2.add(txtDescripcionProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 30, 20));
 
         txtStockProducto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtStockProducto.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtStockProducto.setEnabled(false);
-        jPanel2.add(txtStockProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 60, 90, -1));
+        jPanel2.add(txtStockProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 10, 80, -1));
 
         txtPrecioProducto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtPrecioProducto.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtPrecioProducto.setEnabled(false);
-        jPanel2.add(txtPrecioProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 60, 90, -1));
+        jPanel2.add(txtPrecioProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 50, 80, -1));
         jPanel2.add(lblIdProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, 20, 20));
 
-        jLabel23.setText("PRECIO:");
-        jPanel2.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 40, 50, -1));
-        jPanel2.add(txtCostoProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 80, 90, 20));
+        lblDescuento.setText("0");
+        jPanel2.add(lblDescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 60, 90, 20));
+        jPanel2.add(txtCostoProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 80, 90, 20));
+
+        jLabel20.setText("STOCK:");
+        jPanel2.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, -1, -1));
+
+        jLabel25.setText("PRECIO:");
+        jPanel2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 60, 50, -1));
+
+        grupodescuento.add(rdbtnsi);
+        rdbtnsi.setText("Si");
+        jPanel2.add(rdbtnsi, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 30, -1, 20));
+
+        grupodescuento.add(rdbtnno);
+        rdbtnno.setText("no");
+        jPanel2.add(rdbtnno, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 30, -1, 20));
 
         jPanel5.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 530, 105));
 
@@ -1112,6 +1138,11 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
 
 
     private void btnAgregarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarProductoActionPerformed
+        accionbutonradio();
+    }//GEN-LAST:event_btnAgregarProductoActionPerformed
+
+    /*accion que realiza en caso de que alguno de los radio butons este activado*/
+    public void accionbutonradio() {
         double stock, cant;
         if (!txtCantidadProducto.getText().equals("")) {
             if (txtCantidadProducto.getText().equals("")) {
@@ -1131,22 +1162,40 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
                     String d4 = txtDescripcionProducto.getText();
                     double d5 = Double.parseDouble(txtCantidadProducto.getText());
                     String d6 = txtCostoProducto.getText();
-                    String d7;
-                    String d8;
-                    String d9;
+                    String d7 = null;
+                    String d8 = null;
+                    String d9 = null;
                     DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
                     simbolos.setDecimalSeparator('.');
                     DecimalFormat formateador = new DecimalFormat("####.##", simbolos);
-                    if (chkiva.isSelected()) {
+                    /*en caso de que el radio buton seleccionado sea el rdbtnsi*/
+                    if (rdbtnsi.isSelected()) {
+                        if (chkiva.isSelected()) {
 
-                        d7 = txtPrecioProducto.getText();
-                        d8 = String.valueOf(formateador.format(Double.parseDouble(txtPrecioProducto.getText()) * Double.parseDouble(txtCantidadProducto.getText())));
-                        d9 = "si";
-                    } else {
-                        d7 = txtPrecioProducto.getText();
-                        d8 = txtTotalProducto.getText();
-                        d9 = "no";
+                            d7 = txtPrecioProducto.getText();
+                            d8 = String.valueOf(
+                                    formateador.format((Double.parseDouble(txtPrecioProducto.getText()) * Double.parseDouble(txtCantidadProducto.getText())) - ((Double.parseDouble(txtPrecioProducto.getText()) * Double.parseDouble(txtCantidadProducto.getText())) * (Double.parseDouble(lblDescuento.getText()) / 100))));
+                            d9 = "si";
+                        } else {
+                            d7 = txtPrecioProducto.getText();
+                            d8 = txtTotalProducto.getText();
+                            d9 = "no";
+                        }
+
+                    } else if (rdbtnno.isSelected()) {
+                        if (chkiva.isSelected()) {
+
+                            d7 = txtPrecioProducto.getText();
+                            d8 = String.valueOf(formateador.format(Double.parseDouble(txtPrecioProducto.getText()) * Double.parseDouble(txtCantidadProducto.getText())));
+                            d9 = "si";
+                        } else {
+                            d7 = txtPrecioProducto.getText();
+                            d8 = txtTotalProducto.getText();
+                            d9 = "no";
+                        }
+
                     }
+
                     agregardatos(d1, d2, d3, d4, d5, d6, d7, d8, d9);
                     CalcularValor_Venta();
                     // CalcularTotal_Pagar();
@@ -1177,7 +1226,8 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         }
         contador++;
         chkiva.setSelected(false);
-    }//GEN-LAST:event_btnAgregarProductoActionPerformed
+    }
+
 
     private void txtCantidadProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadProductoKeyReleased
         CalcularTotal();
@@ -1557,6 +1607,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
     public static javax.swing.JComboBox cboTipoDocumento;
     private javax.swing.JCheckBox chkCambiarNumero;
     public static javax.swing.JCheckBox chkiva;
+    private javax.swing.ButtonGroup grupodescuento;
     public static javax.swing.JLabel idventaanular;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
@@ -1566,10 +1617,11 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1585,8 +1637,11 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane3;
+    public static javax.swing.JLabel lblDescuento;
     public static javax.swing.JLabel lblIdCliente;
     public static javax.swing.JLabel lblIdProducto;
+    public static javax.swing.JRadioButton rdbtnno;
+    public static javax.swing.JRadioButton rdbtnsi;
     public static javax.swing.JTable tblDetalleProducto;
     private javax.swing.JTextField txtCambio;
     private javax.swing.JTextField txtCantidadProducto;

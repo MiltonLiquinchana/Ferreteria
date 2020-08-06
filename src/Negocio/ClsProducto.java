@@ -124,11 +124,11 @@ private Connection connection=new ClsConexion().getConection();
                 producto.setStrPrecioCostoProducto(resultSet.getString("PrecioCosto"));
                 producto.setStrPrecioVentaProducto(resultSet.getString("PrecioVenta"));
                 producto.setStrUtilidadProducto(resultSet.getString("Utilidad"));
+                producto.setValorDescuento(resultSet.getInt("valordescuento"));
                 producto.setStrEstadoProducto(resultSet.getString("Estado"));
                 producto.setStrDescripcionCategoria(resultSet.getString("categoria"));
                 producto.setStrImagen(resultSet.getString("imagen"));
                 producto.setStrIva(resultSet.getString("iva"));
-
                 productos.add(producto);
             }
             return productos;

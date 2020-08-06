@@ -40,7 +40,7 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
 
         //--------------------PANEL - PRODUCTO----------------------------
         actualizarTablaProducto();
-        CrearTablaProducto();
+        //CrearTablaProducto();/*hay un problema en este metodo */
         //---------------------ANCHO Y ALTO DEL FORM----------------------
         this.setSize(536, 300);
         CantidadTotal();
@@ -51,14 +51,15 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
 //----------------------------------PANEL - PRODUCTO---------------------------------------------
 //-----------------------------------------------------------------------------------------------
     void actualizarTablaProducto() {
-        String titulos[] = {"ID", "Cód. de Barras", "Nombre", "Descripción", "Stock", "P. Costo", "P. Venta", "Iva"};
+        String titulos[] = {"ID", "Cód. de Barras", "Nombre", "Descripción", "Stock", "P. Costo", "P. Venta", "Iva", "Descuento"};
 
         ClsProducto productos = new ClsProducto();
         ArrayList<ClsEntidadProducto> producto = productos.listarProductoActivo();
         Iterator iterator = producto.iterator();
         DefaultTableModel defaultTableModel = new DefaultTableModel(null, titulos);
 
-        String fila[] = new String[8];
+        String fila[] = new String[9];
+
         while (iterator.hasNext()) {
             ClsEntidadProducto Producto = new ClsEntidadProducto();
             Producto = (ClsEntidadProducto) iterator.next();
@@ -70,6 +71,7 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
             fila[5] = Producto.getStrPrecioCostoProducto();
             fila[6] = Producto.getStrPrecioVentaProducto();
             fila[7] = Producto.getStrIva();
+            fila[8] = String.valueOf(Producto.getValorDescuento());
             defaultTableModel.addRow(fila);
         }
         tblProducto.setModel(defaultTableModel);
@@ -124,7 +126,7 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
     }
 
     void BuscarProductoPanel() {
-        String titulos[] = {"ID", "Cód. de Barras", "Nombre", "Descripción", "Stock", "P. Costo", "P. Venta", "Iva"};
+        String titulos[] = {"ID", "Cód. de Barras", "Nombre", "Descripción", "Stock", "P. Costo", "P. Venta", "Iva", "Descuento"};
         dtm.setColumnIdentifiers(titulos);
 
         ClsProducto categoria = new ClsProducto();
@@ -139,7 +141,7 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
         try {
             rs = categoria.listarProductoActivoPorParametro(criterio, busqueda);
             boolean encuentra = false;
-            String Datos[] = new String[8];
+            String Datos[] = new String[9];
             int f, i;
             f = dtm.getRowCount();
             if (f > 0) {
@@ -156,9 +158,11 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
                 Datos[5] = (String) rs.getString(7);
                 Datos[6] = (String) rs.getString(8);
                 Datos[7] = (String) rs.getString(13);
+                Datos[8] = String.valueOf(rs.getInt(14));
                 dtm.addRow(Datos);
                 encuentra = true;
             }
+
             if (encuentra = false) {
                 JOptionPane.showMessageDialog(null, "¡No se encuentra!");
             }
@@ -284,7 +288,7 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
 
     private void txtBusquedaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyReleased
         BuscarProductoPanel();
-        CrearTablaProducto();
+        //CrearTablaProducto();
         CantidadTotal();
     }//GEN-LAST:event_txtBusquedaKeyReleased
 
@@ -297,6 +301,7 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
         fila = tblProducto.getSelectedRow();
         DefaultTableModel defaultTableModel = new DefaultTableModel();
         if (fila >= 0) {
+            ClsEntidadProducto Productos = new ClsEntidadProducto();
             defaultTableModel = (DefaultTableModel) tblProducto.getModel();
             Presentacion.FrmVenta.lblIdProducto.setText((String) defaultTableModel.getValueAt(fila, 0));
             Presentacion.FrmVenta.txtCodigoProducto.setText((String) defaultTableModel.getValueAt(fila, 1));
@@ -305,14 +310,20 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
             Presentacion.FrmVenta.txtStockProducto.setText((String) defaultTableModel.getValueAt(fila, 4));
             Presentacion.FrmVenta.txtCostoProducto.setText((String) defaultTableModel.getValueAt(fila, 5));
             Presentacion.FrmVenta.txtPrecioProducto.setText((String) defaultTableModel.getValueAt(fila, 6));
+            Presentacion.FrmVenta.lblDescuento.setText((String) defaultTableModel.getValueAt(fila, 8));
             if ("si".equals((String) defaultTableModel.getValueAt(fila, 7))) {
                 Presentacion.FrmVenta.chkiva.setSelected(true);
             } else if ("no".equals((String) defaultTableModel.getValueAt(fila, 7))) {
                 Presentacion.FrmVenta.chkiva.setSelected(false);
             }
-        }else {
+            if (Integer.parseInt((String) defaultTableModel.getValueAt(fila, 8)) > 0) {
+                Presentacion.FrmVenta.rdbtnno.setSelected(true);
+            } else if (Integer.parseInt((String) defaultTableModel.getValueAt(fila, 8)) <= 0) {
+                Presentacion.FrmVenta.rdbtnno.setSelected(true);
+            }
+        } else {
             JOptionPane.showMessageDialog(null, "Se debe seleccionar un registro");
-        }       
+        }
     }//GEN-LAST:event_tblProductoMouseClicked
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
