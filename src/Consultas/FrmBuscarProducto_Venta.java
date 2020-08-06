@@ -40,7 +40,7 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
 
         //--------------------PANEL - PRODUCTO----------------------------
         actualizarTablaProducto();
-        //CrearTablaProducto();/*hay un problema en este metodo */
+        CrearTablaProducto();
         //---------------------ANCHO Y ALTO DEL FORM----------------------
         this.setSize(536, 300);
         CantidadTotal();
@@ -119,7 +119,7 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
         tblProducto.setAutoResizeMode(tblProducto.AUTO_RESIZE_OFF);
 
         //Anchos de cada columna
-        int[] anchos = {40, 100, 150, 200, 60, 60, 60, 30};
+        int[] anchos = {40, 100, 150, 200, 60,60, 60, 60, 30};
         for (int i = 0; i < tblProducto.getColumnCount(); i++) {
             tblProducto.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
         }
@@ -288,7 +288,7 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
 
     private void txtBusquedaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyReleased
         BuscarProductoPanel();
-        //CrearTablaProducto();
+        CrearTablaProducto();
         CantidadTotal();
     }//GEN-LAST:event_txtBusquedaKeyReleased
 
