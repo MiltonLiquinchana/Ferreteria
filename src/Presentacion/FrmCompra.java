@@ -28,86 +28,86 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 public class FrmCompra extends javax.swing.JInternalFrame {
-
-String Total;
+    
+    String Total;
     String strCodigo;
     String accion;
     String numCompra;
     int registros;
-    String id[]=new String[50];
+    String id[] = new String[50];
     //String Datos[]=new String[50];
 
     static int intContador;
-    public String IdEmpleado,NombreEmpleado;
-    int idventa,nidventa;
+    public String IdEmpleado, NombreEmpleado;
+    int idventa, nidventa;
     //-----------------------------------------------
     public String codigo;
-    static Connection conn=null;
+    static Connection conn = null;
     
-    static ResultSet rs=null;
-    DefaultTableModel dtm=new DefaultTableModel();
+    static ResultSet rs = null;
+    DefaultTableModel dtm = new DefaultTableModel();
     DefaultTableModel dtmDetalle = new DefaultTableModel();
-
-    String criterio,busqueda;
+    
+    String criterio, busqueda;
     
     public FrmCompra() {
         initComponents();
         //---------------------FECHA ACTUAL-------------------------------
-        Date date=new Date();
-        String format=new String("dd/MM/yyyy");
-        SimpleDateFormat formato=new SimpleDateFormat(format);
-
-        txtFechaCaducidadLote.setDate(date);
+        Date date = new Date();
+        String format = new String("dd/MM/yyyy");
+        SimpleDateFormat formato = new SimpleDateFormat(format);
+        
+        txtFecha.setDate(date);
         //---------------------GENERA NUMERO DE VENTA---------------------
-        numCompra=generaNumCompra();
+        numCompra = generaNumCompra();
         txtNumero.setText(numCompra);
         //---------------------ANCHO Y ALTO DEL FORM----------------------
         this.setSize(939, 506);
         cargarComboTipoDocumento();
-       
+        
         lblIdProducto.setVisible(false);
         lblIdProveedor.setVisible(false);
         txtDescripcionProducto.setVisible(false);
         mirar();
         //--------------------JTABLE - DETALLEPRODUCTO--------------------
         
-        String titulos[] = {"ID","CODIGO", "PRODUCTO","DESCRIPCION", "CANT.", "PRECIO", "TOTAL","IVA"};
+        String titulos[] = {"ID", "CODIGO", "PRODUCTO", "DESCRIPCION", "CANT.", "PRECIO", "TOTAL", "IVA", "LOTE", "FECHA CADUCIDAD"};
         dtmDetalle.setColumnIdentifiers(titulos);
         tblDetalleProducto.setModel(dtmDetalle);
-        CrearTablaDetalleProducto();
+        //CrearTablaDetalleProducto();
     }
 
 //-----------------------------------------------------------------------------------------------
 //--------------------------------------METODOS--------------------------------------------------
 //-----------------------------------------------------------------------------------------------
-  public String generaNumCompra(){
-
-        ClsCompra oCompra=new ClsCompra(); 
+    public String generaNumCompra() {
+        
+        ClsCompra oCompra = new ClsCompra();        
         try {
-
-            rs= oCompra.obtenerUltimoIdCompra();
+            
+            rs = oCompra.obtenerUltimoIdCompra();
             while (rs.next()) {
-            if (rs.getString(1) != null) {
-                Scanner s = new Scanner(rs.getString(1));
-                int c = s.useDelimiter("C").nextInt() + 1;
-
-                if (c < 10) {
-                    return "C0000" + c;
-                }
-                if (c < 100) {
-                    return "C000" + c;
-                }
-                if (c < 1000) {
-                    return "C00" + c;
-                }
-                if (c < 10000) {
-                    return "C0" + c;
-                } else {
-                    return "C" + c;
+                if (rs.getString(1) != null) {
+                    Scanner s = new Scanner(rs.getString(1));
+                    int c = s.useDelimiter("C").nextInt() + 1;
+                    
+                    if (c < 10) {
+                        return "C0000" + c;
+                    }
+                    if (c < 100) {
+                        return "C000" + c;
+                    }
+                    if (c < 1000) {
+                        return "C00" + c;
+                    }
+                    if (c < 10000) {
+                        return "C0" + c;
+                    } else {
+                        return "C" + c;
+                    }
                 }
             }
-            }
-
+            
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -118,134 +118,131 @@ String Total;
             }
         }
         return "C00001";
-              
-  }
-  
-   void CrearTablaDetalleProducto(){
-   //--------------------PRESENTACION DE JTABLE----------------------
-      
-        TableCellRenderer render = new DefaultTableCellRenderer() { 
-
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) { 
-                //aqui obtengo el render de la calse superior 
-                JLabel l = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
-                //Determinar Alineaciones   
-                    if(column==0 || column==1 || column==4 || column==5 || column==6 || column==12){
-                        l.setHorizontalAlignment(SwingConstants.CENTER); 
-                    }else{
-                        l.setHorizontalAlignment(SwingConstants.LEFT);
-                    }
-
-                //Colores en Jtable        
-               if (isSelected) {
-                    l.setBackground(new Color(203, 159, 41));
-                    //l.setBackground(new Color(168, 198, 238));
-                    l.setForeground(Color.WHITE); 
-                }else{
-                    l.setForeground(Color.BLACK);
-                    if (row % 2 == 0) {
-                        l.setBackground(Color.WHITE);
-                    } else {
-                        //l.setBackground(new Color(232, 232, 232));
-                        l.setBackground(new Color(254, 227, 152));
-                    }
-                }     
-                return l; 
-            } 
-        }; 
         
-        //Agregar Render
-        for (int i=0;i<tblDetalleProducto.getColumnCount();i++){
-            tblDetalleProducto.getColumnModel().getColumn(i).setCellRenderer(render);
-        }
-      
-        //Activar ScrollBar
-        tblDetalleProducto.setAutoResizeMode(tblDetalleProducto.AUTO_RESIZE_OFF);
+    }
 
-        //Anchos de cada columna
-        int[] anchos = {50,100,180,247,70,70,70,30};
-        for(int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
-            tblDetalleProducto.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
-        }
-   }
-
-   void limpiarCampos(){
-
-       txtSubTotal.setText("0.0");
-       txtIGV.setText("0.0");
-       txtTotalCompra.setText("0.0");
-       
-       lblIdProducto.setText("");
-       txtCodigoProducto.setText("");
-       txtNombreProducto.setText("");
-       txtStockProducto.setText("");
-       txtPrecioProducto.setText("");
-       txtCantidadProducto.setText("");
-       txtTotalProducto.setText("");
-       txtCodigoProducto.requestFocus();
-   }
-       
-   void mirar(){
-       btnNuevo.setEnabled(true);
-       btnGuardar.setEnabled(false);
-       btnCancelar.setEnabled(false);
-       btnSalir.setEnabled(true);
+//   void CrearTablaDetalleProducto(){
+//   //--------------------PRESENTACION DE JTABLE----------------------
+//      
+//        TableCellRenderer render = new DefaultTableCellRenderer() { 
+//
+//            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) { 
+//                //aqui obtengo el render de la calse superior 
+//                JLabel l = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
+//                //Determinar Alineaciones   
+//                    if(column==0 || column==1 || column==4 || column==5 || column==6 || column==12){
+//                        l.setHorizontalAlignment(SwingConstants.CENTER); 
+//                    }else{
+//                        l.setHorizontalAlignment(SwingConstants.LEFT);
+//                    }
+//
+//                //Colores en Jtable        
+//               if (isSelected) {
+//                    l.setBackground(new Color(203, 159, 41));
+//                    //l.setBackground(new Color(168, 198, 238));
+//                    l.setForeground(Color.WHITE); 
+//                }else{
+//                    l.setForeground(Color.BLACK);
+//                    if (row % 2 == 0) {
+//                        l.setBackground(Color.WHITE);
+//                    } else {
+//                        //l.setBackground(new Color(232, 232, 232));
+//                        l.setBackground(new Color(254, 227, 152));
+//                    }
+//                }     
+//                return l; 
+//            } 
+//        }; 
+//        
+//        //Agregar Render
+//        for (int i=0;i<tblDetalleProducto.getColumnCount();i++){
+//            tblDetalleProducto.getColumnModel().getColumn(i).setCellRenderer(render);
+//        }
+//      
+//        //Activar ScrollBar
+//        tblDetalleProducto.setAutoResizeMode(tblDetalleProducto.AUTO_RESIZE_OFF);
+//
+//        //Anchos de cada columna
+//        int[] anchos = {50,100,180,247,70,70,70,30};
+//        for(int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
+//            tblDetalleProducto.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+//        }
+//   }
+    void limpiarCampos() {
         
-
-       cboTipoDocumento.setEnabled(false);
-       txtCodigoProducto.setEnabled(false);
-       txtCantidadProducto.setEnabled(false);
-       txtFechaCaducidadLote.setEnabled(false);
-       txtNumero.setEnabled(false);
-       
-       btnBuscarProveedor.setEnabled(false);
-       btnBuscarProducto.setEnabled(false);
-       btnAgregarProducto.setEnabled(false);
-       btnEliminarProducto.setEnabled(false);
-       btnLimpiarTabla.setEnabled(false);
-       chkCambiarNumero.setEnabled(false);
-       chkCambiarNumero.setSelected(false);
-       jCheckiva.setEnabled(false);
-       jCheckiva.setSelected(false);
-       
-       txtSubTotal.setText("0.0");
-       txtIGV.setText("0.0");
-       txtTotalCompra.setText("0.0");
-       lblIdProducto.setText("");
-       txtCodigoProducto.setText("");
-       txtNombreProducto.setText("");
-       txtStockProducto.setText("");
-       txtPrecioProducto.setText("");
-       txtCantidadProducto.setText("");
-       txtTotalProducto.setText("");
-       txtCodigoProducto.requestFocus();
-       
-
-   }
-   
-   void modificar(){
-
-       btnNuevo.setEnabled(false);
-
-       btnGuardar.setEnabled(true);
-       btnCancelar.setEnabled(true);
-       btnSalir.setEnabled(false);
+        txtSubTotal.setText("0.0");
+        txtIGV.setText("0.0");
+        txtTotalCompra.setText("0.0");
         
-       cboTipoDocumento.setEnabled(true);
-       txtCodigoProducto.setEnabled(true);
-       txtCantidadProducto.setEnabled(true);
-       txtFechaCaducidadLote.setEnabled(true);
-       
-       btnBuscarProveedor.setEnabled(true);
-       btnBuscarProducto.setEnabled(true);
-       btnAgregarProducto.setEnabled(true);
-       btnEliminarProducto.setEnabled(true);
-       btnLimpiarTabla.setEnabled(true);
-       chkCambiarNumero.setEnabled(true);
-       jCheckiva.setEnabled(false);
-       
-       txtCodigoProducto.requestFocus();
-   }
+        lblIdProducto.setText("");
+        txtCodigoProducto.setText("");
+        txtNombreProducto.setText("");
+        txtStockProducto.setText("");
+        txtPrecioProducto.setText("");
+        txtCantidadProducto.setText("");
+        txtTotalProducto.setText("");
+        txtCodigoProducto.requestFocus();
+    }
+    
+    void mirar() {
+        btnNuevo.setEnabled(true);
+        btnGuardar.setEnabled(false);
+        btnCancelar.setEnabled(false);
+        btnSalir.setEnabled(true);
+        
+        cboTipoDocumento.setEnabled(false);
+        txtCodigoProducto.setEnabled(false);
+        txtCantidadProducto.setEnabled(false);
+        txtFecha.setEnabled(false);
+        txtNumero.setEnabled(false);
+        
+        btnBuscarProveedor.setEnabled(false);
+        btnBuscarProducto.setEnabled(false);
+        btnAgregarProducto.setEnabled(false);
+        btnEliminarProducto.setEnabled(false);
+        btnLimpiarTabla.setEnabled(false);
+        chkCambiarNumero.setEnabled(false);
+        chkCambiarNumero.setSelected(false);
+        jCheckiva.setEnabled(false);
+        jCheckiva.setSelected(false);
+        
+        txtSubTotal.setText("0.0");
+        txtIGV.setText("0.0");
+        txtTotalCompra.setText("0.0");
+        lblIdProducto.setText("");
+        txtCodigoProducto.setText("");
+        txtNombreProducto.setText("");
+        txtStockProducto.setText("");
+        txtPrecioProducto.setText("");
+        txtCantidadProducto.setText("");
+        txtTotalProducto.setText("");
+        txtCodigoProducto.requestFocus();
+        
+    }
+    
+    void modificar() {
+        
+        btnNuevo.setEnabled(false);
+        
+        btnGuardar.setEnabled(true);
+        btnCancelar.setEnabled(true);
+        btnSalir.setEnabled(false);
+        
+        cboTipoDocumento.setEnabled(true);
+        txtCodigoProducto.setEnabled(true);
+        txtCantidadProducto.setEnabled(true);
+        txtFecha.setEnabled(true);
+        
+        btnBuscarProveedor.setEnabled(true);
+        btnBuscarProducto.setEnabled(true);
+        btnAgregarProducto.setEnabled(true);
+        btnEliminarProducto.setEnabled(true);
+        btnLimpiarTabla.setEnabled(true);
+        chkCambiarNumero.setEnabled(true);
+        jCheckiva.setEnabled(false);
+        
+        txtCodigoProducto.requestFocus();
+    }
 //   void cargarComboTipoDocumento(){
 //       ClsTipoDocumento documentos=new ClsTipoDocumento();
 //       DefaultComboBoxModel DefaultComboBoxModel=new DefaultComboBoxModel();
@@ -276,233 +273,232 @@ String Total;
 //            ex.printStackTrace();
 //        }  
 //    }
-    void cargarComboTipoDocumento(){
-       ClsTipoDocumento tipodocumento=new ClsTipoDocumento();
-       ArrayList<ClsEntidadTipoDocumento> tipodocumentos=tipodocumento.listarTipoDocumento();
-       Iterator iterator=tipodocumentos.iterator();
-       DefaultComboBoxModel DefaultComboBoxModel=new DefaultComboBoxModel();
-       DefaultComboBoxModel.removeAllElements();
-       
-       cboTipoDocumento.removeAll();
-       String fila[]=new String[2];
-       intContador=0;
-       
-       while(iterator.hasNext()){
-           ClsEntidadTipoDocumento TipoDocumento = new ClsEntidadTipoDocumento();
-           TipoDocumento=(ClsEntidadTipoDocumento) iterator.next();
-           id[intContador]=TipoDocumento.getStrIdTipoDocumento();
-           fila[0]=TipoDocumento.getStrIdTipoDocumento();
-           fila[1]=TipoDocumento.getStrDescripcionTipoDocumento();
-           DefaultComboBoxModel.addElement(TipoDocumento.getStrDescripcionTipoDocumento());
-           intContador++;              
-       }
-       cboTipoDocumento.setModel(DefaultComboBoxModel);
-    }
-    void BuscarProductoPorCodigo(){
-        String busqueda=null;
-        busqueda=txtCodigoProducto.getText(); 
-            try{
-                ClsProducto oProducto=new ClsProducto();
-                
-                rs= oProducto.listarProductoActivoPorParametro("codigo",busqueda);
-                while (rs.next()) {
-                    if(rs.getString(2).equals(busqueda)) {
-        
-                            lblIdProducto.setText(rs.getString(1));
-                            txtNombreProducto.setText(rs.getString(3));
-                            txtDescripcionProducto.setText(rs.getString(4));
-                            //DescripcionProducto=rs.getString(4);
-                            txtStockProducto.setText(rs.getString(5));
-                            txtPrecioProducto.setText(rs.getString(7));             
-                    }
-                   break;
-                }
 
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this,ex.getMessage());
-                System.out.println(ex.getMessage());
-            }
-    
+    void cargarComboTipoDocumento() {
+        ClsTipoDocumento tipodocumento = new ClsTipoDocumento();
+        ArrayList<ClsEntidadTipoDocumento> tipodocumentos = tipodocumento.listarTipoDocumento();
+        Iterator iterator = tipodocumentos.iterator();
+        DefaultComboBoxModel DefaultComboBoxModel = new DefaultComboBoxModel();
+        DefaultComboBoxModel.removeAllElements();
+        
+        cboTipoDocumento.removeAll();
+        String fila[] = new String[2];
+        intContador = 0;
+        
+        while (iterator.hasNext()) {
+            ClsEntidadTipoDocumento TipoDocumento = new ClsEntidadTipoDocumento();
+            TipoDocumento = (ClsEntidadTipoDocumento) iterator.next();
+            id[intContador] = TipoDocumento.getStrIdTipoDocumento();
+            fila[0] = TipoDocumento.getStrIdTipoDocumento();
+            fila[1] = TipoDocumento.getStrDescripcionTipoDocumento();
+            DefaultComboBoxModel.addElement(TipoDocumento.getStrDescripcionTipoDocumento());
+            intContador++;            
+        }
+        cboTipoDocumento.setModel(DefaultComboBoxModel);
     }
-void BuscarProveedorPorDefecto(){
-        try{
-            ClsProveedor oProveedor=new ClsProveedor();
-            rs= oProveedor.listarProveedorPorParametro("id","1");
+
+    void BuscarProductoPorCodigo() {
+        String busqueda = null;
+        busqueda = txtCodigoProducto.getText();        
+        try {
+            ClsProducto oProducto = new ClsProducto();
+            
+            rs = oProducto.listarProductoActivoPorParametro("codigo", busqueda);
+            while (rs.next()) {
+                if (rs.getString(2).equals(busqueda)) {
+                    
+                    lblIdProducto.setText(rs.getString(1));
+                    txtNombreProducto.setText(rs.getString(3));
+                    txtDescripcionProducto.setText(rs.getString(4));
+                    //DescripcionProducto=rs.getString(4);
+                    txtStockProducto.setText(rs.getString(5));
+                    txtPrecioProducto.setText(rs.getString(7));                    
+                }
+                break;
+            }
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+            System.out.println(ex.getMessage());
+        }
+        
+    }
+
+    void BuscarProveedorPorDefecto() {
+        try {
+            ClsProveedor oProveedor = new ClsProveedor();
+            rs = oProveedor.listarProveedorPorParametro("id", "1");
             while (rs.next()) {
                 lblIdProveedor.setText(rs.getString(1));
-                txtNombreProveedor.setText(rs.getString(2));             
-            break;
+                txtNombreProveedor.setText(rs.getString(2));                
+                break;
             }
-
-         }catch(Exception ex){
-            JOptionPane.showMessageDialog(this,ex.getMessage());
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
             System.out.println(ex.getMessage());
-         }
-    
+        }
+        
     }
     
-void CalcularTotal(){
-            
+    void CalcularTotal() {
+        
         DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
         simbolos.setDecimalSeparator('.');
-        DecimalFormat formateador = new DecimalFormat("####.##",simbolos);
-        double precio_prod=0,cant_prod=0,total_prod=0;
-        precio_prod=Double.parseDouble(txtPrecioProducto.getText());
-        cant_prod=Double.parseDouble(txtCantidadProducto.getText());
-        total_prod=precio_prod*cant_prod;
+        DecimalFormat formateador = new DecimalFormat("####.##", simbolos);
+        double precio_prod = 0, cant_prod = 0, total_prod = 0;
+        precio_prod = Double.parseDouble(txtPrecioProducto.getText());
+        cant_prod = Double.parseDouble(txtCantidadProducto.getText());
+        total_prod = precio_prod * cant_prod;
         txtTotalProducto.setText(String.valueOf(formateador.format(total_prod)));
-}
-
-
-
-
+    }
     
-
-    public int recorrer(int id){
-        int fila = 0,valor=-1;
+    public int recorrer(int id) {
+        int fila = 0, valor = -1;
         
         fila = tblDetalleProducto.getRowCount();
         
-        for (int f = 0; f < fila;f++) {
-            if(Integer.parseInt(String.valueOf(dtmDetalle.getValueAt(f, 0)))==id){
-
-                valor=f;
+        for (int f = 0; f < fila; f++) {
+            if (Integer.parseInt(String.valueOf(dtmDetalle.getValueAt(f, 0))) == id) {
+                
+                valor = f;
                 //JOptionPane.showMessageDialog(null, "te encontre!");
                 break;
                 
-                
-            }else{
+            } else {
                 //JOptionPane.showMessageDialog(null, "no estas!");
-                valor= -1;
-            }          
-              
+                valor = -1;
+            }            
+            
         }
         return valor;
-    } 
-
-    void agregardatos(int item, String cod, String nom,String descrip,double cant,double pre,double tot, String iva){
+    }    
+    
+    void agregardatos(int item, String cod, String nom, String descrip, double cant, double pre, double tot, String iva, String lote, Date fecha) {
         
-        int p=recorrer(item);
-        double n_cant,n_total;
-        if (p>-1){
-                               
-            n_cant=Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p,4)))+cant;
-            tblDetalleProducto.setValueAt(n_cant,p,4);
-                       
-            n_total=Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p,4)))*Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p,5)));
-            tblDetalleProducto.setValueAt(n_total,p,6);
-            tblDetalleProducto.setValueAt(iva,p,7);
+        int p = recorrer(item);
+        double n_cant, n_total;
+        if (p > -1) {
             
-                            
-        }else{
-            String Datos[] = {String.valueOf(item),cod,nom,descrip,String.valueOf(cant),String.valueOf(pre),String.valueOf(tot),String.valueOf(iva)};
+            n_cant = Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 4))) + cant;
+            tblDetalleProducto.setValueAt(n_cant, p, 4);
+            
+            n_total = Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 4))) * Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 5)));
+            tblDetalleProducto.setValueAt(n_total, p, 6);
+            tblDetalleProducto.setValueAt(iva, p, 7);
+            
+        } else {
+            String Datos[] = {String.valueOf(item), cod, nom, descrip, String.valueOf(cant), String.valueOf(pre), String.valueOf(tot), String.valueOf(iva), lote, String.valueOf(fecha)};
             dtmDetalle.addRow(Datos);
         }
         tblDetalleProducto.setModel(dtmDetalle);
     }
-    void CalcularSubTotal(){
-        double subtotal=0;
+
+    void CalcularSubTotal() {
+        double subtotal = 0;
         int fila = 0;
         fila = dtmDetalle.getRowCount();
         DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
         simbolos.setDecimalSeparator('.');
-        DecimalFormat formateador = new DecimalFormat("####.##",simbolos);        
+        DecimalFormat formateador = new DecimalFormat("####.##", simbolos);
         //subtotal=Double.parseDouble(txtTotalCompra.getText())/1.12;
-        for (int f=0; f<fila; f++){
+        for (int f = 0; f < fila; f++) {
             //if(con_fila[f]==1){
-            if(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 7))=="si"){
-                subtotal += Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 6)))/1.12;            
+            if (String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 7)) == "si") {
+                subtotal += Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 6))) / 1.12;                
             }
         }
         txtSubTotal.setText(String.valueOf(formateador.format(subtotal)));
     }
-    void CalcularIGV(){
-        double igv=0;
+
+    void CalcularIGV() {
+        double igv = 0;
         DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
         simbolos.setDecimalSeparator('.');
-        DecimalFormat formateador = new DecimalFormat("####.##",simbolos);       
-        igv=Double.parseDouble(txtSubTotal.getText())*0.12;
+        DecimalFormat formateador = new DecimalFormat("####.##", simbolos);        
+        igv = Double.parseDouble(txtSubTotal.getText()) * 0.12;
         txtIGV.setText(String.valueOf(formateador.format(igv)));
     }
-    void CalcularTotal_Compra(){
+
+    void CalcularTotal_Compra() {
         int fila = 0;
         double valorCompra = 0;
         fila = dtmDetalle.getRowCount();
         DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
         simbolos.setDecimalSeparator('.');
-        DecimalFormat formateador = new DecimalFormat("####.##",simbolos);
-        for (int f=0; f<fila; f++){
+        DecimalFormat formateador = new DecimalFormat("####.##", simbolos);
+        for (int f = 0; f < fila; f++) {
             valorCompra += Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 6)));            
         }
         txtTotalCompra.setText(String.valueOf(formateador.format(valorCompra)));
     }
-    void limpiarTabla(){
+
+    void limpiarTabla() {
         jCheckiva.setSelected(false);
-        try{      
-	int filas=tblDetalleProducto.getRowCount();
-            for (int i = 0;filas>i; i++) {
+        try {            
+            int filas = tblDetalleProducto.getRowCount();
+            for (int i = 0; filas > i; i++) {
                 dtmDetalle.removeRow(0);
             }
         } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Error al limpiar la tabla.");
+            JOptionPane.showMessageDialog(null, "Error al limpiar la tabla.");
         }
     }
-    void obtenerUltimoIdCompra(){
-        try{
-        ClsCompra oCompra=new ClsCompra(); 
-        rs= oCompra.obtenerUltimoIdCompra();
+
+    void obtenerUltimoIdCompra() {
+        try {
+            ClsCompra oCompra = new ClsCompra();            
+            rs = oCompra.obtenerUltimoIdCompra();
             while (rs.next()) {
                 idventa = rs.getInt(1);
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this,ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage());
             System.out.println(ex.getMessage());
         }
     }
-
-    void guardarDetalle(){
+    
+    void guardarDetalle() {
         obtenerUltimoIdCompra();
-        ClsDetalleCompra detallecompras=new ClsDetalleCompra();
-        ClsEntidadDetalleCompra detallecompra=new ClsEntidadDetalleCompra();
-        ClsProducto productos=new ClsProducto();
-        String codigo,strId;
-        ClsEntidadProducto producto=new ClsEntidadProducto();
-        int fila=0;
-        double cant = 0,ncant,stock;   
-        fila =tblDetalleProducto.getRowCount();
-        for (int f=0; f<fila; f++){
+        ClsDetalleCompra detallecompras = new ClsDetalleCompra();
+        ClsEntidadDetalleCompra detallecompra = new ClsEntidadDetalleCompra();
+        ClsProducto productos = new ClsProducto();
+        String codigo, strId;
+        ClsEntidadProducto producto = new ClsEntidadProducto();
+        int fila = 0;
+        double cant = 0, ncant, stock;        
+        fila = tblDetalleProducto.getRowCount();
+        for (int f = 0; f < fila; f++) {
             detallecompra.setStrIdCompra(String.valueOf(idventa));
             detallecompra.setStrIdProducto(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 0)));
             detallecompra.setStrCantidadDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 4)));
             detallecompra.setStrPrecioDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 5)));
-            detallecompra.setStrTotalDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 6))); 
+            detallecompra.setStrTotalDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 6)));            
             detallecompras.agregarDetalleCompra(detallecompra);
             
-
-
-            try{
-                ClsProducto oProducto=new ClsProducto();
+            try {
+                ClsProducto oProducto = new ClsProducto();
                 
-                rs= oProducto.listarProductoActivoPorParametro("id",((String) tblDetalleProducto.getValueAt(f, 0)));
+                rs = oProducto.listarProductoActivoPorParametro("id", ((String) tblDetalleProducto.getValueAt(f, 0)));
                 while (rs.next()) {
-
-                            cant=Double.parseDouble(rs.getString(5));
+                    
+                    cant = Double.parseDouble(rs.getString(5));
                 }
                 
-
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this,ex.getMessage());
+                JOptionPane.showMessageDialog(this, ex.getMessage());
                 System.out.println(ex.getMessage());
-            }                   
+            }            
             
-        strId =  ((String) tblDetalleProducto.getValueAt(f, 0));
-        ncant=Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 4)));
-        stock=cant+ncant;
-        producto.setStrStockProducto(String.valueOf(stock));
-        productos.actualizarProductoStock(strId, producto);
-
-    }
+            strId = ((String) tblDetalleProducto.getValueAt(f, 0));
+            ncant = Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 4)));
+            stock = cant + ncant;
+            producto.setStrStockProducto(String.valueOf(stock));
+            productos.actualizarProductoStock(strId, producto);
+            
+        }
     }    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -531,18 +527,16 @@ void CalcularTotal(){
         btnBuscarProducto = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
         txtNombreProducto = new javax.swing.JTextField();
-        jLabel19 = new javax.swing.JLabel();
         txtDescripcionProducto = new javax.swing.JLabel();
         txtStockProducto = new javax.swing.JTextField();
         txtPrecioProducto = new javax.swing.JTextField();
         lblIdProducto = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        txtporcentajeDescuento = new javax.swing.JTextField();
+        txtlote = new javax.swing.JTextField();
         jLabel25 = new javax.swing.JLabel();
-        txtporcentajeDescuento1 = new javax.swing.JTextField();
-        txtFechaCaducidadLote = new com.toedter.calendar.JDateChooser();
         jLabel2 = new javax.swing.JLabel();
+        txtFechaCaducidadLote = new com.toedter.calendar.JDateChooser();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btnBuscarProveedor = new javax.swing.JButton();
@@ -550,8 +544,8 @@ void CalcularTotal(){
         jLabel13 = new javax.swing.JLabel();
         cboTipoDocumento = new javax.swing.JComboBox();
         lblIdProveedor = new javax.swing.JLabel();
-        txtFecha1 = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
+        txtFecha = new com.toedter.calendar.JDateChooser();
         chkCambiarNumero = new javax.swing.JCheckBox();
         jLabel4 = new javax.swing.JLabel();
         jCheckiva = new javax.swing.JCheckBox();
@@ -726,16 +720,16 @@ void CalcularTotal(){
         });
         jPanel3.add(btnLimpiarTabla, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 5, 50, 40));
 
-        jPanel5.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 610, 50));
+        jPanel5.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 530, 50));
 
         txtNumero.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtNumero.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jPanel5.add(txtNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 190, 110, -1));
+        jPanel5.add(txtNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 190, 110, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Nº DE COMPRA");
-        jPanel5.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 170, 110, 20));
+        jPanel5.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 170, 110, 20));
 
         jPanel2.setBackground(new java.awt.Color(249, 205, 87));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del Producto"));
@@ -767,9 +761,6 @@ void CalcularTotal(){
 
         txtNombreProducto.setEnabled(false);
         jPanel2.add(txtNombreProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 75, 240, -1));
-
-        jLabel19.setText("Descuento:");
-        jPanel2.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 20, -1, -1));
         jPanel2.add(txtDescripcionProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 30, 20));
 
         txtStockProducto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -784,25 +775,22 @@ void CalcularTotal(){
         jPanel2.add(lblIdProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, 20, 20));
 
         jLabel23.setText("Lote:");
-        jPanel2.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 20, 30, -1));
+        jPanel2.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 10, 30, 20));
 
         jLabel20.setText("STOCK:");
         jPanel2.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, -1, -1));
 
-        txtporcentajeDescuento.setText("0");
-        jPanel2.add(txtporcentajeDescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 40, 50, -1));
+        txtlote.setText("0");
+        jPanel2.add(txtlote, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 10, 80, -1));
 
         jLabel25.setText("COSTO:");
         jPanel2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 50, 50, -1));
 
-        txtporcentajeDescuento1.setText("0");
-        jPanel2.add(txtporcentajeDescuento1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 40, 50, -1));
-        jPanel2.add(txtFechaCaducidadLote, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 70, 100, 20));
-
         jLabel2.setText("FECHA CADUCIDAD:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 70, 110, 20));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 40, 110, 20));
+        jPanel2.add(txtFechaCaducidadLote, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 60, 100, -1));
 
-        jPanel5.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 85, 610, 100));
+        jPanel5.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 85, 530, 100));
 
         jPanel1.setBackground(new java.awt.Color(249, 205, 87));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos de la Compra"));
@@ -829,12 +817,12 @@ void CalcularTotal(){
         cboTipoDocumento.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jPanel1.add(cboTipoDocumento, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 35, 130, 20));
         jPanel1.add(lblIdProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 20, 20));
-        jPanel1.add(txtFecha1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 35, 100, -1));
 
         jLabel3.setText("FECHA:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 15, 80, 20));
+        jPanel1.add(txtFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 40, 100, -1));
 
-        jPanel5.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 610, 70));
+        jPanel5.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 530, 70));
 
         chkCambiarNumero.setText("Cambiar Número");
         chkCambiarNumero.setOpaque(false);
@@ -843,10 +831,10 @@ void CalcularTotal(){
                 chkCambiarNumeroStateChanged(evt);
             }
         });
-        jPanel5.add(chkCambiarNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 220, 110, -1));
+        jPanel5.add(chkCambiarNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 220, 110, -1));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Ferreteria2.png"))); // NOI18N
-        jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 20, 150, 150));
+        jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 20, 150, 150));
 
         jCheckiva.setBackground(new java.awt.Color(255, 255, 204));
         jCheckiva.setText("IVA");
@@ -855,7 +843,7 @@ void CalcularTotal(){
                 jCheckivaStateChanged(evt);
             }
         });
-        jPanel5.add(jCheckiva, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 220, -1, -1));
+        jPanel5.add(jCheckiva, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 220, -1, -1));
 
         getContentPane().add(jPanel5);
         jPanel5.setBounds(10, 10, 790, 250);
@@ -910,7 +898,7 @@ void CalcularTotal(){
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        accion="Nuevo";
+        accion = "Nuevo";
         modificar();
         limpiarCampos();
     }//GEN-LAST:event_btnNuevoActionPerformed
@@ -927,56 +915,62 @@ void CalcularTotal(){
     private void txtCantidadProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadProductoKeyReleased
         CalcularTotal();
         int keyCode = evt.getKeyCode();
-        if (keyCode==KeyEvent.VK_ENTER) btnAgregarProducto.requestFocus(); 
+        if (keyCode == KeyEvent.VK_ENTER) {
+            btnAgregarProducto.requestFocus();
+        }        
     }//GEN-LAST:event_txtCantidadProductoKeyReleased
 
     private void btnAgregarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarProductoActionPerformed
-    double stock,cant;
-  
-    if (!txtCantidadProducto.getText().equals("")){
-        if(txtCantidadProducto.getText().equals("")){
-            txtCantidadProducto.setText("0");
-            cant=Double.parseDouble(txtCantidadProducto.getText());
-        }else{
-        cant=Double.parseDouble(txtCantidadProducto.getText());
-        }
+        double stock, cant;
+        
+        if (!txtCantidadProducto.getText().equals("")) {
+            if (txtCantidadProducto.getText().equals("")) {
+                txtCantidadProducto.setText("0");
+                cant = Double.parseDouble(txtCantidadProducto.getText());
+            } else {
+                cant = Double.parseDouble(txtCantidadProducto.getText());
+            }
             
-        if(cant>0){
-
-            int d1=Integer.parseInt(lblIdProducto.getText());
-            String d2=txtCodigoProducto.getText();
-            String d3=txtNombreProducto.getText();
-            String d4=txtDescripcionProducto.getText();
-            double d5=Double.parseDouble(txtCantidadProducto.getText());
-            double d6=Double.parseDouble(txtPrecioProducto.getText());
-            double d7=Double.parseDouble(txtTotalProducto.getText());
-            String d8;
-            if (jCheckiva.isSelected()){
-                d8="si";
-            }else{
-                d8="no";
-            }  
-            agregardatos(d1,d2,d3,d4,d5,d6,d7,d8);
-
-            CalcularTotal_Compra();
-            CalcularSubTotal();
-            CalcularIGV();
-
-            txtCantidadProducto.setText("");
-            txtTotalProducto.setText("");
-            txtCodigoProducto.requestFocus();  
+            if (cant > 0) {
+                
+                int d1 = Integer.parseInt(lblIdProducto.getText());
+                String d2 = txtCodigoProducto.getText();
+                String d3 = txtNombreProducto.getText();
+                String d4 = txtDescripcionProducto.getText();
+                double d5 = Double.parseDouble(txtCantidadProducto.getText());
+                double d6 = Double.parseDouble(txtPrecioProducto.getText());
+                double d7 = Double.parseDouble(txtTotalProducto.getText());
+                String d8,d9;
+                Date d10;
+                
+                if (jCheckiva.isSelected()) {
+                    d8 = "si";
+                } else {
+                    d8 = "no";
+                } 
+                d9=txtlote.getText();
+                d10=txtFechaCaducidadLote.getDate();
+                agregardatos(d1, d2, d3, d4, d5, d6, d7, d8,d9,d10);
+                
+                CalcularTotal_Compra();
+                CalcularSubTotal();
+                CalcularIGV();
+                
+                txtCantidadProducto.setText("");
+                txtTotalProducto.setText("");
+                txtCodigoProducto.requestFocus();                
+                
+            } else {
+                JOptionPane.showMessageDialog(null, "Ingrese Cantidad mayor a 0");
+                txtCantidadProducto.requestFocus();                
+            }
             
-        }else{
-            JOptionPane.showMessageDialog(null, "Ingrese Cantidad mayor a 0");
-            txtCantidadProducto.requestFocus();   
+        } else {
+            JOptionPane.showMessageDialog(null, "Ingrese cantidad");
+            txtCantidadProducto.requestFocus();            
         }
-     
-    }else{
-        JOptionPane.showMessageDialog(null, "Ingrese cantidad");
-        txtCantidadProducto.requestFocus();   
-    }
+        
 
-       
     }//GEN-LAST:event_btnAgregarProductoActionPerformed
 
     private void btnEliminarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProductoActionPerformed
@@ -991,12 +985,12 @@ void CalcularTotal(){
             txtSubTotal.setText("0.0");
             txtIGV.setText("0.0");
             txtTotalCompra.setText("0.0");
-
+            
             CalcularTotal_Compra();
             CalcularSubTotal();
             CalcularIGV();
         }
-
+        
         CalcularTotal_Compra();
         CalcularSubTotal();
         CalcularIGV();
@@ -1010,32 +1004,34 @@ void CalcularTotal(){
     }//GEN-LAST:event_btnLimpiarTablaActionPerformed
 
     private void txtCodigoProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyReleased
-        BuscarProductoPorCodigo(); 
+        BuscarProductoPorCodigo();        
         int keyCode = evt.getKeyCode();
-        if (keyCode==KeyEvent.VK_ENTER) txtCantidadProducto.requestFocus(); 
+        if (keyCode == KeyEvent.VK_ENTER) {
+            txtCantidadProducto.requestFocus();
+        }        
     }//GEN-LAST:event_txtCodigoProductoKeyReleased
 
     private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
-    Consultas.FrmBuscarProducto_Compra producto= new Consultas.FrmBuscarProducto_Compra();
-    Presentacion.FrmPrincipal.Escritorio.add(producto);
-    producto.toFront();
-    producto.setVisible(true);
+        Consultas.FrmBuscarProducto_Compra producto = new Consultas.FrmBuscarProducto_Compra();
+        Presentacion.FrmPrincipal.Escritorio.add(producto);
+        producto.toFront();
+        producto.setVisible(true);
     }//GEN-LAST:event_btnBuscarProductoActionPerformed
 
     private void btnBuscarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProveedorActionPerformed
-    Consultas.FrmBuscarProveedor_Compra proveedor= new Consultas.FrmBuscarProveedor_Compra();
-    Presentacion.FrmPrincipal.Escritorio.add(proveedor);
-    proveedor.toFront();
-    proveedor.setVisible(true);
+        Consultas.FrmBuscarProveedor_Compra proveedor = new Consultas.FrmBuscarProveedor_Compra();
+        Presentacion.FrmPrincipal.Escritorio.add(proveedor);
+        proveedor.toFront();
+        proveedor.setVisible(true);
     }//GEN-LAST:event_btnBuscarProveedorActionPerformed
 
     private void chkCambiarNumeroStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_chkCambiarNumeroStateChanged
-        if (chkCambiarNumero.isSelected()){
+        if (chkCambiarNumero.isSelected()) {
             txtNumero.setText("");
             txtNumero.setEnabled(true);
-        }else{
+        } else {
             txtNumero.setEnabled(false);
-            numCompra=generaNumCompra();
+            numCompra = generaNumCompra();
             txtNumero.setText(numCompra);
         }
     }//GEN-LAST:event_chkCambiarNumeroStateChanged
@@ -1043,14 +1039,14 @@ void CalcularTotal(){
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         int result = JOptionPane.showConfirmDialog(this, "¿Desea Generar la Compra?", "Mensaje del Sistema", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
-            if(accion.equals("Nuevo")){
-                ClsCompra compras=new ClsCompra();
-                ClsEntidadCompra venta=new ClsEntidadCompra();
+            if (accion.equals("Nuevo")) {
+                ClsCompra compras = new ClsCompra();
+                ClsEntidadCompra venta = new ClsEntidadCompra();
                 venta.setStrIdTipoDocumento(id[cboTipoDocumento.getSelectedIndex()]);
                 venta.setStrIdProveedor(lblIdProveedor.getText());
                 venta.setStrIdEmpleado(IdEmpleado);
                 venta.setStrNumeroCompra(txtNumero.getText());
-                venta.setStrFechaCompra(txtFechaCaducidadLote.getDate());
+                venta.setStrFechaCompra(txtFecha.getDate());
                 venta.setStrSubTotalCompra(txtSubTotal.getText());
                 venta.setStrIgvCompra(txtIGV.getText());
                 venta.setStrTotalCompra(txtTotalCompra.getText());
@@ -1060,7 +1056,7 @@ void CalcularTotal(){
             }
             mirar();
             limpiarTabla();
-            numCompra=generaNumCompra();
+            numCompra = generaNumCompra();
             txtNumero.setText(numCompra);
             BuscarProveedorPorDefecto();
         }
@@ -1077,12 +1073,16 @@ void CalcularTotal(){
 
     private void txtCodigoProductoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyTyped
         char car = evt.getKeyChar();
-        if((car<'0' || car>'9')) evt.consume();
+        if ((car < '0' || car > '9')) {
+            evt.consume();
+        }
     }//GEN-LAST:event_txtCodigoProductoKeyTyped
 
     private void txtCantidadProductoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadProductoKeyTyped
         char car = evt.getKeyChar();
-        if((car<'0' || car>'9')) evt.consume();
+        if ((car < '0' || car > '9')) {
+            evt.consume();
+        }
     }//GEN-LAST:event_txtCantidadProductoKeyTyped
 
     private void jCheckivaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckivaStateChanged
@@ -1110,7 +1110,6 @@ void CalcularTotal(){
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
@@ -1136,7 +1135,7 @@ void CalcularTotal(){
     private javax.swing.JTextField txtCantidadProducto;
     public static javax.swing.JTextField txtCodigoProducto;
     public static javax.swing.JLabel txtDescripcionProducto;
-    private com.toedter.calendar.JDateChooser txtFecha1;
+    private com.toedter.calendar.JDateChooser txtFecha;
     private com.toedter.calendar.JDateChooser txtFechaCaducidadLote;
     private javax.swing.JTextField txtIGV;
     public static javax.swing.JTextField txtNombreProducto;
@@ -1147,7 +1146,6 @@ void CalcularTotal(){
     private javax.swing.JTextField txtSubTotal;
     private javax.swing.JTextField txtTotalCompra;
     private javax.swing.JTextField txtTotalProducto;
-    private javax.swing.JTextField txtporcentajeDescuento;
-    private javax.swing.JTextField txtporcentajeDescuento1;
+    private javax.swing.JTextField txtlote;
     // End of variables declaration//GEN-END:variables
 }
