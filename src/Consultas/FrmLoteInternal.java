@@ -126,7 +126,7 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
                     fechaconformatolote = formato.parse(fechalote);
                     fechaconformatoactual = formato.parse(fechafactual);
                 } catch (ParseException ex) {
-                    Logger.getLogger(FrmLote.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(FrmLoteInternal.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 if (fechaconformatoactual.after(fechaconformatolote)) {
                     /*caducado*/
@@ -179,7 +179,7 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
         try {
             fechadevolver = formato.parse(fechaformato);
         } catch (ParseException ex) {
-            Logger.getLogger(FrmLote.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FrmLoteInternal.class.getName()).log(Level.SEVERE, null, ex);
         }
         return fechadevolver;
     }
