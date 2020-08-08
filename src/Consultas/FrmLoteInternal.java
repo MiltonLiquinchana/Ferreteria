@@ -46,38 +46,70 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
     /*esto lo agregamos para poder hacer busquedas dentro de la tabla*/
     TableRowSorter rowsorter;
     int indice = 6;
+    /*creamos un nuevo modelo de para la tabla*/
+    DefaultTableModel modelo;
 
     public FrmLoteInternal() {
         initComponents();
         /*con esto hasociamos el reder de colores que tendra la tabla*/
         this.tablalote.setDefaultRenderer(Object.class, new Entidad.RenderModelColor());
-        llenartabla(tablalote);
+        llenartabla(tablalote, "listar");
     }
 
     /*metodo que no sirve para llenar la tabla desde la base de datos, este metodo recive la tabla a llenar*/
-    void llenartabla(JTable tabla) {
-        /*creamos un nuevo modelo de para la tabla*/
-        DefaultTableModel modelo = new DefaultTableModel();
+    void llenartabla(JTable tabla, String busqueda) {
+
+        modelo = new DefaultTableModel();
         /*en un arreglo de tipo string definimos los encabezados de cada columna*/
         String titulos[] = {"CODIGO PRODUCTO", "NOMBRE PRODUCTO", "LOTE", "FECHA COMPRA", "FECHA CADUCIDAD", "CANTIDAD", "ESTADO"};
         /*agregamos los encabezados al modelo de la tabla*/
         modelo.setColumnIdentifiers(titulos);
+        /*variable para verificacion de consulta*/
+        boolean verificacionconsulta = false;
+        /*codicionales para saber que tipo de busqueda se va a hacer*/
+        if (busqueda.equals("CaducadoporCaducar")) {//en caso de ser para caducado y por caducar
+            if (CRUD.listarlotescaducadopordacucar(producto, lote, compra)) {
+                verificacionconsulta = true;
+            } else {
+                verificacionconsulta = false;
+            }
+        } else if (busqueda.equals("CaducadoPendiente")) {//en caso de ser para caducado y pendiente
+            if (CRUD.listarlotescaducadopendiente(producto, lote, compra)) {
+                verificacionconsulta = true;
+            } else {
+                verificacionconsulta = false;
+            }
+
+        } else if (busqueda.equals("PorCaducarPendiente")) {//en caso de ser por caducar y pendiente
+            if (CRUD.listarlotesporcaducarpendiente(producto, lote, compra)) {
+                verificacionconsulta = true;
+            } else {
+                verificacionconsulta = false;
+            }
+        } else {
+            if (CRUD.listarlotes(producto, lote, compra)) {//en caso de que se tenga que listar todo, el filtro se ara dependiedo del parametro rowsorter
+                verificacionconsulta = true;
+            } else {
+                verificacionconsulta = false;
+            }
+        }
+
         /*aqui le decimos que si la ejecucion del metodo nos debuelve veradero*/
-        if (CRUD.listarlotes(producto, lote, compra)) {
+        if (verificacionconsulta == true) {
             /*primero creamos cuatro listas las cuales reciviran los valores que tienen las listas de la clase ClsDetalleVenta*/
-            ArrayList<ClsEntidadProducto> listaproducto;
-            ArrayList<ClsEntidadLote> listalote;
-            ArrayList<ClsEntidadCompra> listacompra;
+            ArrayList<ClsEntidadProducto> listaproducto = null;//antes de recivir valores en las listas las limpiamos
+            ArrayList<ClsEntidadLote> listalote = null;
+            ArrayList<ClsEntidadCompra> listacompra = null;
             /*igualamos los valores de las listas*/
             listaproducto = CRUD.listaproducto;
             listalote = CRUD.listalote;
             listacompra = CRUD.listacompra;
-
             /*creamos una vaiable de tipo entera para almacenar el numero de registros que tenga cualquiera de las lista, esto con el proposito
             de que se pueda rrecorer entre los datos de la lista y se vayan agregando al modelo*/
             int tamanio = CRUD.listalote.size();
             int recorrer = 0;/*esta variable aumenta dependientdo de cuantas veces recorra la lista*/
- /*con el tamanio de la lista recorremos entre los datos con la ayudad de un while o un for*/
+            limpiartabla();//Limpiamos la tabla antes de rellenar los datos
+            /*con el tamanio de la lista recorremos entre los datos con la ayudad de un while o un for*/
             while (recorrer < tamanio) {
                 /*primero hacemos una comprovacion de fechas para saber si esta caducado,por caducar, pendiente*/
  /*variable necesarias para la comprovacion*/
@@ -110,15 +142,16 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
                     }
                 }
                 /*agregamos los datos de las listas a un arreglo de tipo string*/
-                String datos[] = {
-                    listaproducto.get(recorrer).getStrCodigoProducto(),
-                    listaproducto.get(recorrer).getStrNombreProducto(),
-                    listalote.get(recorrer).getCodigo(),
-                    String.valueOf(listacompra.get(recorrer).getStrFechaCompra()),
-                    String.valueOf(listalote.get(recorrer).getFecha_caducidad()),
-                    String.valueOf(listalote.get(recorrer).getCantidadcompra()),
-                    stadolote
-                };
+
+                String datos[] = new String[7];
+                datos[0] = listaproducto.get(recorrer).getStrCodigoProducto();
+                datos[1] = listaproducto.get(recorrer).getStrNombreProducto();
+                datos[2] = listalote.get(recorrer).getCodigo();
+                datos[3] = String.valueOf(listacompra.get(recorrer).getStrFechaCompra());
+                datos[4] = String.valueOf(listalote.get(recorrer).getFecha_caducidad());
+                datos[5] = String.valueOf(listalote.get(recorrer).getCantidadcompra());
+                datos[6] = stadolote;
+
                 /*agregamos los datos al modelo de la tabla*/
                 modelo.addRow(datos);
 
@@ -128,6 +161,9 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
             tabla.setRowSorter(rowsorter);
             /*le asignamos el modelo creado a la tabla*/
             tabla.setModel(modelo);
+        } else {
+            JOptionPane.showMessageDialog(null, "No se a podido obtener registros desde la base de datos");
+
         }
 
     }
@@ -240,39 +276,71 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
         filtrarlotes();
     }//GEN-LAST:event_chkbporcaducarActionPerformed
     private void filtrarlotes() {
-        String caducado, porcaducar, pendiente;
+        /*variables que nos sirven para saber que tipo de consulta se ejecutara*/
+        String caducado, porcaducar, pendiente, caducadoporcaducar, caducadopendiente, porCaducarPendiente;
         caducado = "CADUCADO";
         porcaducar = "POR CADUCAR";
         pendiente = "PENDIENTE";
+        caducadoporcaducar = "CaducadoporCaducar";
+        caducadopendiente = "CaducadoPendiente";
+        porCaducarPendiente = "PorCaducarPendiente";
         if (chkbcaducado.isSelected() && !chkbporcaducar.isSelected() && !chkbpendiente.isSelected()) {
-            //JOptionPane.showMessageDialog(null, "caducado");
+            //JOptionPane.showMessageDialog(null, "caducado");  
+            llenartabla(tablalote, "listar");
             rowsorter.setRowFilter(RowFilter.regexFilter(caducado.toUpperCase(), indice));
         }
         if (chkbporcaducar.isSelected() && !chkbcaducado.isSelected() && !chkbpendiente.isSelected()) {
             //JOptionPane.showMessageDialog(null, "por caducar");
+            llenartabla(tablalote, "listar");
             rowsorter.setRowFilter(RowFilter.regexFilter(porcaducar.toUpperCase(), indice));
         }
         if (chkbpendiente.isSelected() && !chkbcaducado.isSelected() && !chkbporcaducar.isSelected()) {
             //JOptionPane.showMessageDialog(null, "pendiente");
+            llenartabla(tablalote, "listar");
             rowsorter.setRowFilter(RowFilter.regexFilter(pendiente.toUpperCase(), indice));
         }
-
         /*verificaciones dobles*/
         if (chkbcaducado.isSelected() && chkbporcaducar.isSelected() && !chkbpendiente.isSelected()) {
-            JOptionPane.showMessageDialog(this, "caducado y por caducar");
+            /*creamos un nuevo modelo de para la tabla*/
+            //JOptionPane.showMessageDialog(this, "caducado y por caducar");
+            llenartabla(tablalote, caducadoporcaducar);
         }
         if (chkbcaducado.isSelected() && chkbpendiente.isSelected() && !chkbporcaducar.isSelected()) {
-            JOptionPane.showMessageDialog(this, "caducado y pendiente");
-
+            //JOptionPane.showMessageDialog(this, "caducado y pendiente");
+            llenartabla(tablalote, caducadopendiente);
         }
         if (chkbporcaducar.isSelected() && chkbpendiente.isSelected() && !chkbcaducado.isSelected()) {
-            JOptionPane.showMessageDialog(this, "por caducar y pendiente");
+            //JOptionPane.showMessageDialog(this, "por caducar y pendiente");
+            llenartabla(tablalote, porCaducarPendiente);
         }
         if (chkbcaducado.isSelected() && chkbporcaducar.isSelected() && chkbpendiente.isSelected()) {
-            JOptionPane.showMessageDialog(this, "caducado, por caducar, y pendiente");
+            //JOptionPane.showMessageDialog(this, "caducado, por caducar, y pendiente");
+            llenartabla(tablalote, "listar");
+        }
+        if (!chkbcaducado.isSelected() && !chkbporcaducar.isSelected() && !chkbpendiente.isSelected()) {
+            //JOptionPane.showMessageDialog(this, "caducado, por caducar, y pendiente");
+            llenartabla(tablalote, "listar");
         }
 
     }
+
+    /*este metodo nos sirve para limpiar la tabla*/
+    public void limpiartabla() {
+        /*declaramos variables e inicialisamos*/
+        int contador = 0;
+        int numfilas;
+        /*capturamos el numero de filas que tiene el modelo de la tabla*/
+        numfilas = modelo.getRowCount();
+        /*decimos que mientras el numero de filas sea mayor al contador*/
+        while (numfilas > contador) {
+            /*entonces nos remueva lo que esta en la pocicion0*/
+            modelo.removeRow(0);
+            /*sumamos mas uno al contador*/
+            contador++;
+        }
+
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox chkbcaducado;
