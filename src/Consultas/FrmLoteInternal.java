@@ -10,15 +10,20 @@ import Entidad.ClsEntidadDetalleCompra;
 import Entidad.ClsEntidadLote;
 import Entidad.ClsEntidadProducto;
 import Negocio.ClsDetalleVenta;
+import java.awt.List;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -38,6 +43,9 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
     /*formato de fehcha para la comprovacion de fechas*/
     String format = new String("dd/MM/yyyy");
     SimpleDateFormat formato = new SimpleDateFormat(format);
+    /*esto lo agregamos para poder hacer busquedas dentro de la tabla*/
+    TableRowSorter rowsorter;
+    int indice = 6;
 
     public FrmLoteInternal() {
         initComponents();
@@ -116,6 +124,8 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
 
                 recorrer++;
             }
+            rowsorter = new TableRowSorter(modelo);
+            tabla.setRowSorter(rowsorter);
             /*le asignamos el modelo creado a la tabla*/
             tabla.setModel(modelo);
         }
@@ -144,6 +154,9 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tablalote = new javax.swing.JTable();
+        chkbcaducado = new javax.swing.JCheckBox();
+        chkbporcaducar = new javax.swing.JCheckBox();
+        chkbpendiente = new javax.swing.JCheckBox();
 
         setClosable(true);
 
@@ -160,28 +173,111 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(tablalote);
 
+        chkbcaducado.setText("Caducados");
+        chkbcaducado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkbcaducadoActionPerformed(evt);
+            }
+        });
+
+        chkbporcaducar.setText("Por caducar");
+        chkbporcaducar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkbporcaducarActionPerformed(evt);
+            }
+        });
+
+        chkbpendiente.setText("Pendiente");
+        chkbpendiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkbpendienteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 722, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 722, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addComponent(chkbcaducado)
+                        .addGap(18, 18, 18)
+                        .addComponent(chkbporcaducar)
+                        .addGap(18, 18, 18)
+                        .addComponent(chkbpendiente)))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chkbcaducado)
+                    .addComponent(chkbporcaducar)
+                    .addComponent(chkbpendiente))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void chkbcaducadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkbcaducadoActionPerformed
+        filtrarlotes();
+    }//GEN-LAST:event_chkbcaducadoActionPerformed
+
+    private void chkbpendienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkbpendienteActionPerformed
+        filtrarlotes();
+    }//GEN-LAST:event_chkbpendienteActionPerformed
+
+    private void chkbporcaducarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkbporcaducarActionPerformed
+        filtrarlotes();
+    }//GEN-LAST:event_chkbporcaducarActionPerformed
+    private void filtrarlotes() {
+        String caducado, porcaducar, pendiente;
+        caducado = "CADUCADO";
+        porcaducar = "POR CADUCAR";
+        pendiente = "PENDIENTE";
+        if (chkbcaducado.isSelected() && !chkbporcaducar.isSelected() && !chkbpendiente.isSelected()) {
+            //JOptionPane.showMessageDialog(null, "caducado");
+            rowsorter.setRowFilter(RowFilter.regexFilter(caducado.toUpperCase(), indice));
+        }
+        if (chkbporcaducar.isSelected() && !chkbcaducado.isSelected() && !chkbpendiente.isSelected()) {
+            //JOptionPane.showMessageDialog(null, "por caducar");
+            rowsorter.setRowFilter(RowFilter.regexFilter(porcaducar.toUpperCase(), indice));
+        }
+        if (chkbpendiente.isSelected() && !chkbcaducado.isSelected() && !chkbporcaducar.isSelected()) {
+            //JOptionPane.showMessageDialog(null, "pendiente");
+            rowsorter.setRowFilter(RowFilter.regexFilter(pendiente.toUpperCase(), indice));
+        }
+
+        /*verificaciones dobles*/
+        if (chkbcaducado.isSelected() && chkbporcaducar.isSelected() && !chkbpendiente.isSelected()) {
+            JOptionPane.showMessageDialog(this, "caducado y por caducar");
+        }
+        if (chkbcaducado.isSelected() && chkbpendiente.isSelected() && !chkbporcaducar.isSelected()) {
+            JOptionPane.showMessageDialog(this, "caducado y pendiente");
+
+        }
+        if (chkbporcaducar.isSelected() && chkbpendiente.isSelected() && !chkbcaducado.isSelected()) {
+            JOptionPane.showMessageDialog(this, "por caducar y pendiente");
+        }
+        if (chkbcaducado.isSelected() && chkbporcaducar.isSelected() && chkbpendiente.isSelected()) {
+            JOptionPane.showMessageDialog(this, "caducado, por caducar, y pendiente");
+        }
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox chkbcaducado;
+    private javax.swing.JCheckBox chkbpendiente;
+    private javax.swing.JCheckBox chkbporcaducar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablalote;
     // End of variables declaration//GEN-END:variables
