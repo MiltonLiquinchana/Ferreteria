@@ -41,6 +41,8 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
     /*formato de fehcha para la comprovacion de fechas*/
     String format = new String("dd/MM/yyyy");
     SimpleDateFormat formato = new SimpleDateFormat(format);
+    String formatdos = new String("yyyy-MM-dd");
+    SimpleDateFormat formatodos = new SimpleDateFormat(formatdos);
     /*esto lo agregamos para poder hacer busquedas dentro de la tabla*/
     TableRowSorter rowsorter;
     int indice = 6;
@@ -113,28 +115,26 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
  /*variable necesarias para la comprovacion*/
                 Date fechaactual = new Date();
                 /*damos el formato de fecha a utilizar*/
-                Date fechaconformatolote = null, fechaconformatoactual = null;
-                String fechalote, fechafactual;
+                Date fechaconformatolote = null;
+                String fechalote = null;
                 /*primero convertimos la fecha de tipo date a string con el formato*/
-                fechalote = formato.format(listalote.get(recorrer).getFecha_caducidad());
-                fechafactual = formato.format(fechaactual);
+                fechalote = listalote.get(recorrer).getFecha_caducidad();;
 
                 try {
                     /*aqui convermimos de string a tipo date pero con el formato de fecha de yyyy/mm/dd*/
-                    fechaconformatolote = formato.parse(fechalote);
-                    fechaconformatoactual = formato.parse(fechafactual);
+                    fechaconformatolote = formatodos.parse(fechalote);
                 } catch (ParseException ex) {
                     Logger.getLogger(FrmLoteInternal.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                if (fechaconformatoactual.after(fechaconformatolote)) {
+                if (fechaactual.after(fechaconformatolote)) {
                     /*caducado*/
                     stadolote = "CADUCADO";
-                } else if (fechaconformatoactual.before(fechaconformatolote)) {
+                } else if (fechaactual.before(fechaconformatolote)) {
                     /*hacemos otra comprobacion*/
-                    if (fechaconformatoactual.after(restardias(fechaconformatolote)) && fechaconformatoactual.before(fechaconformatolote)) {
+                    if (fechaactual.after(restardias(fechaconformatolote)) && fechaactual.before(fechaconformatolote)) {
                         /*por caducar*/
                         stadolote = "POR CADUCAR";
-                    } else if (fechaconformatoactual.before(restardias(fechaconformatolote))) {
+                    } else if (fechaactual.before(restardias(fechaconformatolote))) {
                         /*pendiente*/
                         stadolote = "PENDIENTE";
                     }
@@ -145,7 +145,7 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
                 datos[0] = listaproducto.get(recorrer).getStrCodigoProducto();
                 datos[1] = listaproducto.get(recorrer).getStrNombreProducto();
                 datos[2] = listalote.get(recorrer).getCodigo();
-                datos[3] = String.valueOf(listacompra.get(recorrer).getStrFechaCompra());
+                datos[3] = String.valueOf(listacompra.get(recorrer).getFechacompra());
                 datos[4] = String.valueOf(listalote.get(recorrer).getFecha_caducidad());
                 datos[5] = String.valueOf(listalote.get(recorrer).getCantidadcompra());
                 datos[6] = stadolote;

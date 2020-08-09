@@ -6,7 +6,7 @@ public class EntidadLote {
 
     private int IdLote;
     private String codigo;
-    private Date fecha_caducidad;
+    private String fecha_caducidad;
     private int IdProducto;
     private int IdCompra;
     private int cantidadcompra;
@@ -27,11 +27,11 @@ public class EntidadLote {
         this.codigo = codigo;
     }
 
-    public Date getFecha_caducidad() {
+    public String getFecha_caducidad() {
         return fecha_caducidad;
     }
 
-    public void setFecha_caducidad(Date fecha_caducidad) {
+    public void setFecha_caducidad(String fecha_caducidad) {
         this.fecha_caducidad = fecha_caducidad;
     }
 

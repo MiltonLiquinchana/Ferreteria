@@ -91,8 +91,8 @@ public class ClsDetalleVenta {
                 producto.setStrCodigoProducto(rs.getString("Codigo"));
                 producto.setStrNombreProducto(rs.getString("Nombre"));
                 lote.setCodigo(rs.getString("codigo"));
-                compra.setStrFechaCompra(rs.getDate("Fecha"));
-                lote.setFecha_caducidad(rs.getDate("fecha_caducidad"));
+                compra.setFechacompra(rs.getString("Fecha"));
+                lote.setFecha_caducidad(rs.getString("fecha_caducidad"));
                 lote.setCantidadcompra(rs.getInt("cantidadcompra"));
                 listaproducto.add(producto);
                 listalote.add(lote);
@@ -124,8 +124,8 @@ public class ClsDetalleVenta {
                 producto.setStrCodigoProducto(rs.getString("Codigo"));
                 producto.setStrNombreProducto(rs.getString("Nombre"));
                 lote.setCodigo(rs.getString("codigo"));
-                compra.setStrFechaCompra(rs.getDate("Fecha"));
-                lote.setFecha_caducidad(rs.getDate("fecha_caducidad"));
+                compra.setFechacompra(rs.getString("Fecha"));
+                lote.setFecha_caducidad(rs.getString("fecha_caducidad"));
                 lote.setCantidadcompra(rs.getInt("cantidadcompra"));
                 listaproducto.add(producto);
                 listalote.add(lote);
@@ -157,8 +157,8 @@ public class ClsDetalleVenta {
                 producto.setStrCodigoProducto(rs.getString("Codigo"));
                 producto.setStrNombreProducto(rs.getString("Nombre"));
                 lote.setCodigo(rs.getString("codigo"));
-                compra.setStrFechaCompra(rs.getDate("Fecha"));
-                lote.setFecha_caducidad(rs.getDate("fecha_caducidad"));
+                compra.setFechacompra(rs.getString("Fecha"));
+                lote.setFecha_caducidad(rs.getString("fecha_caducidad"));
                 lote.setCantidadcompra(rs.getInt("cantidadcompra"));
                 listaproducto.add(producto);
                 listalote.add(lote);
@@ -190,8 +190,8 @@ public class ClsDetalleVenta {
                 producto.setStrCodigoProducto(rs.getString("Codigo"));
                 producto.setStrNombreProducto(rs.getString("Nombre"));
                 lote.setCodigo(rs.getString("codigo"));
-                compra.setStrFechaCompra(rs.getDate("Fecha"));
-                lote.setFecha_caducidad(rs.getDate("fecha_caducidad"));
+                compra.setFechacompra(rs.getString("Fecha"));
+                lote.setFecha_caducidad(rs.getString("fecha_caducidad"));
                 lote.setCantidadcompra(rs.getInt("cantidadcompra"));
                 listaproducto.add(producto);
                 listalote.add(lote);

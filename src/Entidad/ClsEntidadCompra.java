@@ -24,6 +24,7 @@ public class ClsEntidadCompra {
     private String strIgvCompra;
     private String strTotalCompra;
     private String strEstadoCompra;
+    private String fechacompra;
     
     public String getStrIdCompra() {
         return strIdCompra;
@@ -127,6 +128,14 @@ public class ClsEntidadCompra {
 
     public void setStrEstadoCompra(String strEstadoCompra) {
         this.strEstadoCompra = strEstadoCompra;
+    }
+
+    public String getFechacompra() {
+        return fechacompra;
+    }
+
+    public void setFechacompra(String fechacompra) {
+        this.fechacompra = fechacompra;
     }
 
     
