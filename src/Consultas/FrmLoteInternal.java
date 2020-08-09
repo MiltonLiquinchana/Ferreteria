@@ -7,16 +7,14 @@ package Consultas;
 
 import Entidad.ClsEntidadCompra;
 import Entidad.ClsEntidadDetalleCompra;
-import Entidad.ClsEntidadLote;
 import Entidad.ClsEntidadProducto;
+import Entidad.EntidadLote;
 import Negocio.ClsDetalleVenta;
-import java.awt.List;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -33,7 +31,7 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
 
     /*cremos los objetos a las clases necesarias para la consulta*/
     ClsEntidadProducto producto;
-    ClsEntidadLote lote;
+    EntidadLote lote;
     ClsEntidadDetalleCompra detallecompra;
     ClsEntidadCompra compra;
     /*objeto para poder ejecutar el metodo en la cual se encuentra la consulta que queremos*/
@@ -98,7 +96,7 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
         if (verificacionconsulta == true) {
             /*primero creamos cuatro listas las cuales reciviran los valores que tienen las listas de la clase ClsDetalleVenta*/
             ArrayList<ClsEntidadProducto> listaproducto = null;//antes de recivir valores en las listas las limpiamos
-            ArrayList<ClsEntidadLote> listalote = null;
+            ArrayList<EntidadLote> listalote = null;
             ArrayList<ClsEntidadCompra> listacompra = null;
             /*igualamos los valores de las listas*/
             listaproducto = CRUD.listaproducto;

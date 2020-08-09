@@ -7,6 +7,7 @@ package Presentacion;
 import Backup.*;
 import Consultas.FrmConsultaStock;
 import Consultas.FrmKardexValorizado;
+import Consultas.FrmLoteInternal;
 import Entidad.*;
 import Negocio.*;
 import java.awt.Desktop;
@@ -176,6 +177,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         mComprade = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         mnuMantenimiento = new javax.swing.JMenu();
         mEmpleado = new javax.swing.JMenuItem();
         mTipodoc = new javax.swing.JMenuItem();
@@ -510,6 +512,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
         mnuInformes.add(jMenuItem3);
+
+        jMenuItem4.setText("Lote");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        mnuInformes.add(jMenuItem4);
 
         jMenuBar1.add(mnuInformes);
 
@@ -1085,6 +1095,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
         form.show();
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        Consultas.FrmLoteInternal lote=new FrmLoteInternal();
+        Escritorio.add(lote);
+        lote.show();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1139,6 +1155,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JLabel lblEstado;
     private javax.swing.JLabel lblFecha;
