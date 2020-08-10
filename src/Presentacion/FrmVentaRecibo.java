@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package Presentacion;
+
 import Conexion.*;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.view.*;
@@ -34,17 +35,18 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class FrmVentaRecibo extends javax.swing.JInternalFrame {
-private Connection connection=new ClsConexion().getConection();
 
-    static ResultSet rs=null;
-    static ResultSet rsTotal=null;
-    DefaultTableModel dtm=new DefaultTableModel();
-    String criterio,busqueda;
+    private Connection connection = new ClsConexion().getConection();
+
+    static ResultSet rs = null;
+    static ResultSet rsTotal = null;
+    DefaultTableModel dtm = new DefaultTableModel();
+    String criterio, busqueda;
     String Total;
     String idventa;
-    String id[]=new String[50];
+    String id[] = new String[50];
     static int intContador;
-    
+
     public FrmVentaRecibo() {
         initComponents();
         txtDocumentoVenta.setVisible(false);
@@ -55,19 +57,19 @@ private Connection connection=new ClsConexion().getConection();
 //-----------------------------------------------------------------------------------------------
 //--------------------------------------METODOS--------------------------------------------------
 //-----------------------------------------------------------------------------------------------
-    void obtenerUltimoIdVenta(){
-        try{
-        ClsVenta oVenta=new ClsVenta(); 
-        rs= oVenta.obtenerUltimoIdVenta();
+    void obtenerUltimoIdVenta() {
+        try {
+            ClsVenta oVenta = new ClsVenta();
+            rs = oVenta.obtenerUltimoIdVenta();
             while (rs.next()) {
-                idventa=String.valueOf(rs.getInt(1));
+                idventa = String.valueOf(rs.getInt(1));
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this,ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage());
             System.out.println(ex.getMessage());
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -112,113 +114,111 @@ private Connection connection=new ClsConexion().getConection();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVerReciboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerReciboActionPerformed
-        if(txtDocumentoVenta.getText().equals("FACTURA")){
-            Map p=new HashMap();
+        if (txtDocumentoVenta.getText().equals("FACTURA")) {
+            Map p = new HashMap();
             p.put("busqueda", idventa);
 //            String imagen="C:/Users/Edgar/Desktop/Proyecto_Casita/Sistema_Casita/src/Iconos/casita.png";
 //            p.put("imagen", this.getClass().getResourceAsStream(imagen)); 
-           
+
             JasperReport report;
             JasperPrint print;
-    
-            try{
-                report=JasperCompileManager.compileReport(new File("").getAbsolutePath()+ "/src/Reportes/RptVentaFactura.jrxml");
-                print=JasperFillManager.fillReport(report, p,connection);
-                JasperViewer view=new JasperViewer(print,false);
+
+            try {
+                report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/Reportes/RptVentaFactura.jrxml");
+                print = JasperFillManager.fillReport(report, p, connection);
+                JasperViewer view = new JasperViewer(print, false);
                 view.setTitle("Reporte de Venta");
                 view.setVisible(true);
-            }catch(JRException e){
+            } catch (JRException e) {
                 e.printStackTrace();
             }
-        }else if(txtDocumentoVenta.getText().equals("BOLETA")){
-            Map p=new HashMap();
+        } else if (txtDocumentoVenta.getText().equals("BOLETA")) {
+            Map p = new HashMap();
             p.put("busqueda", idventa);
             JasperReport report;
             JasperPrint print;
-            try{
-                report=JasperCompileManager.compileReport(new File("").getAbsolutePath()+ "/src/Reportes/RptVentaBoleta.jrxml");
-                print=JasperFillManager.fillReport(report, p,connection);
-                JasperViewer view=new JasperViewer(print,false);
+            try {
+                report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/Reportes/RptVentaBoleta.jrxml");
+                print = JasperFillManager.fillReport(report, p, connection);
+                JasperViewer view = new JasperViewer(print, false);
                 view.setTitle("Reporte de Venta");
                 view.setVisible(true);
-            }catch(JRException e){
+            } catch (JRException e) {
                 e.printStackTrace();
             }
-          }else if(txtDocumentoVenta.getText().equals("TICKET")){
-            Map p=new HashMap();
+        } else if (txtDocumentoVenta.getText().equals("TICKET")) {
+            Map p = new HashMap();
             p.put("busqueda", idventa);
             JasperReport report;
             JasperPrint print;
-            try{
-                report=JasperCompileManager.compileReport(new File("").getAbsolutePath()+ "/src/Reportes/RptVentaTicket.jrxml");
-                print=JasperFillManager.fillReport(report, p,connection);
-                JasperViewer view=new JasperViewer(print,false);
+            try {
+                report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/Reportes/RptVentaTicket.jrxml");
+                print = JasperFillManager.fillReport(report, p, connection);
+                JasperViewer view = new JasperViewer(print, false);
                 view.setTitle("Reporte de Venta");
                 view.setVisible(true);
-            }catch(JRException e){
+            } catch (JRException e) {
                 e.printStackTrace();
             }
         }
-        
-        
+
 
     }//GEN-LAST:event_btnVerReciboActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-obtenerUltimoIdVenta();
+        obtenerUltimoIdVenta();
     }//GEN-LAST:event_formComponentShown
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(txtDocumentoVenta.getText().equals("FACTURA")){
-            Map p=new HashMap();
+        if (txtDocumentoVenta.getText().equals("FACTURA")) {
+            Map p = new HashMap();
             p.put("busqueda", idventa);
-           
+
             JasperReport report;
             JasperPrint print;
-    
-            try{
-                report=JasperCompileManager.compileReport(new File("").getAbsolutePath()+ "/src/Reportes/RptVentaFactura.jrxml");
-                print=JasperFillManager.fillReport(report, p,connection);
-                JasperViewer view=new JasperViewer(print,false);
+
+            try {
+                report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/Reportes/RptVentaFactura.jrxml");
+                print = JasperFillManager.fillReport(report, p, connection);
+                JasperViewer view = new JasperViewer(print, false);
                 view.setTitle("Reporte de Venta");
                 view.setVisible(true);
-            }catch(JRException e){
+            } catch (JRException e) {
                 e.printStackTrace();
             }
-        }else if(txtDocumentoVenta.getText().equals("BOLETA")){
-            Map p=new HashMap();
+        } else if (txtDocumentoVenta.getText().equals("BOLETA")) {
+            Map p = new HashMap();
             p.put("busqueda", idventa);
             JasperReport report;
             JasperPrint print;
-            try{
-                report=JasperCompileManager.compileReport(new File("").getAbsolutePath()+ "/src/Reportes/RptVentaBoleta.jrxml");
-                print=JasperFillManager.fillReport(report, p,connection);
-                JasperViewer view=new JasperViewer(print,false);
+            try {
+                report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/Reportes/RptVentaBoleta.jrxml");
+                print = JasperFillManager.fillReport(report, p, connection);
+                JasperViewer view = new JasperViewer(print, false);
                 view.setTitle("Reporte de Venta");
                 view.setVisible(true);
-            }catch(JRException e){
+            } catch (JRException e) {
                 e.printStackTrace();
             }
-          }else if(txtDocumentoVenta.getText().equals("TICKET")){
-            Map p=new HashMap();
+        } else if (txtDocumentoVenta.getText().equals("TICKET")) {
+            Map p = new HashMap();
             p.put("busqueda", idventa);
             JasperReport report;
             JasperPrint print;
-            try{
-                report=JasperCompileManager.compileReport(new File("").getAbsolutePath()+ "/src/Reportes/RptVentaTicket.jrxml");
-                print=JasperFillManager.fillReport(report, p,connection);
-                JasperViewer view=new JasperViewer(print,false);
+            try {
+                report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/Reportes/RptVentaTicket.jrxml");
+                print = JasperFillManager.fillReport(report, p, connection);
+                JasperViewer view = new JasperViewer(print, false);
 //                view.setTitle("Reporte de Venta");
 //                view.setVisible(true);
-              
-                
+
                 JasperPrintManager.printReport(print, false);
-                
-            }catch(JRException e){
+
+            } catch (JRException e) {
                 e.printStackTrace();
             }
         }
-    
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

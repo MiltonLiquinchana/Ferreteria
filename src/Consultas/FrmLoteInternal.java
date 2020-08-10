@@ -67,32 +67,12 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
         /*variable para verificacion de consulta*/
         boolean verificacionconsulta = false;
         /*codicionales para saber que tipo de busqueda se va a hacer*/
-        if (busqueda.equals("CaducadoporCaducar")) {//en caso de ser para caducado y por caducar
-            if (CRUD.listarlotescaducadopordacucar(producto, lote, compra)) {
-                verificacionconsulta = true;
-            } else {
-                verificacionconsulta = false;
-            }
-        } else if (busqueda.equals("CaducadoPendiente")) {//en caso de ser para caducado y pendiente
-            if (CRUD.listarlotescaducadopendiente(producto, lote, compra)) {
-                verificacionconsulta = true;
-            } else {
-                verificacionconsulta = false;
-            }
-
-        } else if (busqueda.equals("PorCaducarPendiente")) {//en caso de ser por caducar y pendiente
-            if (CRUD.listarlotesporcaducarpendiente(producto, lote, compra)) {
-                verificacionconsulta = true;
-            } else {
-                verificacionconsulta = false;
-            }
+        if (CRUD.listarlotes(producto, lote, compra, busqueda)) {//en caso de que se tenga que listar todo, el filtro se ara dependiedo del parametro rowsorter
+            verificacionconsulta = true;
         } else {
-            if (CRUD.listarlotes(producto, lote, compra)) {//en caso de que se tenga que listar todo, el filtro se ara dependiedo del parametro rowsorter
-                verificacionconsulta = true;
-            } else {
-                verificacionconsulta = false;
-            }
+            verificacionconsulta = false;
         }
+
 
         /*aqui le decimos que si la ejecucion del metodo nos debuelve veradero*/
         if (verificacionconsulta == true) {

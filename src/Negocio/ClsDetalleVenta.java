@@ -74,14 +74,15 @@ public class ClsDetalleVenta {
         }
     }
 
-    public boolean listarlotes(ClsEntidadProducto producto, EntidadLote lote, ClsEntidadCompra compra) {
+    public boolean listarlotes(ClsEntidadProducto producto, EntidadLote lote, ClsEntidadCompra compra,String criterio) {
         ResultSet rs = null;
         CallableStatement call = null;
         listaproducto = new ArrayList<>();//antes de recivir valores en las listas las limpiamos
         listalote = new ArrayList<>();
         listacompra = new ArrayList<>();
         try {
-            call = connection.prepareCall("{call listarlote}");
+            call = connection.prepareCall("{call buscarlotecriterio(?)}");
+            call.setString("criteriobusqueda", criterio);
             hadresult = call.execute();
             rs = call.getResultSet();
             while (rs.next()) {
@@ -107,102 +108,4 @@ public class ClsDetalleVenta {
         return hadresult;
     }
 
-    public boolean listarlotescaducadopordacucar(ClsEntidadProducto producto, EntidadLote lote, ClsEntidadCompra compra) {
-       ResultSet rs = null;
-        CallableStatement call = null;
-        listaproducto = new ArrayList<>();//antes de recivir valores en las listas las limpiamos
-        listalote = new ArrayList<>();
-        listacompra = new ArrayList<>();
-        try {
-            call = connection.prepareCall("{call listarlotecaducadoporcaducar}");
-            hadresult = call.execute();
-            rs = call.getResultSet();
-            while (rs.next()) {
-                producto=new ClsEntidadProducto();
-                lote=new EntidadLote();
-                compra=new ClsEntidadCompra();
-                producto.setStrCodigoProducto(rs.getString("Codigo"));
-                producto.setStrNombreProducto(rs.getString("Nombre"));
-                lote.setCodigo(rs.getString("codigo"));
-                compra.setFechacompra(rs.getString("Fecha"));
-                lote.setFecha_caducidad(rs.getString("fecha_caducidad"));
-                lote.setCantidadcompra(rs.getInt("cantidadcompra"));
-                listaproducto.add(producto);
-                listalote.add(lote);
-                listacompra.add(compra);
-            }
-
-        } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
-        }
-        return hadresult;
-    }
-
-    public boolean listarlotescaducadopendiente(ClsEntidadProducto producto, EntidadLote lote, ClsEntidadCompra compra) {
-        ResultSet rs = null;
-        CallableStatement call = null;
-        listaproducto = new ArrayList<>();//antes de recivir valores en las listas las limpiamos
-        listalote = new ArrayList<>();
-        listacompra = new ArrayList<>();
-        try {
-            call = connection.prepareCall("{call listarlotecaducadopendiente}");
-            hadresult = call.execute();
-            rs = call.getResultSet();
-            while (rs.next()) {
-                producto=new ClsEntidadProducto();
-                lote=new EntidadLote();
-                compra=new ClsEntidadCompra();
-                producto.setStrCodigoProducto(rs.getString("Codigo"));
-                producto.setStrNombreProducto(rs.getString("Nombre"));
-                lote.setCodigo(rs.getString("codigo"));
-                compra.setFechacompra(rs.getString("Fecha"));
-                lote.setFecha_caducidad(rs.getString("fecha_caducidad"));
-                lote.setCantidadcompra(rs.getInt("cantidadcompra"));
-                listaproducto.add(producto);
-                listalote.add(lote);
-                listacompra.add(compra);
-            }
-
-        } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
-        }
-        return hadresult;
-    }
-
-    public boolean listarlotesporcaducarpendiente(ClsEntidadProducto producto, EntidadLote lote, ClsEntidadCompra compra) {
-        ResultSet rs = null;
-        CallableStatement call = null;
-        listaproducto = new ArrayList<>();//antes de recivir valores en las listas las limpiamos
-        listalote = new ArrayList<>();
-        listacompra = new ArrayList<>();
-        try {
-            call = connection.prepareCall("{call listarloteporcaducarpendiente}");
-            hadresult = call.execute();
-            rs = call.getResultSet();
-            while (rs.next()) {
-                producto=new ClsEntidadProducto();
-                lote=new EntidadLote();
-                compra=new ClsEntidadCompra();
-                producto.setStrCodigoProducto(rs.getString("Codigo"));
-                producto.setStrNombreProducto(rs.getString("Nombre"));
-                lote.setCodigo(rs.getString("codigo"));
-                compra.setFechacompra(rs.getString("Fecha"));
-                lote.setFecha_caducidad(rs.getString("fecha_caducidad"));
-                lote.setCantidadcompra(rs.getInt("cantidadcompra"));
-                listaproducto.add(producto);
-                listalote.add(lote);
-                listacompra.add(compra);
-            }
-
-        } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
-        }
-        return hadresult;
-    }
 }
