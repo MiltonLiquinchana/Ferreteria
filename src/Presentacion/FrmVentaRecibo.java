@@ -10,29 +10,11 @@ import net.sf.jasperreports.view.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.sql.Connection;
-import Entidad.*;
 import Negocio.*;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.print.Doc;
-import javax.print.DocFlavor;
-import javax.print.DocPrintJob;
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
-import javax.print.SimpleDoc;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.swing.table.DefaultTableCellRenderer;
 
 public class FrmVentaRecibo extends javax.swing.JInternalFrame {
 

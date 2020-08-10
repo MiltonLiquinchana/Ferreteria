@@ -5,6 +5,7 @@
  */
 package Consultas;
 
+import Conexion.ClsConexion;
 import Entidad.ClsEntidadCompra;
 import Entidad.ClsEntidadDetalleCompra;
 import Entidad.ClsEntidadProducto;
@@ -23,12 +24,22 @@ import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
+/*librerias necesarias para implimir*/
+import java.util.HashMap;
+import java.util.Map;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.view.*;
+import java.io.File;
+import java.sql.Connection;
+
 /**
  *
  * @author liqui
  */
 public class FrmLoteInternal extends javax.swing.JInternalFrame {
 
+    /*esta conexion la utilizaremos para poder usarla con jasper*/
+    private Connection connection = new ClsConexion().getConection();
     /*cremos los objetos a las clases necesarias para la consulta*/
     ClsEntidadProducto producto;
     EntidadLote lote;
@@ -171,6 +182,7 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
         chkbcaducado = new javax.swing.JCheckBox();
         chkbporcaducar = new javax.swing.JCheckBox();
         chkbpendiente = new javax.swing.JCheckBox();
+        jButton1 = new javax.swing.JButton();
 
         setClosable(true);
 
@@ -208,6 +220,14 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
             }
         });
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/printer.png"))); // NOI18N
+        jButton1.setText("Imprimir");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -223,7 +243,9 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addComponent(chkbporcaducar)
                         .addGap(18, 18, 18)
-                        .addComponent(chkbpendiente)))
+                        .addComponent(chkbpendiente)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -233,8 +255,9 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkbcaducado)
                     .addComponent(chkbporcaducar)
-                    .addComponent(chkbpendiente))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                    .addComponent(chkbpendiente)
+                    .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -253,6 +276,72 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
     private void chkbporcaducarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkbporcaducarActionPerformed
         filtrarlotes();
     }//GEN-LAST:event_chkbporcaducarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        imprimir();
+    }//GEN-LAST:event_jButton1ActionPerformed
+    private void imprimir() {
+        String criterio=null;
+        /*variables que nos sirven para saber que tipo de consulta se ejecutara*/
+        String caducado, porcaducar, pendiente, caducadoporcaducar, caducadopendiente, porCaducarPendiente;
+        caducado = "CADUCADO";
+        porcaducar = "POR CADUCAR";
+        pendiente = "PENDIENTE";
+        caducadoporcaducar = "CaducadoporCaducar";
+        caducadopendiente = "CaducadoPendiente";
+        porCaducarPendiente = "PorCaducarPendiente";
+
+        if (chkbcaducado.isSelected() && !chkbporcaducar.isSelected() && !chkbpendiente.isSelected()) {
+            //JOptionPane.showMessageDialog(null, "caducado");
+            criterio=caducado;
+        }
+        if (chkbporcaducar.isSelected() && !chkbcaducado.isSelected() && !chkbpendiente.isSelected()) {
+            //JOptionPane.showMessageDialog(null, "por caducar");
+            criterio=porcaducar;
+        }
+        if (chkbpendiente.isSelected() && !chkbcaducado.isSelected() && !chkbporcaducar.isSelected()) {
+            //JOptionPane.showMessageDialog(null, "pendiente");
+            criterio=pendiente;
+        }
+        /*verificaciones dobles*/
+        if (chkbcaducado.isSelected() && chkbporcaducar.isSelected() && !chkbpendiente.isSelected()) {
+            //JOptionPane.showMessageDialog(this, "caducado y por caducar");
+            criterio=caducadoporcaducar;
+        }
+        if (chkbcaducado.isSelected() && chkbpendiente.isSelected() && !chkbporcaducar.isSelected()) {
+            //JOptionPane.showMessageDialog(this, "caducado y pendiente");
+            criterio=caducadopendiente;
+        }
+        if (chkbporcaducar.isSelected() && chkbpendiente.isSelected() && !chkbcaducado.isSelected()) {
+            //JOptionPane.showMessageDialog(this, "por caducar y pendiente");
+            criterio=porCaducarPendiente;
+        }
+        if (chkbcaducado.isSelected() && chkbporcaducar.isSelected() && chkbpendiente.isSelected()) {
+            //JOptionPane.showMessageDialog(this, "caducado, por caducar, y pendiente");
+            criterio="Todo";
+        }
+        if (!chkbcaducado.isSelected() && !chkbporcaducar.isSelected() && !chkbpendiente.isSelected()) {
+            //JOptionPane.showMessageDialog(this, "caducado, por caducar, y pendiente");
+            criterio="Todo";
+
+        }
+        Map p = new HashMap();
+        p.put("criteriobusqueda", criterio);
+        JasperReport report;
+        JasperPrint print;
+
+        try {
+            report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/Reportes/Lotes.jrxml");
+            print = JasperFillManager.fillReport(report, p, connection);
+            JasperViewer view = new JasperViewer(print, false);
+            view.setTitle("Reporte de Lotes");
+            view.setVisible(true);
+        } catch (JRException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private void filtrarlotes() {
         /*variables que nos sirven para saber que tipo de consulta se ejecutara*/
         String caducado, porcaducar, pendiente, caducadoporcaducar, caducadopendiente, porCaducarPendiente;
@@ -324,6 +413,7 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBox chkbcaducado;
     private javax.swing.JCheckBox chkbpendiente;
     private javax.swing.JCheckBox chkbporcaducar;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablalote;
     // End of variables declaration//GEN-END:variables
