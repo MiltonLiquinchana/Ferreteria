@@ -317,7 +317,7 @@ public class FrmBuscarProducto_Venta extends javax.swing.JInternalFrame {
                 Presentacion.FrmVenta.chkiva.setSelected(false);
             }
             if (Integer.parseInt((String) defaultTableModel.getValueAt(fila, 8)) > 0) {
-                Presentacion.FrmVenta.rdbtnno.setSelected(true);
+                Presentacion.FrmVenta.rdbtnsi.setSelected(true);
             } else if (Integer.parseInt((String) defaultTableModel.getValueAt(fila, 8)) <= 0) {
                 Presentacion.FrmVenta.rdbtnno.setSelected(true);
             }
