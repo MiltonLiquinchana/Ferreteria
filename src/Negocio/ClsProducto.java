@@ -46,7 +46,7 @@ private Connection connection=new ClsConexion().getConection();
     }    
     public void modificarProducto(String codigo,ClsEntidadProducto Producto){
         try{
-            CallableStatement statement=connection.prepareCall("{call SP_U_Producto(?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+            CallableStatement statement=connection.prepareCall("{call SP_U_Producto(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
             statement.setString("pidproducto",codigo);
             statement.setString("pcodigo",Producto.getStrCodigoProducto());
             statement.setString("pnombre",Producto.getStrNombreProducto());
@@ -56,6 +56,7 @@ private Connection connection=new ClsConexion().getConection();
             statement.setString("ppreciocosto",Producto.getStrPrecioCostoProducto());
             statement.setString("pprecioventa",Producto.getStrPrecioVentaProducto());
             statement.setString("putilidad",Producto.getStrUtilidadProducto());
+            statement.setInt("valordescuent", Producto.getValorDescuento());
             statement.setString("pestado",Producto.getStrEstadoProducto());
             statement.setString("pidcategoria",Producto.getStrIdCategoria());           
             statement.setString("pimagen",Producto.getStrImagen());
