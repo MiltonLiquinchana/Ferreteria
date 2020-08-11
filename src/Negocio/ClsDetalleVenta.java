@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ClsDetalleVenta {
 
@@ -73,15 +74,17 @@ public class ClsDetalleVenta {
         }
     }
 
-    public boolean listarlotes(ClsEntidadProducto producto, EntidadLote lote, ClsEntidadCompra compra,String criterio) {
+    public boolean listarlotes(ClsEntidadProducto producto, EntidadLote lote, ClsEntidadCompra compra,String criterio,String fechaini, String fechafin) {
         ResultSet rs = null;
         CallableStatement call = null;
         listaproducto = new ArrayList<>();//antes de recivir valores en las listas las limpiamos
         listalote = new ArrayList<>();
         listacompra = new ArrayList<>();
         try {
-            call = connection.prepareCall("{call buscarlotecriterio(?)}");
+            call = connection.prepareCall("{call buscarlotecriterio(?,?,?)}");
             call.setString("criteriobusqueda", criterio);
+            call.setString("fechainicio", fechaini);
+            call.setString("fechafin",  fechafin);
             hadresult = call.execute();
             rs = call.getResultSet();
             while (rs.next()) {

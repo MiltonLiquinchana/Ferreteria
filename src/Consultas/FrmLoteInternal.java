@@ -11,6 +11,8 @@ import Entidad.ClsEntidadDetalleCompra;
 import Entidad.ClsEntidadProducto;
 import Entidad.EntidadLote;
 import Negocio.ClsDetalleVenta;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,16 +61,29 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
     int indice = 6;
     /*creamos un nuevo modelo de para la tabla*/
     DefaultTableModel modelo;
+    String criterio = "listar";
+    //converion de fecha obtenida a string con formato yyyy-MM-dd
+    SimpleDateFormat formatotres = new SimpleDateFormat("yyyy-MM-dd");
+    String fechaini, fechafin;
 
     public FrmLoteInternal() {
         initComponents();
+
+        /*inicialisamos los valores de los calendarios*/
+        Date datefecha = new Date();
+        dcFechaini.setDate(datefecha);
+        dcFechafin.setDate(datefecha);
         /*con esto hasociamos el reder de colores que tendra la tabla*/
         this.tablalote.setDefaultRenderer(Object.class, new Entidad.RenderModelColor());
-        llenartabla(tablalote, "listar");
+        /*llenamos la tabla*/
+        llenartabla(tablalote);
+        /*agregamos el metodo que nos detenca los eventos del calendario*/
+        calendario();
+
     }
 
     /*metodo que no sirve para llenar la tabla desde la base de datos, este metodo recive la tabla a llenar*/
-    void llenartabla(JTable tabla, String busqueda) {
+    void llenartabla(JTable tabla) {
 
         modelo = new DefaultTableModel();
         /*en un arreglo de tipo string definimos los encabezados de cada columna*/
@@ -77,13 +92,14 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
         modelo.setColumnIdentifiers(titulos);
         /*variable para verificacion de consulta*/
         boolean verificacionconsulta = false;
+        fechaini = formatotres.format(dcFechaini.getDate());
+        fechafin = formatotres.format(dcFechafin.getDate());
         /*codicionales para saber que tipo de busqueda se va a hacer*/
-        if (CRUD.listarlotes(producto, lote, compra, busqueda)) {//en caso de que se tenga que listar todo, el filtro se ara dependiedo del parametro rowsorter
+        if (CRUD.listarlotes(producto, lote, compra, criterio, fechaini, fechafin)) {//en caso de que se tenga que listar todo, el filtro se ara dependiedo del parametro rowsorter
             verificacionconsulta = true;
         } else {
             verificacionconsulta = false;
         }
-
 
         /*aqui le decimos que si la ejecucion del metodo nos debuelve veradero*/
         if (verificacionconsulta == true) {
@@ -183,6 +199,10 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
         chkbporcaducar = new javax.swing.JCheckBox();
         chkbpendiente = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        dcFechaini = new com.toedter.calendar.JDateChooser();
+        dcFechafin = new com.toedter.calendar.JDateChooser();
+        jLabel3 = new javax.swing.JLabel();
 
         setClosable(true);
 
@@ -228,36 +248,68 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel2.setText("DESDE:");
+
+        dcFechaini.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        dcFechafin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setText("HASTA:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 722, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 722, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(50, 50, 50)
+                                .addComponent(dcFechaini, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(50, 50, 50)
+                                .addComponent(dcFechafin, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, Short.MAX_VALUE)
                         .addComponent(chkbcaducado)
                         .addGap(18, 18, 18)
                         .addComponent(chkbporcaducar)
                         .addGap(18, 18, 18)
                         .addComponent(chkbpendiente)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                        .addComponent(jButton1)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(chkbcaducado)
-                    .addComponent(chkbporcaducar)
-                    .addComponent(chkbpendiente)
-                    .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(chkbcaducado)
+                            .addComponent(chkbporcaducar)
+                            .addComponent(chkbpendiente)
+                            .addComponent(jButton1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dcFechaini, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dcFechafin, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -281,52 +333,10 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
         imprimir();
     }//GEN-LAST:event_jButton1ActionPerformed
     private void imprimir() {
-        String criterio=null;
-        /*variables que nos sirven para saber que tipo de consulta se ejecutara*/
-        String caducado, porcaducar, pendiente, caducadoporcaducar, caducadopendiente, porCaducarPendiente;
-        caducado = "CADUCADO";
-        porcaducar = "POR CADUCAR";
-        pendiente = "PENDIENTE";
-        caducadoporcaducar = "CaducadoporCaducar";
-        caducadopendiente = "CaducadoPendiente";
-        porCaducarPendiente = "PorCaducarPendiente";
-
-        if (chkbcaducado.isSelected() && !chkbporcaducar.isSelected() && !chkbpendiente.isSelected()) {
-            //JOptionPane.showMessageDialog(null, "caducado");
-            criterio=caducado;
-        }
-        if (chkbporcaducar.isSelected() && !chkbcaducado.isSelected() && !chkbpendiente.isSelected()) {
-            //JOptionPane.showMessageDialog(null, "por caducar");
-            criterio=porcaducar;
-        }
-        if (chkbpendiente.isSelected() && !chkbcaducado.isSelected() && !chkbporcaducar.isSelected()) {
-            //JOptionPane.showMessageDialog(null, "pendiente");
-            criterio=pendiente;
-        }
-        /*verificaciones dobles*/
-        if (chkbcaducado.isSelected() && chkbporcaducar.isSelected() && !chkbpendiente.isSelected()) {
-            //JOptionPane.showMessageDialog(this, "caducado y por caducar");
-            criterio=caducadoporcaducar;
-        }
-        if (chkbcaducado.isSelected() && chkbpendiente.isSelected() && !chkbporcaducar.isSelected()) {
-            //JOptionPane.showMessageDialog(this, "caducado y pendiente");
-            criterio=caducadopendiente;
-        }
-        if (chkbporcaducar.isSelected() && chkbpendiente.isSelected() && !chkbcaducado.isSelected()) {
-            //JOptionPane.showMessageDialog(this, "por caducar y pendiente");
-            criterio=porCaducarPendiente;
-        }
-        if (chkbcaducado.isSelected() && chkbporcaducar.isSelected() && chkbpendiente.isSelected()) {
-            //JOptionPane.showMessageDialog(this, "caducado, por caducar, y pendiente");
-            criterio="Todo";
-        }
-        if (!chkbcaducado.isSelected() && !chkbporcaducar.isSelected() && !chkbpendiente.isSelected()) {
-            //JOptionPane.showMessageDialog(this, "caducado, por caducar, y pendiente");
-            criterio="Todo";
-
-        }
         Map p = new HashMap();
         p.put("criteriobusqueda", criterio);
+        p.put("fechaini", fechaini);
+        p.put("fechafin", fechafin);
         JasperReport report;
         JasperPrint print;
 
@@ -353,41 +363,67 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
         porCaducarPendiente = "PorCaducarPendiente";
         if (chkbcaducado.isSelected() && !chkbporcaducar.isSelected() && !chkbpendiente.isSelected()) {
             //JOptionPane.showMessageDialog(null, "caducado");  
-            llenartabla(tablalote, "listar");
+            criterio = caducado;
+            llenartabla(tablalote);
             rowsorter.setRowFilter(RowFilter.regexFilter(caducado.toUpperCase(), indice));
         }
         if (chkbporcaducar.isSelected() && !chkbcaducado.isSelected() && !chkbpendiente.isSelected()) {
             //JOptionPane.showMessageDialog(null, "por caducar");
-            llenartabla(tablalote, "listar");
+            criterio = porcaducar;
+            llenartabla(tablalote);
             rowsorter.setRowFilter(RowFilter.regexFilter(porcaducar.toUpperCase(), indice));
         }
         if (chkbpendiente.isSelected() && !chkbcaducado.isSelected() && !chkbporcaducar.isSelected()) {
             //JOptionPane.showMessageDialog(null, "pendiente");
-            llenartabla(tablalote, "listar");
+            criterio = pendiente;
+            llenartabla(tablalote);
             rowsorter.setRowFilter(RowFilter.regexFilter(pendiente.toUpperCase(), indice));
         }
         /*verificaciones dobles*/
         if (chkbcaducado.isSelected() && chkbporcaducar.isSelected() && !chkbpendiente.isSelected()) {
             /*creamos un nuevo modelo de para la tabla*/
             //JOptionPane.showMessageDialog(this, "caducado y por caducar");
-            llenartabla(tablalote, caducadoporcaducar);
+            criterio = caducadoporcaducar;
+            llenartabla(tablalote);
         }
         if (chkbcaducado.isSelected() && chkbpendiente.isSelected() && !chkbporcaducar.isSelected()) {
             //JOptionPane.showMessageDialog(this, "caducado y pendiente");
-            llenartabla(tablalote, caducadopendiente);
+            criterio = caducadopendiente;
+            llenartabla(tablalote);
         }
         if (chkbporcaducar.isSelected() && chkbpendiente.isSelected() && !chkbcaducado.isSelected()) {
             //JOptionPane.showMessageDialog(this, "por caducar y pendiente");
-            llenartabla(tablalote, porCaducarPendiente);
+            criterio = porCaducarPendiente;
+            llenartabla(tablalote);
         }
         if (chkbcaducado.isSelected() && chkbporcaducar.isSelected() && chkbpendiente.isSelected()) {
             //JOptionPane.showMessageDialog(this, "caducado, por caducar, y pendiente");
-            llenartabla(tablalote, "listar");
+            criterio = "listar";
+            llenartabla(tablalote);
         }
         if (!chkbcaducado.isSelected() && !chkbporcaducar.isSelected() && !chkbpendiente.isSelected()) {
             //JOptionPane.showMessageDialog(this, "caducado, por caducar, y pendiente");
-            llenartabla(tablalote, "listar");
+            criterio = "listar";
+            llenartabla(tablalote);
         }
+
+    }
+
+    /*metodo que sirve para bucar dentro de la fechaseleccionada*/
+    public void calendario() {
+
+        dcFechaini.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent pce) {
+                llenartabla(tablalote);
+            }
+        });
+        dcFechafin.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent pce) {
+                llenartabla(tablalote);
+            }
+        });
 
     }
 
@@ -413,7 +449,11 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBox chkbcaducado;
     private javax.swing.JCheckBox chkbpendiente;
     private javax.swing.JCheckBox chkbporcaducar;
+    private com.toedter.calendar.JDateChooser dcFechafin;
+    private com.toedter.calendar.JDateChooser dcFechaini;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablalote;
     // End of variables declaration//GEN-END:variables
