@@ -321,11 +321,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         btnLimpiarTabla.setEnabled(true);
         chkCambiarNumero.setEnabled(true);
         chkiva.setEnabled(false);
-
         txtCodigoProducto.requestFocus();
-        /*activo los radio butons*/
-        rdbtnno.setEnabled(true);
-        rdbtnsi.setEnabled(true);
     }
 
     void cargarComboTipoDocumento() {
