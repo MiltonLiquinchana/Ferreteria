@@ -74,7 +74,7 @@ public class FrmCompra extends javax.swing.JInternalFrame {
         String titulos[] = {"ID", "CODIGO", "PRODUCTO", "DESCRIPCION", "CANT.", "PRECIO", "TOTAL", "IVA", "LOTE", "FECHA CADUCIDAD"};
         dtmDetalle.setColumnIdentifiers(titulos);
         tblDetalleProducto.setModel(dtmDetalle);
-        //CrearTablaDetalleProducto();
+        CrearTablaDetalleProducto();
     }
 
 //-----------------------------------------------------------------------------------------------
@@ -121,53 +121,53 @@ public class FrmCompra extends javax.swing.JInternalFrame {
         
     }
 
-//   void CrearTablaDetalleProducto(){
-//   //--------------------PRESENTACION DE JTABLE----------------------
-//      
-//        TableCellRenderer render = new DefaultTableCellRenderer() { 
-//
-//            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) { 
-//                //aqui obtengo el render de la calse superior 
-//                JLabel l = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
-//                //Determinar Alineaciones   
-//                    if(column==0 || column==1 || column==4 || column==5 || column==6 || column==12){
-//                        l.setHorizontalAlignment(SwingConstants.CENTER); 
-//                    }else{
-//                        l.setHorizontalAlignment(SwingConstants.LEFT);
-//                    }
-//
-//                //Colores en Jtable        
-//               if (isSelected) {
-//                    l.setBackground(new Color(203, 159, 41));
-//                    //l.setBackground(new Color(168, 198, 238));
-//                    l.setForeground(Color.WHITE); 
-//                }else{
-//                    l.setForeground(Color.BLACK);
-//                    if (row % 2 == 0) {
-//                        l.setBackground(Color.WHITE);
-//                    } else {
-//                        //l.setBackground(new Color(232, 232, 232));
-//                        l.setBackground(new Color(254, 227, 152));
-//                    }
-//                }     
-//                return l; 
-//            } 
-//        }; 
-//        
-//        //Agregar Render
-//        for (int i=0;i<tblDetalleProducto.getColumnCount();i++){
-//            tblDetalleProducto.getColumnModel().getColumn(i).setCellRenderer(render);
-//        }
-//      
-//        //Activar ScrollBar
-//        tblDetalleProducto.setAutoResizeMode(tblDetalleProducto.AUTO_RESIZE_OFF);
-//
-//        //Anchos de cada columna
-//        int[] anchos = {50,100,180,247,70,70,70,30};
-//        for(int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
-//            tblDetalleProducto.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
-//        }
-//   }
+   void CrearTablaDetalleProducto(){
+   //--------------------PRESENTACION DE JTABLE----------------------
+      
+        TableCellRenderer render = new DefaultTableCellRenderer() { 
+
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) { 
+                //aqui obtengo el render de la calse superior 
+                JLabel l = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
+                //Determinar Alineaciones   
+                    if(column==0 || column==1 || column==4 || column==5 || column==6 || column==12){
+                        l.setHorizontalAlignment(SwingConstants.CENTER); 
+                    }else{
+                        l.setHorizontalAlignment(SwingConstants.LEFT);
+                    }
+
+                //Colores en Jtable        
+               if (isSelected) {
+                    l.setBackground(new Color(203, 159, 41));
+                    //l.setBackground(new Color(168, 198, 238));
+                    l.setForeground(Color.WHITE); 
+                }else{
+                    l.setForeground(Color.BLACK);
+                    if (row % 2 == 0) {
+                        l.setBackground(Color.WHITE);
+                    } else {
+                        //l.setBackground(new Color(232, 232, 232));
+                        l.setBackground(new Color(254, 227, 152));
+                    }
+                }     
+                return l; 
+            } 
+        }; 
+        
+        //Agregar Render
+        for (int i=0;i<tblDetalleProducto.getColumnCount();i++){
+            tblDetalleProducto.getColumnModel().getColumn(i).setCellRenderer(render);
+        }
+      
+        //Activar ScrollBar
+        tblDetalleProducto.setAutoResizeMode(tblDetalleProducto.AUTO_RESIZE_OFF);
+
+        //Anchos de cada columna
+        int[] anchos = {50,100,180,247,70,70,70,30,70,150};
+        for(int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
+            tblDetalleProducto.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        }
+   }
     void limpiarCampos() {
         
         txtSubTotal.setText("0.0");
