@@ -197,7 +197,6 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         cboTipoCodificacion.setEnabled(false);
         btnGenerar.setEnabled(false);
         imagen = "";
-        txtDescuento.setText("0");
 
     }
 
