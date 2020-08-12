@@ -18,7 +18,7 @@ public class ClsCompra {
 
     private Connection connection = new ClsConexion().getConection();
     /*variable de tipo boleana para saber si se guardo o no los datos*/
-    boolean trueandfalse,trueandfalselote;
+    boolean trueandfalse, trueandfalselote;
 //--------------------------------------------------------------------------------------------------
 //-----------------------------------------METODOS--------------------------------------------------
 //-------------------------------------------------------------------------------------------------- 
@@ -164,13 +164,30 @@ public class ClsCompra {
             call = connection.prepareCall("{call guardarlote(?,?,?,?)}");
             call.setString("codig", codigo);
             call.setString("fecha_Caducidad", fechacaducidad);
-            call.setInt("cantidadcomprado", cantidad);
-            call.setInt("Idproducto", Idproducto);
-            trueandfalselote=call.execute();
-            
-        } catch (Exception e) {
+            call.setInt("Idproduct", Idproducto);
+            call.setInt("cantidadcomprado", cantidad);   
+            trueandfalselote = call.execute();
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "No se a podido guardar el lote");
         }
         return trueandfalselote;
+    }
+
+    public boolean listarultimoidlote(EntidadLote lote) {
+        CallableStatement call = null;
+        ResultSet result = null;
+        try {
+            call = connection.prepareCall("{call maxidlote}");
+            trueandfalselote = call.execute();
+            result = call.getResultSet();
+            if (result.next()) {
+                lote.setIdLote(result.getInt("IdLote"));
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "No se a podido listar el lote");
+        }
+        return trueandfalselote;
+
     }
 }

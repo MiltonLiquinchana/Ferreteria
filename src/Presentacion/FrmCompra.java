@@ -9,14 +9,11 @@ import Negocio.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,7 +25,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 public class FrmCompra extends javax.swing.JInternalFrame {
-    
+
     String Total;
     String strCodigo;
     String accion;
@@ -36,61 +33,60 @@ public class FrmCompra extends javax.swing.JInternalFrame {
     int registros;
     String id[] = new String[50];
     //String Datos[]=new String[50];
-
     static int intContador;
     public String IdEmpleado, NombreEmpleado;
     int idventa, nidventa;
     //-----------------------------------------------
     public String codigo;
     static Connection conn = null;
-    
     static ResultSet rs = null;
     DefaultTableModel dtm = new DefaultTableModel();
     DefaultTableModel dtmDetalle = new DefaultTableModel();
-    
     String criterio, busqueda;
-    
+    ClsCompra compralote = new ClsCompra();
+
     public FrmCompra() {
         initComponents();
         //---------------------FECHA ACTUAL-------------------------------
         Date date = new Date();
         String format = new String("dd/MM/yyyy");
         SimpleDateFormat formato = new SimpleDateFormat(format);
-        
         txtFecha.setDate(date);
+        txtFechaCaducidadLote.setDate(date);
         //---------------------GENERA NUMERO DE VENTA---------------------
         numCompra = generaNumCompra();
         txtNumero.setText(numCompra);
         //---------------------ANCHO Y ALTO DEL FORM----------------------
         this.setSize(939, 506);
         cargarComboTipoDocumento();
-        
+
         lblIdProducto.setVisible(false);
         lblIdProveedor.setVisible(false);
         txtDescripcionProducto.setVisible(false);
         mirar();
         //--------------------JTABLE - DETALLEPRODUCTO--------------------
-        
+
         String titulos[] = {"ID", "CODIGO", "PRODUCTO", "DESCRIPCION", "CANT.", "PRECIO", "TOTAL", "IVA", "LOTE", "FECHA CADUCIDAD"};
         dtmDetalle.setColumnIdentifiers(titulos);
         tblDetalleProducto.setModel(dtmDetalle);
-        //CrearTablaDetalleProducto();
+        CrearTablaDetalleProducto();
+        agregarultimoloteconid();
     }
 
 //-----------------------------------------------------------------------------------------------
 //--------------------------------------METODOS--------------------------------------------------
 //-----------------------------------------------------------------------------------------------
     public String generaNumCompra() {
-        
-        ClsCompra oCompra = new ClsCompra();        
+
+        ClsCompra oCompra = new ClsCompra();
         try {
-            
+
             rs = oCompra.obtenerUltimoIdCompra();
             while (rs.next()) {
                 if (rs.getString(1) != null) {
                     Scanner s = new Scanner(rs.getString(1));
                     int c = s.useDelimiter("C").nextInt() + 1;
-                    
+
                     if (c < 10) {
                         return "C0000" + c;
                     }
@@ -107,7 +103,7 @@ public class FrmCompra extends javax.swing.JInternalFrame {
                     }
                 }
             }
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -118,62 +114,63 @@ public class FrmCompra extends javax.swing.JInternalFrame {
             }
         }
         return "C00001";
-        
+
     }
 
-//   void CrearTablaDetalleProducto(){
-//   //--------------------PRESENTACION DE JTABLE----------------------
-//      
-//        TableCellRenderer render = new DefaultTableCellRenderer() { 
-//
-//            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) { 
-//                //aqui obtengo el render de la calse superior 
-//                JLabel l = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
-//                //Determinar Alineaciones   
-//                    if(column==0 || column==1 || column==4 || column==5 || column==6 || column==12){
-//                        l.setHorizontalAlignment(SwingConstants.CENTER); 
-//                    }else{
-//                        l.setHorizontalAlignment(SwingConstants.LEFT);
-//                    }
-//
-//                //Colores en Jtable        
-//               if (isSelected) {
-//                    l.setBackground(new Color(203, 159, 41));
-//                    //l.setBackground(new Color(168, 198, 238));
-//                    l.setForeground(Color.WHITE); 
-//                }else{
-//                    l.setForeground(Color.BLACK);
-//                    if (row % 2 == 0) {
-//                        l.setBackground(Color.WHITE);
-//                    } else {
-//                        //l.setBackground(new Color(232, 232, 232));
-//                        l.setBackground(new Color(254, 227, 152));
-//                    }
-//                }     
-//                return l; 
-//            } 
-//        }; 
-//        
-//        //Agregar Render
-//        for (int i=0;i<tblDetalleProducto.getColumnCount();i++){
-//            tblDetalleProducto.getColumnModel().getColumn(i).setCellRenderer(render);
-//        }
-//      
-//        //Activar ScrollBar
-//        tblDetalleProducto.setAutoResizeMode(tblDetalleProducto.AUTO_RESIZE_OFF);
-//
-//        //Anchos de cada columna
-//        int[] anchos = {50,100,180,247,70,70,70,30};
-//        for(int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
-//            tblDetalleProducto.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
-//        }
-//   }
+    void CrearTablaDetalleProducto() {
+        //--------------------PRESENTACION DE JTABLE----------------------
+
+        TableCellRenderer render = new DefaultTableCellRenderer() {
+
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                //aqui obtengo el render de la calse superior 
+                JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                //Determinar Alineaciones   
+                if (column == 0 || column == 1 || column == 4 || column == 5 || column == 6 || column == 12) {
+                    l.setHorizontalAlignment(SwingConstants.CENTER);
+                } else {
+                    l.setHorizontalAlignment(SwingConstants.LEFT);
+                }
+
+                //Colores en Jtable        
+                if (isSelected) {
+                    l.setBackground(new Color(203, 159, 41));
+                    //l.setBackground(new Color(168, 198, 238));
+                    l.setForeground(Color.WHITE);
+                } else {
+                    l.setForeground(Color.BLACK);
+                    if (row % 2 == 0) {
+                        l.setBackground(Color.WHITE);
+                    } else {
+                        //l.setBackground(new Color(232, 232, 232));
+                        l.setBackground(new Color(254, 227, 152));
+                    }
+                }
+                return l;
+            }
+        };
+
+        //Agregar Render
+        for (int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
+            tblDetalleProducto.getColumnModel().getColumn(i).setCellRenderer(render);
+        }
+
+        //Activar ScrollBar
+        tblDetalleProducto.setAutoResizeMode(tblDetalleProducto.AUTO_RESIZE_OFF);
+
+        //Anchos de cada columna
+        int[] anchos = {50, 100, 180, 247, 70, 70, 70, 30, 70, 150};
+        for (int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
+            tblDetalleProducto.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        }
+    }
+
     void limpiarCampos() {
-        
+
         txtSubTotal.setText("0.0");
         txtIGV.setText("0.0");
         txtTotalCompra.setText("0.0");
-        
+
         lblIdProducto.setText("");
         txtCodigoProducto.setText("");
         txtNombreProducto.setText("");
@@ -183,19 +180,19 @@ public class FrmCompra extends javax.swing.JInternalFrame {
         txtTotalProducto.setText("");
         txtCodigoProducto.requestFocus();
     }
-    
+
     void mirar() {
         btnNuevo.setEnabled(true);
         btnGuardar.setEnabled(false);
         btnCancelar.setEnabled(false);
         btnSalir.setEnabled(true);
-        
+
         cboTipoDocumento.setEnabled(false);
         txtCodigoProducto.setEnabled(false);
         txtCantidadProducto.setEnabled(false);
         txtFecha.setEnabled(false);
         txtNumero.setEnabled(false);
-        
+
         btnBuscarProveedor.setEnabled(false);
         btnBuscarProducto.setEnabled(false);
         btnAgregarProducto.setEnabled(false);
@@ -205,7 +202,7 @@ public class FrmCompra extends javax.swing.JInternalFrame {
         chkCambiarNumero.setSelected(false);
         jCheckiva.setEnabled(false);
         jCheckiva.setSelected(false);
-        
+
         txtSubTotal.setText("0.0");
         txtIGV.setText("0.0");
         txtTotalCompra.setText("0.0");
@@ -217,22 +214,22 @@ public class FrmCompra extends javax.swing.JInternalFrame {
         txtCantidadProducto.setText("");
         txtTotalProducto.setText("");
         txtCodigoProducto.requestFocus();
-        
+
     }
-    
+
     void modificar() {
-        
+
         btnNuevo.setEnabled(false);
-        
+
         btnGuardar.setEnabled(true);
         btnCancelar.setEnabled(true);
         btnSalir.setEnabled(false);
-        
+
         cboTipoDocumento.setEnabled(true);
         txtCodigoProducto.setEnabled(true);
         txtCantidadProducto.setEnabled(true);
         txtFecha.setEnabled(true);
-        
+
         btnBuscarProveedor.setEnabled(true);
         btnBuscarProducto.setEnabled(true);
         btnAgregarProducto.setEnabled(true);
@@ -240,7 +237,7 @@ public class FrmCompra extends javax.swing.JInternalFrame {
         btnLimpiarTabla.setEnabled(true);
         chkCambiarNumero.setEnabled(true);
         jCheckiva.setEnabled(false);
-        
+
         txtCodigoProducto.requestFocus();
     }
 //   void cargarComboTipoDocumento(){
@@ -280,11 +277,11 @@ public class FrmCompra extends javax.swing.JInternalFrame {
         Iterator iterator = tipodocumentos.iterator();
         DefaultComboBoxModel DefaultComboBoxModel = new DefaultComboBoxModel();
         DefaultComboBoxModel.removeAllElements();
-        
+
         cboTipoDocumento.removeAll();
         String fila[] = new String[2];
         intContador = 0;
-        
+
         while (iterator.hasNext()) {
             ClsEntidadTipoDocumento TipoDocumento = new ClsEntidadTipoDocumento();
             TipoDocumento = (ClsEntidadTipoDocumento) iterator.next();
@@ -292,36 +289,36 @@ public class FrmCompra extends javax.swing.JInternalFrame {
             fila[0] = TipoDocumento.getStrIdTipoDocumento();
             fila[1] = TipoDocumento.getStrDescripcionTipoDocumento();
             DefaultComboBoxModel.addElement(TipoDocumento.getStrDescripcionTipoDocumento());
-            intContador++;            
+            intContador++;
         }
         cboTipoDocumento.setModel(DefaultComboBoxModel);
     }
 
     void BuscarProductoPorCodigo() {
         String busqueda = null;
-        busqueda = txtCodigoProducto.getText();        
+        busqueda = txtCodigoProducto.getText();
         try {
             ClsProducto oProducto = new ClsProducto();
-            
+
             rs = oProducto.listarProductoActivoPorParametro("codigo", busqueda);
             while (rs.next()) {
                 if (rs.getString(2).equals(busqueda)) {
-                    
+
                     lblIdProducto.setText(rs.getString(1));
                     txtNombreProducto.setText(rs.getString(3));
                     txtDescripcionProducto.setText(rs.getString(4));
                     //DescripcionProducto=rs.getString(4);
                     txtStockProducto.setText(rs.getString(5));
-                    txtPrecioProducto.setText(rs.getString(7));                    
+                    txtPrecioProducto.setText(rs.getString(7));
                 }
                 break;
             }
-            
+
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
             System.out.println(ex.getMessage());
         }
-        
+
     }
 
     void BuscarProveedorPorDefecto() {
@@ -330,19 +327,19 @@ public class FrmCompra extends javax.swing.JInternalFrame {
             rs = oProveedor.listarProveedorPorParametro("id", "1");
             while (rs.next()) {
                 lblIdProveedor.setText(rs.getString(1));
-                txtNombreProveedor.setText(rs.getString(2));                
+                txtNombreProveedor.setText(rs.getString(2));
                 break;
             }
-            
+
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
             System.out.println(ex.getMessage());
         }
-        
+
     }
-    
+
     void CalcularTotal() {
-        
+
         DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
         simbolos.setDecimalSeparator('.');
         DecimalFormat formateador = new DecimalFormat("####.##", simbolos);
@@ -352,43 +349,45 @@ public class FrmCompra extends javax.swing.JInternalFrame {
         total_prod = precio_prod * cant_prod;
         txtTotalProducto.setText(String.valueOf(formateador.format(total_prod)));
     }
-    
+
     public int recorrer(int id) {
         int fila = 0, valor = -1;
-        
+
         fila = tblDetalleProducto.getRowCount();
-        
+
         for (int f = 0; f < fila; f++) {
             if (Integer.parseInt(String.valueOf(dtmDetalle.getValueAt(f, 0))) == id) {
-                
+
                 valor = f;
                 //JOptionPane.showMessageDialog(null, "te encontre!");
                 break;
-                
+
             } else {
                 //JOptionPane.showMessageDialog(null, "no estas!");
                 valor = -1;
-            }            
-            
+            }
+
         }
         return valor;
-    }    
-    
+    }
+
     void agregardatos(int item, String cod, String nom, String descrip, double cant, double pre, double tot, String iva, String lote, Date fecha) {
-        
+
         int p = recorrer(item);
         double n_cant, n_total;
         if (p > -1) {
-            
+
             n_cant = Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 4))) + cant;
             tblDetalleProducto.setValueAt(n_cant, p, 4);
-            
+
             n_total = Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 4))) * Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 5)));
             tblDetalleProducto.setValueAt(n_total, p, 6);
             tblDetalleProducto.setValueAt(iva, p, 7);
-            
+
         } else {
-            String Datos[] = {String.valueOf(item), cod, nom, descrip, String.valueOf(cant), String.valueOf(pre), String.valueOf(tot), String.valueOf(iva), lote, String.valueOf(fecha)};
+            String format = new String("yyyy/MM/dd");
+            SimpleDateFormat formato = new SimpleDateFormat(format);
+            String Datos[] = {String.valueOf(item), cod, nom, descrip, String.valueOf(cant), String.valueOf(pre), String.valueOf(tot), String.valueOf(iva), lote, formato.format(fecha)};
             dtmDetalle.addRow(Datos);
         }
         tblDetalleProducto.setModel(dtmDetalle);
@@ -405,7 +404,7 @@ public class FrmCompra extends javax.swing.JInternalFrame {
         for (int f = 0; f < fila; f++) {
             //if(con_fila[f]==1){
             if (String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 7)) == "si") {
-                subtotal += Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 6))) / 1.12;                
+                subtotal += Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 6))) / 1.12;
             }
         }
         txtSubTotal.setText(String.valueOf(formateador.format(subtotal)));
@@ -415,7 +414,7 @@ public class FrmCompra extends javax.swing.JInternalFrame {
         double igv = 0;
         DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
         simbolos.setDecimalSeparator('.');
-        DecimalFormat formateador = new DecimalFormat("####.##", simbolos);        
+        DecimalFormat formateador = new DecimalFormat("####.##", simbolos);
         igv = Double.parseDouble(txtSubTotal.getText()) * 0.12;
         txtIGV.setText(String.valueOf(formateador.format(igv)));
     }
@@ -428,14 +427,14 @@ public class FrmCompra extends javax.swing.JInternalFrame {
         simbolos.setDecimalSeparator('.');
         DecimalFormat formateador = new DecimalFormat("####.##", simbolos);
         for (int f = 0; f < fila; f++) {
-            valorCompra += Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 6)));            
+            valorCompra += Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 6)));
         }
         txtTotalCompra.setText(String.valueOf(formateador.format(valorCompra)));
     }
 
     void limpiarTabla() {
         jCheckiva.setSelected(false);
-        try {            
+        try {
             int filas = tblDetalleProducto.getRowCount();
             for (int i = 0; filas > i; i++) {
                 dtmDetalle.removeRow(0);
@@ -447,7 +446,7 @@ public class FrmCompra extends javax.swing.JInternalFrame {
 
     void obtenerUltimoIdCompra() {
         try {
-            ClsCompra oCompra = new ClsCompra();            
+            ClsCompra oCompra = new ClsCompra();
             rs = oCompra.obtenerUltimoIdCompra();
             while (rs.next()) {
                 idventa = rs.getInt(1);
@@ -457,47 +456,65 @@ public class FrmCompra extends javax.swing.JInternalFrame {
             System.out.println(ex.getMessage());
         }
     }
-    
+
     void guardarDetalle() {
         obtenerUltimoIdCompra();
         ClsDetalleCompra detallecompras = new ClsDetalleCompra();
         ClsEntidadDetalleCompra detallecompra = new ClsEntidadDetalleCompra();
         ClsProducto productos = new ClsProducto();
-        String codigo, strId;
+        String strId;
         ClsEntidadProducto producto = new ClsEntidadProducto();
         int fila = 0;
-        double cant = 0, ncant, stock;        
+        double cant = 0, ncant, stock;
         fila = tblDetalleProducto.getRowCount();
         for (int f = 0; f < fila; f++) {
             detallecompra.setStrIdCompra(String.valueOf(idventa));
             detallecompra.setStrIdProducto(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 0)));
             detallecompra.setStrCantidadDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 4)));
             detallecompra.setStrPrecioDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 5)));
-            detallecompra.setStrTotalDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 6)));            
+            detallecompra.setStrTotalDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 6)));
             detallecompras.agregarDetalleCompra(detallecompra);
-            
+
             try {
                 ClsProducto oProducto = new ClsProducto();
-                
+
                 rs = oProducto.listarProductoActivoPorParametro("id", ((String) tblDetalleProducto.getValueAt(f, 0)));
                 while (rs.next()) {
-                    
+
                     cant = Double.parseDouble(rs.getString(5));
                 }
-                
+
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
                 System.out.println(ex.getMessage());
-            }            
-            
+            }
+
             strId = ((String) tblDetalleProducto.getValueAt(f, 0));
             ncant = Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 4)));
             stock = cant + ncant;
             producto.setStrStockProducto(String.valueOf(stock));
             productos.actualizarProductoStock(strId, producto);
-            
+
         }
-    }    
+    }
+
+    private void agregarlote() {
+        int contador = tblDetalleProducto.getRowCount();
+        int acum = 0;
+        while (acum < contador) {
+            ClsCompra compralotenew = new ClsCompra();
+            String codigo, fechacaducidad;
+            int cantidad, Idproducto;
+            codigo = String.valueOf(tblDetalleProducto.getValueAt(acum, 8));
+            fechacaducidad = String.valueOf(tblDetalleProducto.getValueAt(acum, 9));
+            cantidad = (int) Double.parseDouble(String.valueOf(tblDetalleProducto.getValueAt(acum, 4)));
+            Idproducto = Integer.parseInt((String) tblDetalleProducto.getValueAt(acum, 0));
+            compralotenew.agregarlote(codigo, fechacaducidad, cantidad, Idproducto);
+            acum++;
+        }
+        JOptionPane.showMessageDialog(this, "La compra se a agregado exitosamente");
+
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -917,12 +934,12 @@ public class FrmCompra extends javax.swing.JInternalFrame {
         int keyCode = evt.getKeyCode();
         if (keyCode == KeyEvent.VK_ENTER) {
             btnAgregarProducto.requestFocus();
-        }        
+        }
     }//GEN-LAST:event_txtCantidadProductoKeyReleased
 
     private void btnAgregarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarProductoActionPerformed
         double stock, cant;
-        
+
         if (!txtCantidadProducto.getText().equals("")) {
             if (txtCantidadProducto.getText().equals("")) {
                 txtCantidadProducto.setText("0");
@@ -930,9 +947,9 @@ public class FrmCompra extends javax.swing.JInternalFrame {
             } else {
                 cant = Double.parseDouble(txtCantidadProducto.getText());
             }
-            
+
             if (cant > 0) {
-                
+
                 int d1 = Integer.parseInt(lblIdProducto.getText());
                 String d2 = txtCodigoProducto.getText();
                 String d3 = txtNombreProducto.getText();
@@ -940,36 +957,45 @@ public class FrmCompra extends javax.swing.JInternalFrame {
                 double d5 = Double.parseDouble(txtCantidadProducto.getText());
                 double d6 = Double.parseDouble(txtPrecioProducto.getText());
                 double d7 = Double.parseDouble(txtTotalProducto.getText());
-                String d8,d9;
+                String d8, d9;
                 Date d10;
-                
+
                 if (jCheckiva.isSelected()) {
                     d8 = "si";
                 } else {
                     d8 = "no";
-                } 
-                d9=txtlote.getText();
-                d10=txtFechaCaducidadLote.getDate();
-                agregardatos(d1, d2, d3, d4, d5, d6, d7, d8,d9,d10);
-                
+                }
+                d9 = txtlote.getText();
+                d10 = txtFechaCaducidadLote.getDate();
+                if (d10.after(txtFecha.getDate())) {
+                    agregardatos(d1, d2, d3, d4, d5, d6, d7, d8, d9, d10);
+                    txtCodigoProducto.setText("");
+                    txtNombreProducto.setText("");
+                    txtStockProducto.setText("");
+                    txtPrecioProducto.setText("");
+                    txtCantidadProducto.setText("");
+                    txtTotalProducto.setText("");
+                    separarL();
+                } else if (d10.before(txtFecha.getDate())) {
+                    JOptionPane.showMessageDialog(this, "Ingrese una fecha mayor a la fecha actual");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Ingrese una fecha mayor a la fecha actual");
+                }
                 CalcularTotal_Compra();
                 CalcularSubTotal();
                 CalcularIGV();
-                
-                txtCantidadProducto.setText("");
-                txtTotalProducto.setText("");
-                txtCodigoProducto.requestFocus();                
-                
+                txtCodigoProducto.requestFocus();
+
             } else {
                 JOptionPane.showMessageDialog(null, "Ingrese Cantidad mayor a 0");
-                txtCantidadProducto.requestFocus();                
+                txtCantidadProducto.requestFocus();
             }
-            
+
         } else {
             JOptionPane.showMessageDialog(null, "Ingrese cantidad");
-            txtCantidadProducto.requestFocus();            
+            txtCantidadProducto.requestFocus();
         }
-        
+
 
     }//GEN-LAST:event_btnAgregarProductoActionPerformed
 
@@ -985,16 +1011,34 @@ public class FrmCompra extends javax.swing.JInternalFrame {
             txtSubTotal.setText("0.0");
             txtIGV.setText("0.0");
             txtTotalCompra.setText("0.0");
-            
+
             CalcularTotal_Compra();
             CalcularSubTotal();
             CalcularIGV();
         }
-        
+
         CalcularTotal_Compra();
         CalcularSubTotal();
         CalcularIGV();
     }//GEN-LAST:event_btnEliminarProductoActionPerformed
+
+    private void agregarultimoloteconid() {
+        EntidadLote lote = new EntidadLote();
+        if (compralote.listarultimoidlote(lote)) {
+            txtlote.setText("L" + String.valueOf(lote.getIdLote() + 1));
+        } else {
+            JOptionPane.showMessageDialog(this, "Se deve agregar un lote");
+        }
+
+    }
+
+    private void separarL() {
+        String cadena = txtlote.getText();
+        String cadenaremplase = cadena.replace("L", "");
+        int cadenaentero = Integer.parseInt(cadenaremplase);
+        txtlote.setText("L" + String.valueOf(cadenaentero + 1));
+
+    }
 
     private void btnLimpiarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarTablaActionPerformed
         limpiarTabla();
@@ -1004,11 +1048,11 @@ public class FrmCompra extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnLimpiarTablaActionPerformed
 
     private void txtCodigoProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyReleased
-        BuscarProductoPorCodigo();        
+        BuscarProductoPorCodigo();
         int keyCode = evt.getKeyCode();
         if (keyCode == KeyEvent.VK_ENTER) {
             txtCantidadProducto.requestFocus();
-        }        
+        }
     }//GEN-LAST:event_txtCodigoProductoKeyReleased
 
     private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
@@ -1053,6 +1097,7 @@ public class FrmCompra extends javax.swing.JInternalFrame {
                 venta.setStrEstadoCompra("NORMAL");
                 compras.agregarCompra(venta);
                 guardarDetalle();
+                agregarlote();
             }
             mirar();
             limpiarTabla();
