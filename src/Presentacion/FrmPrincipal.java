@@ -513,7 +513,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         mnuInformes.add(jMenuItem3);
 
-        jMenuItem4.setText("Lote");
+        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/calendario.png"))); // NOI18N
+        jMenuItem4.setText("Reporte de Lote");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem4ActionPerformed(evt);
