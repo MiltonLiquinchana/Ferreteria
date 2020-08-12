@@ -83,7 +83,7 @@ public class FrmLoteInternal extends javax.swing.JInternalFrame {
     }
 
     /*metodo que no sirve para llenar la tabla desde la base de datos, este metodo recive la tabla a llenar*/
-    void llenartabla(JTable tabla) {
+    private void llenartabla(JTable tabla) {
 
         modelo = new DefaultTableModel();
         /*en un arreglo de tipo string definimos los encabezados de cada columna*/
