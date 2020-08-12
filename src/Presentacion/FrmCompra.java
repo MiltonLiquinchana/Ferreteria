@@ -536,7 +536,6 @@ public class FrmCompra extends javax.swing.JInternalFrame {
         txtTotalProducto = new javax.swing.JTextField();
         btnEliminarProducto = new javax.swing.JButton();
         btnLimpiarTabla = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         txtNumero = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -737,14 +736,6 @@ public class FrmCompra extends javax.swing.JInternalFrame {
             }
         });
         jPanel3.add(btnLimpiarTabla, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 5, 50, 40));
-
-        jButton1.setText("cadena");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 10, -1, -1));
 
         jPanel5.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 530, 50));
 
@@ -1147,10 +1138,6 @@ public class FrmCompra extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTotalCompraActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        separarL();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarProducto;
     private javax.swing.JButton btnBuscarProducto;
@@ -1163,7 +1150,6 @@ public class FrmCompra extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JComboBox cboTipoDocumento;
     private javax.swing.JCheckBox chkCambiarNumero;
-    private javax.swing.JButton jButton1;
     public static javax.swing.JCheckBox jCheckiva;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;

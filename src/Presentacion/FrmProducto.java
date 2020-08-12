@@ -25,17 +25,13 @@ import javax.swing.table.TableCellRenderer;
 //--------------CODIGO DE BARRAS------------
 import java.awt.Image;
 import javax.swing.ImageIcon;
-import javax.swing.*;
 import net.sourceforge.barbecue.BarcodeFactory;
 import net.sourceforge.barbecue.Barcode;
 import net.sourceforge.barbecue.BarcodeException;
 import net.sourceforge.barbecue.BarcodeImageHandler;
-import java.awt.image.BufferedImage;
-import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -201,6 +197,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         cboTipoCodificacion.setEnabled(false);
         btnGenerar.setEnabled(false);
         imagen = "";
+        txtDescuento.setText("0");
 
     }
 
@@ -383,10 +380,12 @@ public class FrmProducto extends javax.swing.JInternalFrame {
 
     void CalcularUtilidad() {
         double pre_costo = 0, pre_venta = 0, utilidad = 0, t_utilidad;
+        int descuento=0;
         pre_costo = Double.parseDouble(txtPrecioCosto.getText());
         pre_venta = Double.parseDouble(txtPrecioVenta.getText());
+        descuento=Integer.parseInt(txtDescuento.getText());
         utilidad = pre_venta - pre_costo;
-        t_utilidad = Math.rint(utilidad * 100) / 100;
+        t_utilidad = utilidad -((utilidad*descuento)/ 100);
         txtUtilidad.setText(String.valueOf(t_utilidad));
     }
 
@@ -1100,6 +1099,8 @@ public class FrmProducto extends javax.swing.JInternalFrame {
             btnGuardar.requestFocus();
         }
     }//GEN-LAST:event_txtPrecioVentaKeyReleased
+    
+    
     void verificarCodigoBar() {
         String busqueda = null;
         int sen = 2;
@@ -1401,7 +1402,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jCheckivaStateChanged
 
     private void txtDescuentoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescuentoKeyReleased
-        // TODO add your handling code here:
+        CalcularUtilidad();
     }//GEN-LAST:event_txtDescuentoKeyReleased
 
     private void txtDescuentoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescuentoKeyTyped
