@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -619,7 +618,7 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
                 Datos[7] = (String) rs.getString(9);
                 Datos[8] = (String) rs.getString(10);
                 venta.agregardatos(Integer.parseInt(Datos[0]), Datos[1], Datos[2], Datos[3], Double.parseDouble(Datos[4]),
-                        Datos[5], Datos[6], Datos[7], Datos[8]);
+                        Datos[5], Datos[6],"","", Datos[7], Datos[8],"");
                 encuentra = true;
             }
             if (encuentra = false) {
