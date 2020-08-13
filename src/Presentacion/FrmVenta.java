@@ -101,7 +101,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
          */
         /*hacignamos el modelo de a la tabla*/
         tblDetalleProducto.setModel(dtmDetalle);
-        //CrearTablaDetalleProducto();
+        CrearTablaDetalleProducto();
         vander = vandera.getText();
         vandera.setVisible(false);
         idventaanular.setVisible(false);
@@ -115,26 +115,30 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
             int fila = evento.getFirstRow();
             int columna = evento.getColumn();
             /*obtenemos los valores que se modificarion*/
-            String cantidanueva, precio, totalnuevo;
+            String cantidanueva, preciodecuento, preciosindescuento, totalnuevocondescuento, totalnuevosindescuento;
             cantidanueva = String.valueOf(modelo.getValueAt(fila, 4));
-            precio = String.valueOf(modelo.getValueAt(fila, 6));
+            preciosindescuento = String.valueOf(modelo.getValueAt(fila, 6));
+            preciodecuento = String.valueOf(modelo.getValueAt(fila, 8));
             // Los cambios en la columna numero 7 donde se ase el cambio de por el nuevo total se ignoran.
             // Este return es necesario porque cuando nuestro codigo modifique
             // los valores de las cantidades, precios en esta fila y columna, saltara nuevamente
             // el evento, metiendonos en un bucle recursivo de llamadas a este
             // metodo.
             /*aqui le decimos que ignore cualquier cambio en la columna 7*/
-            if (columna == 7) {
+            if (columna == 9 || columna == 11) {
                 return;
             }
             try {
                 /*hacemos el calculo con los valores que se obtenieron anteriorment*/
-                totalnuevo = String.valueOf(Double.parseDouble(cantidanueva) * Double.parseDouble(precio));
+                totalnuevosindescuento = String.valueOf(Double.parseDouble(cantidanueva) * Double.parseDouble(preciosindescuento));
+                totalnuevocondescuento = String.valueOf(Double.parseDouble(cantidanueva) * Double.parseDouble(preciodecuento));
                 /*hacignamos el nuevo calculo*/
-                modelo.setValueAt(totalnuevo, fila, 7);
+                modelo.setValueAt(totalnuevocondescuento, fila, 9);
+                modelo.setValueAt(totalnuevosindescuento, fila, 11);
                 CalcularValor_Venta();
                 CalcularSubTotal();
                 CalcularIGV();
+                descuentototal();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "ha ocurrido un problema");
             }
@@ -187,57 +191,57 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
 
     }
 
-//    void CrearTablaDetalleProducto() {
-//        //--------------------PRESENTACION DE JTABLE----------------------
-//
-//        TableCellRenderer render = new DefaultTableCellRenderer() {
-//
-//            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-//                //aqui obtengo el render de la calse superior 
-//                JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-//                //Determinar Alineaciones   
-//                if (column == 0 || column == 1 || column == 4 || column == 5 || column == 6 || column == 7 || column == 12) {
-//                    l.setHorizontalAlignment(SwingConstants.CENTER);
-//                } else {
-//                    l.setHorizontalAlignment(SwingConstants.LEFT);
-//                }
-//
-//                //Colores en Jtable        
-//                if (isSelected) {
-//                    l.setBackground(new Color(203, 159, 41));
-//                    //l.setBackground(new Color(168, 198, 238));
-//                    l.setForeground(Color.WHITE);
-//                } else {
-//                    l.setForeground(Color.BLACK);
-//                    if (row % 2 == 0) {
-//                        l.setBackground(Color.WHITE);
-//                    } else {
-//                        //l.setBackground(new Color(232, 232, 232));
-//                        l.setBackground(new Color(254, 227, 152));
-//                    }
-//                }
-//                return l;
-//            }
-//        };
-//
-//        //Agregar Render
-//        for (int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
-//            tblDetalleProducto.getColumnModel().getColumn(i).setCellRenderer(render);
-//        }
-//
-//        //Activar ScrollBar
-//        tblDetalleProducto.setAutoResizeMode(tblDetalleProducto.AUTO_RESIZE_OFF);
-//
-//        //Anchos de cada columna
-//        int[] anchos = {50, 120, 190, 260, 70, 70,100,70, 100, 70, 30};
-//        for (int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
-//            tblDetalleProducto.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
-//        }
-//
-//        //Ocultar columa
-//        setOcultarColumnasJTable(tblDetalleProducto, new int[]{0, 5});
-//
-//    }
+    void CrearTablaDetalleProducto() {
+        //--------------------PRESENTACION DE JTABLE----------------------
+
+        TableCellRenderer render = new DefaultTableCellRenderer() {
+
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                //aqui obtengo el render de la calse superior 
+                JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                //Determinar Alineaciones   
+                if (column == 0 || column == 1 || column == 4 || column == 5 || column == 6 || column == 7 || column == 12) {
+                    l.setHorizontalAlignment(SwingConstants.CENTER);
+                } else {
+                    l.setHorizontalAlignment(SwingConstants.LEFT);
+                }
+
+                //Colores en Jtable        
+                if (isSelected) {
+                    l.setBackground(new Color(203, 159, 41));
+                    //l.setBackground(new Color(168, 198, 238));
+                    l.setForeground(Color.WHITE);
+                } else {
+                    l.setForeground(Color.BLACK);
+                    if (row % 2 == 0) {
+                        l.setBackground(Color.WHITE);
+                    } else {
+                        //l.setBackground(new Color(232, 232, 232));
+                        l.setBackground(new Color(254, 227, 152));
+                    }
+                }
+                return l;
+            }
+        };
+
+        //Agregar Render
+        for (int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
+            tblDetalleProducto.getColumnModel().getColumn(i).setCellRenderer(render);
+        }
+
+        //Activar ScrollBar
+        tblDetalleProducto.setAutoResizeMode(tblDetalleProducto.AUTO_RESIZE_OFF);
+
+        //Anchos de cada columna
+        int[] anchos = {50, 120, 260, 260, 70, 70,100,70, 120, 100, 50,100};
+        for (int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
+            tblDetalleProducto.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        }
+
+        //Ocultar columa
+        setOcultarColumnasJTable(tblDetalleProducto, new int[]{0, 5,11});
+
+    }
     void limpiarCampos() {
 
         txtTotalVenta.setText("0.0");
@@ -303,7 +307,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
 
         btnNuevo.setEnabled(false);
 
-        btnGuardar.setEnabled(true);
+        btnGuardar.setEnabled(false);
         btnCancelar.setEnabled(true);
         btnSalir.setEnabled(false);
 
@@ -492,8 +496,6 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         txtCambio = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(255, 255, 255));
-        setClosable(true);
-        setIconifiable(true);
         setTitle("Ventas");
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -1153,7 +1155,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
         simbolos.setDecimalSeparator('.');
         DecimalFormat formateador = new DecimalFormat("####.####", simbolos);
-        txtDescuento.setText(formateador.format(suma- Double.parseDouble(txtTotalPagar.getText())));
+        txtDescuento.setText(formateador.format(suma - Double.parseDouble(txtTotalPagar.getText())));
 
     }
 
@@ -1436,6 +1438,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
             importe = Double.parseDouble(ingreso);
             txtImporte.setText(String.valueOf(importe));
             cambio = Double.parseDouble(txtImporte.getText()) - Double.parseDouble(txtTotalPagar.getText());
+            btnGuardar.setEnabled(true);
             txtCambio.setText(String.valueOf(formateador.format(cambio)));
         } else {
             DecimalFormatSymbols simbolos = new DecimalFormatSymbols();

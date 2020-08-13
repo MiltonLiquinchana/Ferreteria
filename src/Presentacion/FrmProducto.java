@@ -36,6 +36,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -378,14 +380,17 @@ public class FrmProducto extends javax.swing.JInternalFrame {
     }
 
     void CalcularUtilidad() {
-        double pre_costo = 0, pre_venta = 0, utilidad = 0, t_utilidad;
-        int descuento=0;
+        DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
+        simbolos.setDecimalSeparator('.');
+        DecimalFormat formateador = new DecimalFormat("####.##", simbolos);
+        double pre_costo, pre_venta, utilidad;
+        int descuento;
         pre_costo = Double.parseDouble(txtPrecioCosto.getText());
         pre_venta = Double.parseDouble(txtPrecioVenta.getText());
         descuento=Integer.parseInt(txtDescuento.getText());
-        utilidad = pre_venta - pre_costo;
-        t_utilidad = utilidad -((utilidad*descuento)/ 100);
-        txtUtilidad.setText(String.valueOf(t_utilidad));
+        utilidad = pre_venta -((pre_venta*descuento)/ 100) - pre_costo;
+        //t_utilidad = utilidad ;
+        txtUtilidad.setText(String.valueOf(formateador.format(utilidad)));
     }
 
     @SuppressWarnings("unchecked")
