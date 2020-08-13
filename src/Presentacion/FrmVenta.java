@@ -1147,7 +1147,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
 
     }
 
-    private void descuentototal() {
+    public void descuentototal() {
         int contar = tblDetalleProducto.getRowCount();
         double suma = 0;
         for (int i = 0; i < contar; i++) {
@@ -1613,8 +1613,8 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
             detalleventa.setStrIdProducto(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 0)));
             detalleventa.setStrCantidadDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 4)));
             detalleventa.setStrCostoDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 5)));
-            detalleventa.setStrPrecioDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 6)));
-            detalleventa.setStrTotalDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 7)));
+            detalleventa.setStrPrecioDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 8)));
+            detalleventa.setStrTotalDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 9)));
             detalleventas.agregarDetalleVenta(detalleventa);
 
             try {
