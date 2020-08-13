@@ -84,7 +84,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         mirar();
         //--------------------JTABLE - DETALLEPRODUCTO--------------------
 
-        String titulos[] = {"ID", "CÓDIGO", "PRODUCTO", "DESCRIPCIÓN", "CANT.", "COSTO", "PRECIO", "TOTAL", "IVA"};
+        String titulos[] = {"ID", "CÓDIGO", "PRODUCTO", "DESCRIPCIÓN", "CANT.", "COSTO", "PRECIO VENTA", "DESCUENTO", "PRECIO DESCUENTO", "TOTAL", "IVA", "totalsindescuento"};
         dtmDetalle.setColumnIdentifiers(titulos);
         /**
          * *********************Evento datatable**************************
@@ -101,7 +101,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
          */
         /*hacignamos el modelo de a la tabla*/
         tblDetalleProducto.setModel(dtmDetalle);
-        CrearTablaDetalleProducto();
+        //CrearTablaDetalleProducto();
         vander = vandera.getText();
         vandera.setVisible(false);
         idventaanular.setVisible(false);
@@ -187,58 +187,57 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
 
     }
 
-    void CrearTablaDetalleProducto() {
-        //--------------------PRESENTACION DE JTABLE----------------------
-
-        TableCellRenderer render = new DefaultTableCellRenderer() {
-
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                //aqui obtengo el render de la calse superior 
-                JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                //Determinar Alineaciones   
-                if (column == 0 || column == 1 || column == 4 || column == 5 || column == 6 || column == 7 || column == 12) {
-                    l.setHorizontalAlignment(SwingConstants.CENTER);
-                } else {
-                    l.setHorizontalAlignment(SwingConstants.LEFT);
-                }
-
-                //Colores en Jtable        
-                if (isSelected) {
-                    l.setBackground(new Color(203, 159, 41));
-                    //l.setBackground(new Color(168, 198, 238));
-                    l.setForeground(Color.WHITE);
-                } else {
-                    l.setForeground(Color.BLACK);
-                    if (row % 2 == 0) {
-                        l.setBackground(Color.WHITE);
-                    } else {
-                        //l.setBackground(new Color(232, 232, 232));
-                        l.setBackground(new Color(254, 227, 152));
-                    }
-                }
-                return l;
-            }
-        };
-
-        //Agregar Render
-        for (int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
-            tblDetalleProducto.getColumnModel().getColumn(i).setCellRenderer(render);
-        }
-
-        //Activar ScrollBar
-        tblDetalleProducto.setAutoResizeMode(tblDetalleProducto.AUTO_RESIZE_OFF);
-
-        //Anchos de cada columna
-        int[] anchos = {50, 120, 190, 260, 70, 70, 70, 70, 30};
-        for (int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
-            tblDetalleProducto.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
-        }
-
-        //Ocultar columa
-        setOcultarColumnasJTable(tblDetalleProducto, new int[]{0, 5});
-
-    }
-
+//    void CrearTablaDetalleProducto() {
+//        //--------------------PRESENTACION DE JTABLE----------------------
+//
+//        TableCellRenderer render = new DefaultTableCellRenderer() {
+//
+//            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+//                //aqui obtengo el render de la calse superior 
+//                JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+//                //Determinar Alineaciones   
+//                if (column == 0 || column == 1 || column == 4 || column == 5 || column == 6 || column == 7 || column == 12) {
+//                    l.setHorizontalAlignment(SwingConstants.CENTER);
+//                } else {
+//                    l.setHorizontalAlignment(SwingConstants.LEFT);
+//                }
+//
+//                //Colores en Jtable        
+//                if (isSelected) {
+//                    l.setBackground(new Color(203, 159, 41));
+//                    //l.setBackground(new Color(168, 198, 238));
+//                    l.setForeground(Color.WHITE);
+//                } else {
+//                    l.setForeground(Color.BLACK);
+//                    if (row % 2 == 0) {
+//                        l.setBackground(Color.WHITE);
+//                    } else {
+//                        //l.setBackground(new Color(232, 232, 232));
+//                        l.setBackground(new Color(254, 227, 152));
+//                    }
+//                }
+//                return l;
+//            }
+//        };
+//
+//        //Agregar Render
+//        for (int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
+//            tblDetalleProducto.getColumnModel().getColumn(i).setCellRenderer(render);
+//        }
+//
+//        //Activar ScrollBar
+//        tblDetalleProducto.setAutoResizeMode(tblDetalleProducto.AUTO_RESIZE_OFF);
+//
+//        //Anchos de cada columna
+//        int[] anchos = {50, 120, 190, 260, 70, 70,100,70, 100, 70, 30};
+//        for (int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
+//            tblDetalleProducto.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+//        }
+//
+//        //Ocultar columa
+//        setOcultarColumnasJTable(tblDetalleProducto, new int[]{0, 5});
+//
+//    }
     void limpiarCampos() {
 
         txtTotalVenta.setText("0.0");
@@ -859,28 +858,28 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("SUB TOTAL");
-        jPanel6.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(221, 3, 100, 20));
+        jPanel6.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, 100, 20));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("I.V.A.");
-        jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(332, 3, 100, 20));
+        jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 0, 100, 20));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel12.setText("TOTAL A PAGAR");
         jLabel12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel6.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(448, 3, 130, 20));
+        jPanel6.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 0, 130, 20));
 
         txtSubTotal.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txtSubTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtSubTotal.setEnabled(false);
-        jPanel6.add(txtSubTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(221, 25, 100, 30));
+        jPanel6.add(txtSubTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 30, 100, 30));
 
         txtIGV.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txtIGV.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtIGV.setEnabled(false);
-        jPanel6.add(txtIGV, new org.netbeans.lib.awtextra.AbsoluteConstraints(332, 25, 100, 30));
+        jPanel6.add(txtIGV, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 30, 100, 30));
 
         txtTotalPagar.setBackground(new java.awt.Color(0, 0, 0));
         txtTotalPagar.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -893,7 +892,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
                 txtTotalPagarActionPerformed(evt);
             }
         });
-        jPanel6.add(txtTotalPagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(444, 25, 135, 30));
+        jPanel6.add(txtTotalPagar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 30, 135, 30));
 
         txtTotalVenta.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txtTotalVenta.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -907,8 +906,8 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel15.setText("DESCUENTO %");
-        jPanel6.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 3, 90, 20));
+        jLabel15.setText("DESCUENTO TOTAL");
+        jPanel6.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 3, 120, 20));
 
         txtDescuento.setBackground(new java.awt.Color(255, 255, 204));
         txtDescuento.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -918,10 +917,10 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
                 txtDescuentoKeyReleased(evt);
             }
         });
-        jPanel6.add(txtDescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 25, 90, 30));
+        jPanel6.add(txtDescuento, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 25, 120, 30));
 
         getContentPane().add(jPanel6);
-        jPanel6.setBounds(210, 403, 590, 65);
+        jPanel6.setBounds(190, 403, 610, 65);
 
         jPanel7.setBackground(new java.awt.Color(247, 254, 255));
         jPanel7.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -930,7 +929,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("IMPORTE");
-        jPanel7.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 3, 80, 20));
+        jPanel7.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 70, 20));
 
         txtImporte.setBackground(new java.awt.Color(0, 0, 0));
         txtImporte.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -938,12 +937,12 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         txtImporte.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtImporte.setDisabledTextColor(new java.awt.Color(255, 255, 255));
         txtImporte.setEnabled(false);
-        jPanel7.add(txtImporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 25, 80, 30));
+        jPanel7.add(txtImporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 70, 30));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel11.setText("CAMBIO");
-        jPanel7.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 3, 80, 20));
+        jPanel7.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 0, 70, 20));
 
         txtCambio.setBackground(new java.awt.Color(0, 0, 0));
         txtCambio.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -951,10 +950,10 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         txtCambio.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtCambio.setDisabledTextColor(new java.awt.Color(255, 255, 0));
         txtCambio.setEnabled(false);
-        jPanel7.add(txtCambio, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 25, 80, 30));
+        jPanel7.add(txtCambio, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, 70, 30));
 
         getContentPane().add(jPanel7);
-        jPanel7.setBounds(10, 403, 190, 65);
+        jPanel7.setBounds(10, 403, 180, 65);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1013,7 +1012,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         return valor;
     }
 
-    public void agregardatos(int item, String cod, String nom, String descrip, double cant, String cost, String pre, String tot, String iva) {
+    public void agregardatos(int item, String cod, String nom, String descrip, double cant, String cost, String prev, String desc, String predesc, String tot, String iva, String totalsindes) {
 
         int p = recorrer(item);
         double n_cant, n_total;
@@ -1031,7 +1030,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
             DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
             simbolos.setDecimalSeparator('.');
             DecimalFormat formateador = new DecimalFormat("####.####", simbolos);
-            String Datos[] = {String.valueOf(item), cod, nom, descrip, String.valueOf(cant), cost, pre, tot, String.valueOf(iva)};
+            String Datos[] = {String.valueOf(item), cod, nom, descrip, String.valueOf(cant), cost, prev, desc, predesc, tot, String.valueOf(iva), totalsindes};
             dtmDetalle.addRow(Datos);
 
         }
@@ -1047,7 +1046,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         int contar = tblDetalleProducto.getRowCount();
         double suma = 0;
         for (int i = 0; i < contar; i++) {
-            suma = suma + Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(i, 7)));
+            suma = suma + Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(i, 9)));
         }
         DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
         simbolos.setDecimalSeparator('.');
@@ -1057,48 +1056,110 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
     }
 
     public void CalcularSubTotal() {
+        int contadr, acumulador = 0;
+        contadr = tblDetalleProducto.getRowCount();
+        String sinoiva = null;
+        double preciocondescuento = 0, preciosiniva = 0, acumpreciossiniva = 0;
+        while (acumulador < contadr) {
+            sinoiva = (String) tblDetalleProducto.getValueAt(acumulador, 10);
+            preciocondescuento = Double.parseDouble(String.valueOf(tblDetalleProducto.getValueAt(acumulador, 9)));
+            if (sinoiva.equals("si")) {
+
+                acumpreciossiniva = acumpreciossiniva + redondearSubtotal(preciocondescuento, 2);
+                //
+            } else if (sinoiva.equals("no")) {
+                acumpreciossiniva = preciocondescuento + acumpreciossiniva;
+            }
+            acumulador++;
+
+        }
+        DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
+        simbolos.setDecimalSeparator('.');
+        DecimalFormat formateador = new DecimalFormat("####.##", simbolos);
+        txtSubTotal.setText(formateador.format(acumpreciossiniva));
+
+    }
+
+    public double redondearSubtotal(double valordecimalentrada, int numerodedecimales) {
+        double valoriva, parteenteraiva, partedecimaliva, resultado;
+        /*primero obtenemos el valor del iva al precio agregado*/
+        valoriva = valordecimalentrada - (valordecimalentrada / 1.12);
+        /*retiramos los decimales dejando solo la parte entera de valor del iva del precio*/
+        parteenteraiva = Math.floor(valoriva);
+        /*retiramos la parte entera para que solo queden los decimales*/
+        partedecimaliva = valoriva - parteenteraiva;
+        /*multiplicamos los decimales por 10 y por un numero el numero definira cuantos dedimales tendra ejemplo 10 por 2 dos decimales*/
+        partedecimaliva = partedecimaliva * Math.pow(10, numerodedecimales);
+        /*redondeamos a un solo entero sin decimales*/
+        partedecimaliva = Math.round(partedecimaliva);
+        /*convertimos a decimales el entero dividiendolo para 100*/
+        partedecimaliva = (partedecimaliva / Math.pow(10, 2));
+        /*sumas la parte entera del decimal con los decimales que son solo dos*/
+        partedecimaliva = parteenteraiva + partedecimaliva;
+        /*le quitamos el iva redondeado al valor del precio*/
+        resultado = valordecimalentrada - partedecimaliva;
+        return resultado;
+
+    }
+
+    public void CalcularIGV() {
+        int contadr, acumulador = 0;
+        contadr = tblDetalleProducto.getRowCount();
+        String sinoiva = null;
+        double preciocondescuento = 0, preciosiniva = 0, acumpreciossiniva = 0;
+        while (acumulador < contadr) {
+            sinoiva = (String) tblDetalleProducto.getValueAt(acumulador, 10);
+            preciocondescuento = Double.parseDouble(String.valueOf(tblDetalleProducto.getValueAt(acumulador, 9)));
+            if (sinoiva.equals("si")) {
+                acumpreciossiniva = acumpreciossiniva + redondearIva(preciocondescuento, 2);
+                //
+            } else if (sinoiva.equals("no")) {
+                acumpreciossiniva = 0 + acumpreciossiniva;
+            }
+            acumulador++;
+
+        }
+        DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
+        simbolos.setDecimalSeparator('.');
+        DecimalFormat formateador = new DecimalFormat("####.##", simbolos);
+        txtIGV.setText(formateador.format(acumpreciossiniva));
+    }
+
+    public double redondearIva(double valordecimalentrada, int numerodedecimales) {
+        double valoriva, parteenteraiva, partedecimaliva/*, resultado*/;
+        /*primero obtenemos el valor del iva al precio agregado*/
+        valoriva = valordecimalentrada - (valordecimalentrada / 1.12);
+        /*retiramos los decimales dejando solo la parte entera de valor del iva del precio*/
+        parteenteraiva = Math.floor(valoriva);
+        /*retiramos la parte entera para que solo queden los decimales*/
+        partedecimaliva = valoriva - parteenteraiva;
+        /*multiplicamos los decimales por 10 y por un numero el numero definira cuantos dedimales tendra ejemplo 10 por 2 dos decimales*/
+        partedecimaliva = partedecimaliva * Math.pow(10, numerodedecimales);
+        /*redondeamos a un solo entero sin decimales*/
+        partedecimaliva = Math.round(partedecimaliva);
+        /*convertimos a decimales el entero dividiendolo para 100*/
+        partedecimaliva = (partedecimaliva / Math.pow(10, 2));
+        /*sumas la parte entera del decimal con los decimales que son solo dos*/
+        partedecimaliva = parteenteraiva + partedecimaliva;
+        /*le quitamos el iva redondeado al valor del precio*/
+        //resultado = valordecimalentrada - partedecimaliva;
+        return partedecimaliva;
+
+    }
+
+    private void descuentototal() {
         int contar = tblDetalleProducto.getRowCount();
-        double suma = 0, subtotal;
+        double suma = 0;
         for (int i = 0; i < contar; i++) {
-            suma = suma + Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(i, 7)));;
+            suma = suma + Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(i, 11)));
         }
         DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
         simbolos.setDecimalSeparator('.');
         DecimalFormat formateador = new DecimalFormat("####.####", simbolos);
-        subtotal = suma / 1.12;
-        txtSubTotal.setText(formateador.format(subtotal));
+        txtDescuento.setText(formateador.format(suma- Double.parseDouble(txtTotalPagar.getText())));
+
     }
 
-    public void CalcularIGV() {
-        double totalpagar = 0;
-        double subtotal = 0, iva;
-        totalpagar = Double.parseDouble(txtTotalPagar.getText());
-        DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
-        simbolos.setDecimalSeparator('.');
-        DecimalFormat formateador = new DecimalFormat("####.###", simbolos);
-        subtotal = totalpagar / 1.12;
-        iva = totalpagar - subtotal;
-        txtIGV.setText(formateador.format(iva));
-    }
-
-    /*
-    void CalcularSubTotal(){
-        double subtotal=0;
-        DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
-        simbolos.setDecimalSeparator('.');
-        DecimalFormat formateador = new DecimalFormat("####.##",simbolos);        
-        subtotal=Double.parseDouble(txtTotalPagar.getText())/1.12;
-        txtSubTotal.setText(String.valueOf(formateador.format(subtotal)));
-    }
-    void CalcularIGV(){
-        double igv=0;
-        DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
-        simbolos.setDecimalSeparator('.');
-        DecimalFormat formateador = new DecimalFormat("####.##",simbolos);       
-        igv=Double.parseDouble(txtSubTotal.getText())*0.12;
-        txtIGV.setText(String.valueOf(formateador.format(igv)));
-    }
-     */
     void CalcularTotal_Pagar() {
         int fila = 0;
         double totalpagar = 0;
@@ -1110,7 +1171,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         DecimalFormat formateador = new DecimalFormat("####.##", simbolos);
         for (int f = 0; f < fila; f++) {
             subtotal += Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 7)));
-            if (String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 8)) == "si") {
+            if (String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 8)).equals("si")) {
                 igv += Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 7))) * 1.12 - Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 7)));
             }
         }
@@ -1159,44 +1220,43 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
                     double d5 = Double.parseDouble(txtCantidadProducto.getText());
                     String d6 = txtCostoProducto.getText();
                     String d7 = null;
+                    d7 = txtPrecioProducto.getText();
                     String d8 = null;
+                    if (Integer.parseInt(lblDescuento.getText()) > 0) {
+                        d8 = "si";
+                    } else if (Integer.parseInt(lblDescuento.getText()) <= 0) {
+                        d8 = "no";
+                    }
                     String d9 = null;
+                    String d10 = null;
+                    String d11 = null;
+                    String d12;
                     DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
                     simbolos.setDecimalSeparator('.');
                     DecimalFormat formateador = new DecimalFormat("####.##", simbolos);
+                    d12 = String.valueOf(formateador.format(Double.parseDouble(txtPrecioProducto.getText()) * Double.parseDouble(txtCantidadProducto.getText())));
                     /*en caso de que el radio buton seleccionado sea el rdbtnsi*/
                     if (rdbtnsi.isSelected()) {
-                        if (chkiva.isSelected()) {
-
-                            d7 = String.valueOf(formateador.format(Double.parseDouble(txtPrecioProducto.getText()) - (Double.parseDouble(txtPrecioProducto.getText()) * (Double.parseDouble(lblDescuento.getText()) / 100))));
-                            d8 = String.valueOf(formateador.format(Double.parseDouble(txtCantidadProducto.getText()) * (Double.parseDouble(txtPrecioProducto.getText()) - (Double.parseDouble(txtPrecioProducto.getText()) * (Double.parseDouble(lblDescuento.getText()) / 100)))));
-                            d9 = "si";
-                        } else {
-                            d7 = txtPrecioProducto.getText();
-                            d8 = txtTotalProducto.getText();
-                            d9 = "no";
-                        }
+                        d9 = String.valueOf(formateador.format(Double.parseDouble(txtPrecioProducto.getText()) - (Double.parseDouble(txtPrecioProducto.getText()) * (Double.parseDouble(lblDescuento.getText()) / 100))));
+                        d10 = String.valueOf(formateador.format(Double.parseDouble(txtCantidadProducto.getText()) * (Double.parseDouble(txtPrecioProducto.getText()) - (Double.parseDouble(txtPrecioProducto.getText()) * (Double.parseDouble(lblDescuento.getText()) / 100)))));
 
                     } else if (rdbtnno.isSelected()) {
-                        if (chkiva.isSelected()) {
-
-                            d7 = txtPrecioProducto.getText();
-                            d8 = String.valueOf(formateador.format(Double.parseDouble(txtPrecioProducto.getText()) * Double.parseDouble(txtCantidadProducto.getText())));
-                            d9 = "si";
-                        } else {
-                            d7 = txtPrecioProducto.getText();
-                            d8 = txtTotalProducto.getText();
-                            d9 = "no";
-                        }
-
+                        d9 = txtPrecioProducto.getText();
+                        d10 = String.valueOf(formateador.format(Double.parseDouble(txtPrecioProducto.getText()) * Double.parseDouble(txtCantidadProducto.getText())));
                     }
 
-                    agregardatos(d1, d2, d3, d4, d5, d6, d7, d8, d9);
+                    if (chkiva.isSelected()) {
+                        d11 = "si";
+                    } else {
+                        d11 = "no";
+                    }
+
+                    agregardatos(d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12);
                     CalcularValor_Venta();
-                    // CalcularTotal_Pagar();
+                    //CalcularTotal_Pagar();
                     CalcularSubTotal();
                     CalcularIGV();
-
+                    descuentototal();
                     txtCantidadProducto.setText("");
                     txtTotalProducto.setText("");
 
@@ -1236,6 +1296,10 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
     private void btnEliminarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProductoActionPerformed
         int fila = tblDetalleProducto.getSelectedRow();
         dtmDetalle.removeRow(fila);
+        CalcularValor_Venta();
+        CalcularSubTotal();
+        CalcularIGV();
+        descuentototal();
     }//GEN-LAST:event_btnEliminarProductoActionPerformed
 
     private void txtCodigoProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyReleased
