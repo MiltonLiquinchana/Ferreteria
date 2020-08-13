@@ -1027,9 +1027,6 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
 
             //JOptionPane.showMessageDialog(null, "IGUALL!");
         } else {
-            DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
-            simbolos.setDecimalSeparator('.');
-            DecimalFormat formateador = new DecimalFormat("####.####", simbolos);
             String Datos[] = {String.valueOf(item), cod, nom, descrip, String.valueOf(cant), cost, prev, desc, predesc, tot, String.valueOf(iva), totalsindes};
             dtmDetalle.addRow(Datos);
 
@@ -1147,7 +1144,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
 
     }
 
-    private void descuentototal() {
+    public void descuentototal() {
         int contar = tblDetalleProducto.getRowCount();
         double suma = 0;
         for (int i = 0; i < contar; i++) {
@@ -1387,8 +1384,8 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         String strId;
         ClsProducto productos = new ClsProducto();
         ClsEntidadProducto producto = new ClsEntidadProducto();
-        int fila = 0;
-        double cant = 0, ncant = 0, stock = 0;
+        int fila;
+        double cant = 0, ncant, stock;
         //String cantidad[] = new String[1];
         //fila = tblDetalleProducto.getRowCount();
         fila = cantidadesrecive.size();
@@ -1602,19 +1599,19 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         ClsDetalleVenta detalleventas = new ClsDetalleVenta();
         ClsEntidadDetalleVenta detalleventa = new ClsEntidadDetalleVenta();
         ClsProducto productos = new ClsProducto();
-        String codigo, strId;
+        String strId;
         ClsEntidadProducto producto = new ClsEntidadProducto();
-        int fila = 0;
+        int fila;
 
-        double cant = 0, ncant = 0, stock = 0;
+        double cant = 0, ncant, stock;
         fila = tblDetalleProducto.getRowCount();
         for (int f = 0; f < fila; f++) {
             detalleventa.setStrIdVenta(String.valueOf(idventa));
             detalleventa.setStrIdProducto(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 0)));
             detalleventa.setStrCantidadDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 4)));
             detalleventa.setStrCostoDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 5)));
-            detalleventa.setStrPrecioDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 6)));
-            detalleventa.setStrTotalDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 7)));
+            detalleventa.setStrPrecioDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 8)));
+            detalleventa.setStrTotalDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 9)));
             detalleventas.agregarDetalleVenta(detalleventa);
 
             try {

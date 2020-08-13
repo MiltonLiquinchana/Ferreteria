@@ -578,6 +578,8 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
         venta.NombreEmpleado = lblvendedor.getText();
         venta.CalcularValor_Venta();
         venta.CalcularSubTotal();
+        venta.CalcularIGV();
+        venta.descuentototal();
         /*el valor del label venta sera anular*/
         venta.vandera.setText("anular");
         venta.idventaanular.setText(lblIdVenta.getText());
@@ -601,13 +603,13 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
     void capturecodproducto() {
         /*aqui se va a consultar los productos que se vendieron deacuerdo al numero del documento*/
         ClsVenta ventas = new ClsVenta();
-        String Datos[] = new String[9];
+        String Datos[] = new String[12];
         try {
             rs = ventas.listarProductosporId(lblIdVenta.getText());
             boolean encuentra = false;
             
             while (rs.next()) {
-                nomcliente=(String) rs.getString(1);
+                nomcliente = (String) rs.getString(1);
                 Datos[0] = (String) rs.getString(2);
                 Datos[1] = (String) rs.getString(3);
                 Datos[2] = (String) rs.getString(4);
@@ -617,8 +619,11 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
                 Datos[6] = (String) rs.getString(8);
                 Datos[7] = (String) rs.getString(9);
                 Datos[8] = (String) rs.getString(10);
+                Datos[9] = (String)rs.getString(11);
+                Datos[10] = (String)rs.getString(12);
+                Datos[11] =(String) rs.getString(13);
                 venta.agregardatos(Integer.parseInt(Datos[0]), Datos[1], Datos[2], Datos[3], Double.parseDouble(Datos[4]),
-                        Datos[5], Datos[6],"","", Datos[7], Datos[8],"");
+                        Datos[5], Datos[6], Datos[7], Datos[8], Datos[9], Datos[10], Datos[11]);
                 encuentra = true;
             }
             if (encuentra = false) {
