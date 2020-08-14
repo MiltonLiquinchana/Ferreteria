@@ -35,13 +35,13 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 public final class FrmVenta extends javax.swing.JInternalFrame {
-
+    
     private Connection connection = new ClsConexion().getConection();
     String Total;
     String strCodigo;
     String accion;
     String numVenta, tipoDocumento;
-
+    
     int registros;
     String id[] = new String[50];
     //String Datos[]=new String[50];
@@ -53,16 +53,16 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
     //-----------------------------------------------
     public String codigo;
     static Connection conn = null;
-
+    
     static ResultSet rs = null;
     static ResultSet resultado = null;
     DefaultTableModel dtm = new DefaultTableModel();
     DefaultTableModel dtmDetalle = new DefaultTableModel();
-
+    
     String criterio, busqueda;
-    String vander;
+    String vander, idventavandera;
     ArrayList cantidadesrecive = new ArrayList();
-
+    
     public FrmVenta() {
         initComponents();
         //---------------------FECHA ACTUAL-------------------------------
@@ -76,9 +76,9 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         //---------------------ANCHO Y ALTO DEL FORM----------------------
         this.setSize(955, 505);
         cargarComboTipoDocumento();
-
+        
         lblIdProducto.setVisible(false);
-        lblIdCliente.setVisible(false);
+        lblIdCliente.setVisible(true);
         txtDescripcionProducto.setVisible(false);
         txtCostoProducto.setVisible(false);
         mirar();
@@ -103,12 +103,12 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         tblDetalleProducto.setModel(dtmDetalle);
         CrearTablaDetalleProducto();
         vander = vandera.getText();
-        vandera.setVisible(false);
-        idventaanular.setVisible(false);
+        vandera.setVisible(true);
+        idventaanular.setVisible(true);
     }
-
+    
     public void eventotable(TableModelEvent evento) {
-
+        
         if (evento.getType() == TableModelEvent.UPDATE) {
             /*obtenemos el modelo de la tabla y la fila/ columna que han cambiado*/
             TableModel modelo = ((TableModel) (evento.getSource()));
@@ -142,25 +142,25 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "ha ocurrido un problema");
             }
-
+            
         }
-
+        
     }
 
 //-----------------------------------------------------------------------------------------------
 //--------------------------------------METODOS--------------------------------------------------
 //-----------------------------------------------------------------------------------------------
     public String generaNumVenta() {
-
+        
         ClsVenta oVenta = new ClsVenta();
         try {
-
+            
             rs = oVenta.obtenerUltimoIdVenta();
             while (rs.next()) {
                 if (rs.getString(1) != null) {
                     Scanner s = new Scanner(rs.getString(1));
                     int c = s.useDelimiter("C").nextInt() + 1;
-
+                    
                     if (c < 10) {
                         return "C0000" + c;
                     }
@@ -177,7 +177,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
                     }
                 }
             }
-
+            
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -188,14 +188,14 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
             }
         }
         return "C00001";
-
+        
     }
-
+    
     void CrearTablaDetalleProducto() {
         //--------------------PRESENTACION DE JTABLE----------------------
 
         TableCellRenderer render = new DefaultTableCellRenderer() {
-
+            
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 //aqui obtengo el render de la calse superior 
                 JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -233,23 +233,24 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         tblDetalleProducto.setAutoResizeMode(tblDetalleProducto.AUTO_RESIZE_OFF);
 
         //Anchos de cada columna
-        int[] anchos = {50, 120, 260, 260, 70, 70,100,70, 120, 100, 50,100};
+        int[] anchos = {50, 120, 260, 260, 70, 70, 100, 70, 120, 100, 50, 100};
         for (int i = 0; i < tblDetalleProducto.getColumnCount(); i++) {
             tblDetalleProducto.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
         }
 
         //Ocultar columa
-        setOcultarColumnasJTable(tblDetalleProducto, new int[]{0, 5,11});
-
+        setOcultarColumnasJTable(tblDetalleProducto, new int[]{0, 5, 11});
+        
     }
-    void limpiarCampos() {
 
+    void limpiarCampos() {
+        
         txtTotalVenta.setText("0.0");
         txtDescuento.setText("0.0");
         txtSubTotal.setText("0.0");
         txtIGV.setText("0.0");
         txtTotalPagar.setText("0.0");
-
+        
         lblIdProducto.setText("");
         txtCodigoProducto.setText("");
         txtNombreProducto.setText("");
@@ -259,20 +260,20 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         txtTotalProducto.setText("");
         txtCodigoProducto.requestFocus();
     }
-
+    
     void mirar() {
         btnNuevo.setEnabled(true);
         btnGuardar.setEnabled(false);
         btnCancelar.setEnabled(false);
         btnSalir.setEnabled(true);
-
+        btnImporte.setEnabled(false);
         cboTipoDocumento.setEnabled(false);
         txtCodigoProducto.setEnabled(false);
         txtSerie.setEnabled(false);
         txtCantidadProducto.setEnabled(false);
         txtFecha.setEnabled(false);
         txtNumero.setEnabled(false);
-
+        
         btnBuscarCliente.setEnabled(false);
         btnBuscarProducto.setEnabled(false);
         btnAgregarProducto.setEnabled(false);
@@ -282,7 +283,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         chkCambiarNumero.setSelected(false);
         chkiva.setEnabled(false);
         chkiva.setSelected(false);
-
+        
         txtTotalVenta.setText("0.0");
         txtDescuento.setText("0.0");
         txtSubTotal.setText("0.0");
@@ -300,23 +301,22 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         grupodescuento.clearSelection();
         rdbtnno.setEnabled(false);
         rdbtnsi.setEnabled(false);
-
+        
     }
-
+    
     void modificar() {
-
-        btnNuevo.setEnabled(false);
-
+        
+        btnNuevo.setEnabled(false);  
         btnGuardar.setEnabled(false);
         btnCancelar.setEnabled(true);
         btnSalir.setEnabled(false);
-
+        btnImporte.setEnabled(true);
         cboTipoDocumento.setEnabled(true);
         txtCodigoProducto.setEnabled(true);
         txtSerie.setEnabled(true);
         txtCantidadProducto.setEnabled(true);
         txtFecha.setEnabled(true);
-
+        
         btnBuscarCliente.setEnabled(true);
         btnBuscarProducto.setEnabled(true);
         btnAgregarProducto.setEnabled(true);
@@ -324,20 +324,20 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         btnLimpiarTabla.setEnabled(true);
         chkCambiarNumero.setEnabled(true);
         chkiva.setEnabled(false);
-        txtCodigoProducto.requestFocus();
+        txtCodigoProducto.requestFocus();        
     }
-
+    
     void cargarComboTipoDocumento() {
         ClsTipoDocumento tipodocumento = new ClsTipoDocumento();
         ArrayList<ClsEntidadTipoDocumento> tipodocumentos = tipodocumento.listarTipoDocumento();
         Iterator iterator = tipodocumentos.iterator();
         DefaultComboBoxModel DefaultComboBoxModel = new DefaultComboBoxModel();
         DefaultComboBoxModel.removeAllElements();
-
+        
         cboTipoDocumento.removeAll();
         String fila[] = new String[2];
         intContador = 0;
-
+        
         while (iterator.hasNext()) {
             ClsEntidadTipoDocumento TipoDocumento = new ClsEntidadTipoDocumento();
             TipoDocumento = (ClsEntidadTipoDocumento) iterator.next();
@@ -349,17 +349,17 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         }
         cboTipoDocumento.setModel(DefaultComboBoxModel);
     }
-
+    
     void BuscarProductoPorCodigo() {
         String busqueda = null;
         busqueda = txtCodigoProducto.getText();
         try {
             ClsProducto oProducto = new ClsProducto();
-
+            
             rs = oProducto.listarProductoActivoPorParametro("codigo", busqueda);
             while (rs.next()) {
                 if (rs.getString(2).equals(busqueda)) {
-
+                    
                     lblIdProducto.setText(rs.getString(1));
                     txtNombreProducto.setText(rs.getString(3));
                     txtDescripcionProducto.setText(rs.getString(4));
@@ -370,14 +370,14 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
                 }
                 break;
             }
-
+            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
             System.out.println(ex.getMessage());
         }
-
+        
     }
-
+    
     public void BuscarClientePorDefecto() {
         try {
             ClsCliente oCliente = new ClsCliente();
@@ -387,14 +387,14 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
                 txtNombreCliente.setText(rs.getString(2));
                 break;
             }
-
+            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
             System.out.println(ex.getMessage());
         }
-
+        
     }
-
+    
     private void setOcultarColumnasJTable(JTable tbl, int columna[]) {
         for (int i = 0; i < columna.length; i++) {
             tbl.getColumnModel().getColumn(columna[i]).setMaxWidth(0);
@@ -419,7 +419,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
             System.out.println(ex.getMessage());
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -964,7 +964,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
 //        txtIdEmpleado.setText(IdEmpleado);
         //BuscarClientePorDefecto();
         cargarComboTipoDocumento();
-
+        
 
     }//GEN-LAST:event_formComponentShown
 
@@ -981,7 +981,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         cliente.toFront();
         cliente.setVisible(true);
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
-
+    
     void CalcularTotal() {
         DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
         simbolos.setDecimalSeparator('.');
@@ -992,37 +992,37 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         total_prod = precio_prod * cant_prod;
         txtTotalProducto.setText(String.valueOf(formateador.format(total_prod)));
     }
-
+    
     public int recorrer(int id) {
         int fila = 0, valor = -1;
-
+        
         fila = tblDetalleProducto.getRowCount();
-
+        
         for (int f = 0; f < fila; f++) {
             if (Integer.parseInt(String.valueOf(dtmDetalle.getValueAt(f, 0))) == id) {
-
+                
                 valor = f;
                 //JOptionPane.showMessageDialog(null, "te encontre!");
                 break;
-
+                
             } else {
                 //JOptionPane.showMessageDialog(null, "no estas!");
                 valor = -1;
             }
-
+            
         }
         return valor;
     }
-
+    
     public void agregardatos(int item, String cod, String nom, String descrip, double cant, String cost, String prev, String desc, String predesc, String tot, String iva, String totalsindes) {
-
+        
         int p = recorrer(item);
         double n_cant, n_total;
         if (p > -1) {
-
+            
             n_cant = Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 4))) + cant;
             tblDetalleProducto.setValueAt(n_cant, p, 4);
-
+            
             n_total = Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 4))) * Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(p, 5)));
             tblDetalleProducto.setValueAt(n_total, p, 7);
             tblDetalleProducto.setValueAt(iva, p, 8);
@@ -1031,16 +1031,16 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         } else {
             String Datos[] = {String.valueOf(item), cod, nom, descrip, String.valueOf(cant), cost, prev, desc, predesc, tot, String.valueOf(iva), totalsindes};
             dtmDetalle.addRow(Datos);
-
+            
         }
-
+        
         tblDetalleProducto.setModel(dtmDetalle);
     }
-
+    
     public void agregardatosarraylist(ArrayList cantidades) {
         cantidadesrecive = cantidades;
     }
-
+    
     public void CalcularValor_Venta() {
         int contar = tblDetalleProducto.getRowCount();
         double suma = 0;
@@ -1053,7 +1053,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         txtTotalVenta.setText(formateador.format(suma));
         txtTotalPagar.setText(formateador.format(suma));
     }
-
+    
     public void CalcularSubTotal() {
         int contadr, acumulador = 0;
         contadr = tblDetalleProducto.getRowCount();
@@ -1063,22 +1063,22 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
             sinoiva = (String) tblDetalleProducto.getValueAt(acumulador, 10);
             preciocondescuento = Double.parseDouble(String.valueOf(tblDetalleProducto.getValueAt(acumulador, 9)));
             if (sinoiva.equals("si")) {
-
+                
                 acumpreciossiniva = acumpreciossiniva + redondearSubtotal(preciocondescuento, 2);
                 //
             } else if (sinoiva.equals("no")) {
                 acumpreciossiniva = preciocondescuento + acumpreciossiniva;
             }
             acumulador++;
-
+            
         }
         DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
         simbolos.setDecimalSeparator('.');
         DecimalFormat formateador = new DecimalFormat("####.##", simbolos);
         txtSubTotal.setText(formateador.format(acumpreciossiniva));
-
+        
     }
-
+    
     public double redondearSubtotal(double valordecimalentrada, int numerodedecimales) {
         double valoriva, parteenteraiva, partedecimaliva, resultado;
         /*primero obtenemos el valor del iva al precio agregado*/
@@ -1098,9 +1098,9 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         /*le quitamos el iva redondeado al valor del precio*/
         resultado = valordecimalentrada - partedecimaliva;
         return resultado;
-
+        
     }
-
+    
     public void CalcularIGV() {
         int contadr, acumulador = 0;
         contadr = tblDetalleProducto.getRowCount();
@@ -1116,14 +1116,14 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
                 acumpreciossiniva = 0 + acumpreciossiniva;
             }
             acumulador++;
-
+            
         }
         DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
         simbolos.setDecimalSeparator('.');
         DecimalFormat formateador = new DecimalFormat("####.##", simbolos);
         txtIGV.setText(formateador.format(acumpreciossiniva));
     }
-
+    
     public double redondearIva(double valordecimalentrada, int numerodedecimales) {
         double valoriva, parteenteraiva, partedecimaliva/*, resultado*/;
         /*primero obtenemos el valor del iva al precio agregado*/
@@ -1143,9 +1143,9 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         /*le quitamos el iva redondeado al valor del precio*/
         //resultado = valordecimalentrada - partedecimaliva;
         return partedecimaliva;
-
+        
     }
-
+    
     public void descuentototal() {
         int contar = tblDetalleProducto.getRowCount();
         double suma = 0;
@@ -1156,9 +1156,9 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         simbolos.setDecimalSeparator('.');
         DecimalFormat formateador = new DecimalFormat("####.####", simbolos);
         txtDescuento.setText(formateador.format(suma - Double.parseDouble(txtTotalPagar.getText())));
-
+        
     }
-
+    
     void CalcularTotal_Pagar() {
         int fila = 0;
         double totalpagar = 0;
@@ -1177,7 +1177,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         totalpagar = subtotal + igv - Double.parseDouble(txtDescuento.getText()) * Double.parseDouble(txtTotalVenta.getText()) / 100;
         txtTotalPagar.setText(String.valueOf(formateador.format(totalpagar)));
     }
-
+    
     void limpiarTabla() {
         contador = 0;
         chkiva.setSelected(false);
@@ -1191,7 +1191,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Error al limpiar la tabla.");
         }
     }
-
+    
 
     private void btnAgregarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarProductoActionPerformed
         accionbutonradio();
@@ -1207,7 +1207,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
             } else {
                 cant = Double.parseDouble(txtCantidadProducto.getText());
             }
-
+            
             if (cant > 0) {
                 stock = Double.parseDouble(txtStockProducto.getText());
                 cant = Double.parseDouble(txtCantidadProducto.getText());
@@ -1238,18 +1238,18 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
                     if (rdbtnsi.isSelected()) {
                         d9 = String.valueOf(formateador.format(Double.parseDouble(txtPrecioProducto.getText()) - (Double.parseDouble(txtPrecioProducto.getText()) * (Double.parseDouble(lblDescuento.getText()) / 100))));
                         d10 = String.valueOf(formateador.format(Double.parseDouble(txtCantidadProducto.getText()) * (Double.parseDouble(txtPrecioProducto.getText()) - (Double.parseDouble(txtPrecioProducto.getText()) * (Double.parseDouble(lblDescuento.getText()) / 100)))));
-
+                        
                     } else if (rdbtnno.isSelected()) {
                         d9 = txtPrecioProducto.getText();
                         d10 = String.valueOf(formateador.format(Double.parseDouble(txtPrecioProducto.getText()) * Double.parseDouble(txtCantidadProducto.getText())));
                     }
-
+                    
                     if (chkiva.isSelected()) {
                         d11 = "si";
                     } else {
                         d11 = "no";
                     }
-
+                    
                     agregardatos(d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12);
                     CalcularValor_Venta();
                     //CalcularTotal_Pagar();
@@ -1258,7 +1258,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
                     descuentototal();
                     txtCantidadProducto.setText("");
                     txtTotalProducto.setText("");
-
+                    
                     txtCodigoProducto.setText("");
                     txtNombreProducto.setText("");
                     txtStockProducto.setText("");
@@ -1268,12 +1268,12 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
                     JOptionPane.showMessageDialog(null, "Stock Insuficiente");
                     txtCantidadProducto.requestFocus();
                 }
-
+                
             } else {
                 JOptionPane.showMessageDialog(null, "Ingrese Cantidad mayor a 0");
                 txtCantidadProducto.requestFocus();
             }
-
+            
         } else {
             JOptionPane.showMessageDialog(null, "Ingrese cantidad");
             txtCantidadProducto.requestFocus();
@@ -1281,7 +1281,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         contador++;
         chkiva.setSelected(false);
     }
-
+    
 
     private void txtCantidadProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadProductoKeyReleased
         CalcularTotal();
@@ -1340,13 +1340,13 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         /*verificaremos si se a anulado la venta si se a accedido desde anular venta y da en cancelar
         se volvera a ejecutar el metodo actualizar caso contrario solo se vende*/
-        vander = vandera.getText();
-        if (vander.equals("vandera")) {
+        idventavandera = idventaanular.getText();
+        if (idventavandera.equals("idventa")) {
             mirar();
             limpiarTabla();
             this.dispose();
         }
-        if (vander.equals("anular")) {
+        if (!idventavandera.equals("idventa")) {
             /*se ara una anulacion a la inversa*/
             ClsVenta ventas = new ClsVenta();
             ClsEntidadVenta venta = new ClsEntidadVenta();
@@ -1362,12 +1362,12 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         /*verificaremos si se a anulado la venta si se a accedido desde anular venta y da en cancelar
         se volvera a ejecutar el metodo actualizar caso contrario solo se vende*/
-        vander = vandera.getText();
-        if (vander.equals("vandera")) {
+        idventavandera = idventaanular.getText();
+        if (idventavandera.equals("idventa")) {
             mirar();
             limpiarTabla();
         }
-        if (vander.equals("anular")) {
+        if (!idventavandera.equals("idventa")) {
             /*se ara una anulacion a la inversa*/
             ClsVenta ventas = new ClsVenta();
             ClsEntidadVenta venta = new ClsEntidadVenta();
@@ -1404,7 +1404,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
                 }
             } catch (Exception ex) {
             }
-
+            
             strId = ((String) tblDetalleProducto.getValueAt(f, 0));
             ncant = Double.parseDouble((String) cantidadesrecive.get(f));
             stock = cant - ncant;
@@ -1417,7 +1417,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         stock = 0;
         cantidadesrecive.clear();
     }
-
+    
 
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
         Presentacion.FrmVentaRecibo VentaRecibo = new Presentacion.FrmVentaRecibo();
@@ -1468,9 +1468,11 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
                 venta.setStrEstadoVenta("EMITIDO");
                 ventas.agregarVenta(venta);
                 guardarDetalle();
-
+                vandera.setText("vandera");
+                idventaanular.setText("idventa");
+                
             }
-
+            
             mirar();
             tipoDocumento = cboTipoDocumento.getSelectedItem().toString();
             limpiarTabla();
@@ -1482,20 +1484,20 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
                 //Dese imprimir el Comprobante?
                 int imprime = JOptionPane.showConfirmDialog(this, "¿Desea Imprimir el Ticket?", "Mensaje del Sistema", JOptionPane.YES_NO_OPTION);
                 if (imprime == JOptionPane.YES_OPTION) {
-
+                    
                     obtenerUltimoIdVenta_print();
                     Map p = new HashMap();
                     p.put("busqueda", idventa_print);
-
+                    
                     JasperReport report;
                     JasperPrint print;
                     try {
-
+                        
                         report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/Reportes/RptVentaTicket.jrxml");
                         print = JasperFillManager.fillReport(report, p, connection);
                         JasperViewer view = new JasperViewer(print, false);
                         JasperPrintManager.printReport(print, false);
-
+                        
                     } catch (JRException e) {
                         e.printStackTrace();
                     }
@@ -1504,7 +1506,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
             //fin imprimir            
 
         }
-
+        
         if (result == JOptionPane.NO_OPTION) {
             JOptionPane.showMessageDialog(null, "Venta Anulada!");
         }
@@ -1537,7 +1539,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
     private void btnAgregarProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarProductoMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAgregarProductoMouseClicked
-
+    
     int cond_iva;
     int[] con_fila = new int[100];
     int contador = 0;
@@ -1595,9 +1597,9 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
             System.out.println(ex.getMessage());
         }
     }
-
+    
     void guardarDetalle() {
-
+        
         obtenerUltimoIdVenta();
         ClsDetalleVenta detalleventas = new ClsDetalleVenta();
         ClsEntidadDetalleVenta detalleventa = new ClsEntidadDetalleVenta();
@@ -1605,7 +1607,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         String strId;
         ClsEntidadProducto producto = new ClsEntidadProducto();
         int fila;
-
+        
         double cant = 0, ncant, stock;
         fila = tblDetalleProducto.getRowCount();
         for (int f = 0; f < fila; f++) {
@@ -1616,28 +1618,28 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
             detalleventa.setStrPrecioDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 8)));
             detalleventa.setStrTotalDet(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 9)));
             detalleventas.agregarDetalleVenta(detalleventa);
-
+            
             try {
                 ClsProducto oProducto = new ClsProducto();
-
+                
                 rs = oProducto.listarProductoActivoPorParametro("id", ((String) tblDetalleProducto.getValueAt(f, 0)));
                 while (rs.next()) {
                     cant = Double.parseDouble(rs.getString(5));
                 }
-
+                
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
                 System.out.println(ex.getMessage());
             }
-
+            
             strId = ((String) tblDetalleProducto.getValueAt(f, 0));
-
+            
             ncant = Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(f, 4)));
-
+            
             stock = cant - ncant;
             producto.setStrStockProducto(String.valueOf(stock));
             productos.actualizarProductoStock(strId, producto);
-
+            
         }
     }
 

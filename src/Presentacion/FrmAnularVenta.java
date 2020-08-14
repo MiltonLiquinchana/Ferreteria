@@ -36,7 +36,7 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
     String documento, criterio, busqueda, Total;
     boolean valor = true;
     int n = 0;
-    String nomcliente;
+    String nomcliente,idcliente;
     /*enviar cantidad de esta consulta a la otra ventana*/
     double cant = 0, ncant, stock;
     /*instancia de form frmventa*/
@@ -584,6 +584,7 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
         venta.vandera.setText("anular");
         venta.idventaanular.setText(lblIdVenta.getText());
         venta.txtNombreCliente.setText(nomcliente);
+        venta.lblIdCliente.setText(idcliente);
         /*agregar datos a el array cantidades*/
         int f, i = 0;
         f = tblDetalleVenta.getRowCount();
@@ -609,19 +610,20 @@ public class FrmAnularVenta extends javax.swing.JInternalFrame {
             boolean encuentra = false;
             
             while (rs.next()) {
-                nomcliente = (String) rs.getString(1);
-                Datos[0] = (String) rs.getString(2);
-                Datos[1] = (String) rs.getString(3);
-                Datos[2] = (String) rs.getString(4);
-                Datos[3] = (String) rs.getString(5);
-                Datos[4] = (String) rs.getString(6);
-                Datos[5] = (String) rs.getString(7);
-                Datos[6] = (String) rs.getString(8);
-                Datos[7] = (String) rs.getString(9);
-                Datos[8] = (String) rs.getString(10);
-                Datos[9] = (String)rs.getString(11);
-                Datos[10] = (String)rs.getString(12);
-                Datos[11] =(String) rs.getString(13);
+                idcliente=(String) rs.getString(1);
+                nomcliente = (String) rs.getString(2);
+                Datos[0] = (String) rs.getString(3);
+                Datos[1] = (String) rs.getString(4);
+                Datos[2] = (String) rs.getString(5);
+                Datos[3] = (String) rs.getString(6);
+                Datos[4] = (String) rs.getString(7);
+                Datos[5] = (String) rs.getString(8);
+                Datos[6] = (String) rs.getString(9);
+                Datos[7] = (String) rs.getString(10);
+                Datos[8] = (String) rs.getString(11);
+                Datos[9] = (String)rs.getString(12);
+                Datos[10] = (String)rs.getString(13);
+                Datos[11] =(String) rs.getString(14);
                 venta.agregardatos(Integer.parseInt(Datos[0]), Datos[1], Datos[2], Datos[3], Double.parseDouble(Datos[4]),
                         Datos[5], Datos[6], Datos[7], Datos[8], Datos[9], Datos[10], Datos[11]);
                 encuentra = true;
