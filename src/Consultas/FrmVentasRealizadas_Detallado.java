@@ -5,7 +5,6 @@
 package Consultas;
 
 import Conexion.ClsConexion;
-import Entidad.*;
 import Negocio.*;
 import java.awt.Color;
 import java.awt.Component;
@@ -15,12 +14,9 @@ import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
