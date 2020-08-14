@@ -4,19 +4,12 @@
  */
 package Presentacion;
 
-import Conexion.ClsConexion;
-import Entidad.ClsEntidadProducto;
-import Negocio.ClsDetalleVenta;
-import Negocio.ClsProducto;
 import Negocio.ClsVenta;
 import java.awt.Color;
 import java.awt.Component;
-import java.math.RoundingMode;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JLabel;
