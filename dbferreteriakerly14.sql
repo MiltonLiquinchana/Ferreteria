@@ -1707,7 +1707,7 @@ DELIMITER ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_S_VentaPorFecha`(IN `pcriterio` VARCHAR(30), IN `pfechaini` DATE, IN `pfechafin` DATE, IN `pdocumento` VARCHAR(30))
 BEGIN
@@ -1726,8 +1726,8 @@ BEGIN
 			INNER JOIN empleado AS e ON v.IdEmpleado=e.IdEmpleado
 			WHERE (v.Fecha>=pfechaini AND v.Fecha<=pfechafin) ORDER BY v.IdVenta DESC;
 		ELSEIF pcriterio = "caja" THEN	
-		   SELECT SUM(dv.Cantidad) AS Cantidad,p.Nombre AS Producto,p.PrecioVenta,
-			TRUNCATE(SUM(dv.Cantidad)*p.PrecioVenta,2) AS Total, TRUNCATE(SUM(dv.Cantidad)*(p.PrecioVenta-p.PrecioCosto),2) AS Ganancia,v.Fecha FROM venta AS v
+		   SELECT SUM(dv.Cantidad) AS Cantidad,p.Nombre AS Producto,dv.Precio,
+			TRUNCATE(SUM(dv.Cantidad)*dv.Precio,2) AS Total, TRUNCATE(SUM(dv.Cantidad)*(dv.Precio-p.PrecioCosto),2) AS Ganancia,v.Fecha FROM venta AS v
 			INNER JOIN detalleventa AS dv ON v.IdVenta=dv.IdVenta
 			INNER JOIN producto AS p ON dv.IdProducto=p.IdProducto
 			INNER JOIN categoria AS c ON p.IdCategoria=c.IdCategoria
@@ -2223,4 +2223,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-08-14 13:50:33
+-- Dump completed on 2020-08-14 14:01:45
