@@ -3,12 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/liqui/Documents/NetBeansProjects/Ferreteria/src/Consultas/FrmVentasRealizadas_Detallado.java</file>
-            <file>file:/C:/Users/liqui/Documents/NetBeansProjects/Ferreteria/src/Presentacion/FrmPrincipal.java</file>
-            <file>file:/C:/Users/liqui/Documents/NetBeansProjects/Ferreteria/src/Presentacion/FrmAnularVenta.java</file>
             <file>file:/C:/Users/liqui/Documents/NetBeansProjects/Ferreteria/src/Presentacion/FrmVenta.java</file>
-            <file>file:/C:/Users/liqui/Documents/NetBeansProjects/Ferreteria/src/Presentacion/FrmCaja.java</file>
-            <file>file:/C:/Users/liqui/Documents/NetBeansProjects/Ferreteria/src/Negocio/ClsVenta.java</file>
+            <file>file:/C:/Users/liqui/Documents/NetBeansProjects/Ferreteria/src/Reportes/RptVentasRealizadas.jrxml</file>
         </group>
     </open-files>
 </project-private>

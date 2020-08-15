@@ -9,6 +9,7 @@
 	<queryString>
 		<![CDATA[CALL busquedaclientefecha($P{nomCliente},$P{fecha_ini},$P{fecha_fin});]]>
 	</queryString>
+        <field name="Nombre" class="java.lang.String"/>
 	<field name="IdVenta" class="java.lang.Integer"/>
 	<field name="Codigo" class="java.lang.String"/>
 	<field name="FventaProducto" class="java.lang.String"/>
@@ -80,7 +81,7 @@
 				<textElement>
 					<font size="7"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{nomCliente}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Nombre}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

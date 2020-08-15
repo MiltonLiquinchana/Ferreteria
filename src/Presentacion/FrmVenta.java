@@ -78,7 +78,7 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         cargarComboTipoDocumento();
         
         lblIdProducto.setVisible(false);
-        lblIdCliente.setVisible(true);
+        lblIdCliente.setVisible(false);
         txtDescripcionProducto.setVisible(false);
         txtCostoProducto.setVisible(false);
         mirar();
@@ -103,8 +103,10 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         tblDetalleProducto.setModel(dtmDetalle);
         CrearTablaDetalleProducto();
         vander = vandera.getText();
-        vandera.setVisible(true);
-        idventaanular.setVisible(true);
+        vandera.setVisible(false);
+        idventaanular.setVisible(false);
+        lblDescuento.setVisible(false);
+        jLabel19.setVisible(false);
     }
     
     public void eventotable(TableModelEvent evento) {
@@ -301,6 +303,8 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
         grupodescuento.clearSelection();
         rdbtnno.setEnabled(false);
         rdbtnsi.setEnabled(false);
+        rdbtnno.setVisible(false);
+        rdbtnsi.setVisible(false);
         
     }
     
@@ -1055,6 +1059,15 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
     }
     
     public void CalcularSubTotal() {
+       int contar = tblDetalleProducto.getRowCount();
+        double suma = 0;
+        for (int i = 0; i < contar; i++) {
+            suma = suma + Double.parseDouble(String.valueOf(tblDetalleProducto.getModel().getValueAt(i, 11)));
+        }
+        DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
+        simbolos.setDecimalSeparator('.');
+        DecimalFormat formateador = new DecimalFormat("####.####", simbolos);
+        
         int contadr, acumulador = 0;
         contadr = tblDetalleProducto.getRowCount();
         String sinoiva = null;
@@ -1063,19 +1076,16 @@ public final class FrmVenta extends javax.swing.JInternalFrame {
             sinoiva = (String) tblDetalleProducto.getValueAt(acumulador, 10);
             preciocondescuento = Double.parseDouble(String.valueOf(tblDetalleProducto.getValueAt(acumulador, 9)));
             if (sinoiva.equals("si")) {
-                
+
                 acumpreciossiniva = acumpreciossiniva + redondearSubtotal(preciocondescuento, 2);
                 //
             } else if (sinoiva.equals("no")) {
                 acumpreciossiniva = preciocondescuento + acumpreciossiniva;
             }
             acumulador++;
-            
+
         }
-        DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
-        simbolos.setDecimalSeparator('.');
-        DecimalFormat formateador = new DecimalFormat("####.##", simbolos);
-        txtSubTotal.setText(formateador.format(acumpreciossiniva));
+        txtSubTotal.setText(formateador.format(acumpreciossiniva+(suma - Double.parseDouble(txtTotalPagar.getText()))));
         
     }
     
